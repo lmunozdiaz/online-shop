@@ -22,7 +22,13 @@ public class ProductController {
 
     // fetch-all-by-category endpoint
     @GetMapping("/search/category/{id}")
-    public List<Product> getAllProductsByCategory(@PathVariable("id") Long id) {
+    public List<Product> fetchAllProductsByCategory(@PathVariable("id") Long id) {
         return productService.getAllProductsByCategory(id);
+    }
+
+    // fetch-all-by-keyword endpoint
+    @GetMapping("/search/product/{keyword}")
+    public List<Product> fetchAllProductsByKeyword(@PathVariable("keyword") String keyword) {
+        return productService.getAllProductsByKeyword(keyword);
     }
 }

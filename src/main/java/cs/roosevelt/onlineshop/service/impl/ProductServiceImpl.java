@@ -29,4 +29,10 @@ public class ProductServiceImpl implements ProductService {
     // get all the products by given category from the db
     @Override
     public List<Product> getAllProductsByCategory(Long id) { return productRepository.findAllByCategoryId(id); }
+
+    // get all the products by a keyword from the db
+    @Override
+    public List<Product> getAllProductsByKeyword(String keyword) {
+        return productRepository.findByNameIgnoreCaseContaining(keyword);
+    }
 }
