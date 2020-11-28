@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java,angular
-# Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,maven,java,angular
+# Created by https://www.toptal.com/developers/gitignore/api/intellij+all,java,maven,angular,vscode
+# Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,java,maven,angular,vscode
 
 ### Angular ###
 ## Angular ##
@@ -159,4 +159,12 @@ buildNumber.properties
 # https://github.com/takari/maven-wrapper#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/intellij+all,maven,java,angular
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# End of https://www.toptal.com/developers/gitignore/api/intellij+all,java,maven,angular,vscode

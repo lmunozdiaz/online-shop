@@ -4,8 +4,16 @@ import cs.roosevelt.onlineshop.entity.Product;
 
 import java.util.List;
 
+/**
+ * The methods that must be implemented. Typically,
+ * by a class of the same name with an 'Impl' suffix.
+ *
+ * Used for abstraction.
+ */
 public interface ProductService {
 
-    List<Product> findAll();
+    List<Product> getAllProducts();
+
+    List<Product> getAllProductsByCategory(Long id);
 
 }

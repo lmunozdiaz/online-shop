@@ -8,14 +8,25 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * The implementer class for ProductService.
+ * It must implement its method signatures that will
+ * be used by the controller.
+ *
+ * Aids organization and readability.
+ */
 @Service
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    // retrieve all the products from the db
+    // get all the products from the db
     @Override
-    public List<Product> findAll() {
+    public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
+    // get all the products by given category from the db
+    @Override
+    public List<Product> getAllProductsByCategory(Long id) { return productRepository.findAllByCategoryId(id); }
 }

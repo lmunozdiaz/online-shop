@@ -10,12 +10,16 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import {MaterialModule} from "./material/material.module";
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ProductListComponent,
-    NavigationComponent
+    NavigationComponent,
+    DashboardComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule,

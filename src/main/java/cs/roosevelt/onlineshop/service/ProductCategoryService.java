@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ProductCategoryService {
 
-    List<ProductCategory> findAll();
+    List<ProductCategory> getAllCategories();
 
 }

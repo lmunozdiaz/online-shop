@@ -1,4 +1,3 @@
-====== Product Table ======
 CREATE TABLE products (
     id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     sku VARCHAR(255),
@@ -13,11 +12,4 @@ CREATE TABLE products (
     category_id BIGINT NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES product_category(id)
-)
-
-====== Product_Category Table ======
-CREATE TABLE product_category (
-    id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    category_name VARCHAR(255),
-    PRIMARY KEY (id)
 )
