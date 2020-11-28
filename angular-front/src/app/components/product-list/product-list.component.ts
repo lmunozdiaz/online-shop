@@ -10,7 +10,9 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class ProductListComponent implements OnInit {
 
+  // to hold the fetched products
   products: Product[];
+  // to hold the category ID
   currentCategoryId: number;
 
   constructor(private productService: ProductService,
@@ -23,6 +25,14 @@ export class ProductListComponent implements OnInit {
     })
   }
 
+  /**
+   * The fetchProducts() retrieves all products by
+   * category, given by the category ID.
+   *
+   * If no category ID is present, default it
+   * to category ID = 1.
+   * @private
+   */
   private fetchProducts() {
     // check if 'id' parameter is present
     const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');

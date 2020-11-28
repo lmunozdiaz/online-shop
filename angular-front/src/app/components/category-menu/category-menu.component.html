@@ -1,0 +1,4 @@
+<mat-nav-list *ngFor="let tempCategory of categories">
+  <a mat-list-item routerLink="/category/{{tempCategory.id}}"
+     routerLinkActive="active">{{tempCategory.categoryName}}</a>
+</mat-nav-list>

@@ -12,6 +12,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import {MaterialModule} from "./material/material.module";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CardComponent } from './components/card/card.component';
+import { CategoryMenuComponent } from './components/category-menu/category-menu.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { CardComponent } from './components/card/card.component';
     ProductListComponent,
     NavigationComponent,
     DashboardComponent,
-    CardComponent
+    CardComponent,
+    CategoryMenuComponent
   ],
   imports: [
     BrowserModule,
