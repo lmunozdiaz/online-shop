@@ -7,32 +7,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
- * The implementer class for ProductService.
- * It must implement its method signatures that will
- * be used by the controller.
+ * ProductServiceImpl defines the method signatures provided
+ * by the ProductService interface for the controller to use.
  *
- * Aids organization and readability.
+ * Within each method, it uses methods from
+ * the ProductRepository.
  */
 @Service
 public class ProductServiceImpl implements ProductService {
+
     @Autowired
     private ProductRepository productRepository;
 
     // get all the products from the db
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> getAll() {
         return productRepository.findAll();
     }
 
-    // get all the products by given category from the db
+    // get a product by the given ID
     @Override
-    public List<Product> getAllProductsByCategory(Long id) { return productRepository.findAllByCategoryId(id); }
+    public Optional<Product> getOne(String id) { return productRepository.findById(id); }
 
-    // get all the products by a keyword from the db
+    // get all the products by the given category type from the db
     @Override
-    public List<Product> getAllProductsByKeyword(String keyword) {
-        return productRepository.findByNameIgnoreCaseContaining(keyword);
+    public List<Product> getAllByCategory(Integer categoryType) {
+        return productRepository.findAllByCategoryType(categoryType);
     }
+
+    // get all the products containing the search string from the db
+    @Override
+    public List<Product> getAllContainingSearchString(String searchStr) {
+        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchStr, searchStr);
+    }
+
 }

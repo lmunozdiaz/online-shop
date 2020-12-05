@@ -3,6 +3,7 @@ package cs.roosevelt.onlineshop.service;
 import cs.roosevelt.onlineshop.entity.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The methods that must be implemented. Typically,
@@ -12,10 +13,12 @@ import java.util.List;
  */
 public interface ProductService {
 
-    List<Product> getAllProducts();
+    List<Product> getAll();
 
-    List<Product> getAllProductsByCategory(Long id);
+    Optional<Product> getOne(String id);
 
-    List<Product> getAllProductsByKeyword(String keyword);
+    List<Product> getAllByCategory(Integer categoryType);
+
+    List<Product> getAllContainingSearchString(String searchStr);
 
 }

@@ -12,45 +12,98 @@ export class ProductListComponent implements OnInit {
 
   // to hold the fetched products
   products: Product[];
-  // to hold the category ID
-  currentCategoryId: number;
+  // to hold the category type
+  currentCategoryType: number;
+  // to decide which fetch-product method to use
+  hasSearchString: boolean;
 
   constructor(private productService: ProductService,
               private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+
     this.route.paramMap.subscribe(() => {
       this.fetchProducts();
-    })
+    });
+
   }
 
   /**
-   * The fetchProducts() retrieves all products by
-   * category, given by the category ID.
+   * The fetchProducts() decides how to display the
+   * products, based on the route parameters.
    *
-   * If no category ID is present, default it
-   * to category ID = 1.
+   * If there's a search string in the route, then display
+   * products based on it.
+   *
+   * If there's a category type in the route, then display
+   * products based on it.
    * @private
    */
   private fetchProducts() {
-    // check if 'id' parameter is present
-    const hasCategoryId: boolean = this.route.snapshot.paramMap.has('id');
-    if (hasCategoryId) {
-      // get the 'id' param string and convert to number
-      this.currentCategoryId = +this.route.snapshot.paramMap.get('id');
+
+    // is there a search string in the route?
+    this.hasSearchString = this.route.snapshot.paramMap.has('searchStr');
+
+    if (this.hasSearchString) {
+      // yes, there is
+      this.handleProductListBySearch();
     } else {
-      // category 'id' no present
-      this.currentCategoryId = 1;
+      // no, there isn't; retrieve products by category
+      this.handleProductListByCategory();
     }
 
-    // retrieve products for given category id
-    this.productService.getAll(this.currentCategoryId).subscribe(
+  }
+
+  /**
+   * The handleProductListByCategory() retrieves
+   * all products based on the category type
+   * from the route parameter.
+   * @private
+   */
+  private handleProductListByCategory() {
+
+    // is there a category type in the route?
+    const isCategoryPresent: boolean = this.route.snapshot.paramMap.has('categoryType');
+
+    if (isCategoryPresent) {
+      // yes, there is; convert to number
+      this.currentCategoryType = +this.route.snapshot.paramMap.get('categoryType');
+    } else {
+      // no, there isn't; set a default value
+      this.currentCategoryType = 1;
+    }
+
+    // retrieve the products for given category
+    this.productService.getAll(this.currentCategoryType).subscribe(
       data => {
         this.products = data;
         // log the data for debugging
         console.log(data);
       }
     );
+
+  }
+
+  /**
+   * The handleProductListBySearch retrieves
+   * all products based on the keyword
+   * from the route parameter.
+   * @private
+   */
+  private handleProductListBySearch() {
+
+    // get the search string from the route
+    const searchStr = this.route.snapshot.paramMap.get('searchStr');
+
+    // retrieve the products containing the search string
+    this.productService.getAllContainingSearchString(searchStr).subscribe(
+      data => {
+        this.products = data;
+        // log the data for debugging
+        console.log(data);
+      }
+    );
+
   }
 }

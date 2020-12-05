@@ -20,9 +20,10 @@ export class CategoryMenuComponent implements OnInit {
 
   /**
    * The fetchCategories() retrieves all categories
-   * to dynamically display the category list.
+   * to dynamically display the category menu items.
    */
   fetchCategories() {
+
     this.categoryService.getAll().subscribe(
       data => {
         this.categories = data;
@@ -30,5 +31,6 @@ export class CategoryMenuComponent implements OnInit {
         console.log(data);
       }
     );
+
   }
 }

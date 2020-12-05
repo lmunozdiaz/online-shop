@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Product} from "../model/product";
 import {Category} from "../model/category";
 
 @Injectable({
@@ -9,10 +8,16 @@ import {Category} from "../model/category";
 })
 export class CategoryService {
 
+  // the backend url for products, hardcoded
   readonly baseUrl: string = 'http://localhost:8080/api/products/categories';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
+  /**
+   * The getAll() retrieves all category types
+   * from the backend endpoint
+   */
   getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.baseUrl);
   }

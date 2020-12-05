@@ -1,4 +1,13 @@
-<mat-nav-list *ngFor="let tempCategory of categories">
-  <a mat-list-item routerLink="/category/{{tempCategory.id}}"
-     routerLinkActive="active">{{tempCategory.categoryName}}</a>
-</mat-nav-list>
+<!-- category-menu component -->
+<mat-selection-list [multiple]="false">
+
+  <div mat-subheader>Categories</div>
+
+  <!-- use an ngFor loop to iterate through this component's 'categories' array and create a routerLink for each one.
+  The routerLink points to a special instance of the product-list component, which (in this case) displays products
+  based on category -->
+  <mat-list-option *ngFor="let category of categories">
+    <a routerLink="category/{{category.categoryType}}">{{category.name}}</a>
+  </mat-list-option>
+
+</mat-selection-list>

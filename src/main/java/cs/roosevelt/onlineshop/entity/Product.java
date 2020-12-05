@@ -1,11 +1,14 @@
 package cs.roosevelt.onlineshop.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sun.istack.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,44 +20,43 @@ import java.util.Date;
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
+public class Product implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "PRODUCT_ID")
+    private String id;
 
-    @Column(name = "sku")
-    private String sku;
+    @Column(name = "CATEGORY_TYPE", nullable = false)
+    @ColumnDefault("0")
+    private Integer categoryType;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "CREATE_TIME")
+    @CreationTimestamp
+    private Date createTime;
 
-    @Column(name = "description")
+    @Column(name = "PRODUCT_DESCRIPTION")
     private String description;
 
-    @Column(name = "unit_price")
-    private BigDecimal unitPrice;
-
-    @Column(name = "image_url")
+    @Column(name = "PRODUCT_ICON")
     private String imageUrl;
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "PRODUCT_NAME")
+    @NotNull
+    private String name;
 
-    @Column(name = "units_in_stock")
-    private int unitsInStock;
+    @Column(name = "PRODUCT_PRICE")
+    @NotNull
+    private BigDecimal price;
 
-    @Column(name = "date_created")
-    @CreationTimestamp
-    private Date dateCreated;
+    @Column(name = "PRODUCT_STATUS")
+    private int status;
 
-    @Column(name = "last_updated")
+    @Column(name = "PRODUCT_STOCK")
+    @NotNull
+    private int stock;
+
+    @Column(name = "UPDATE_TIME")
     @UpdateTimestamp
-    private Date lastUpdated;
+    private Date updateTime;
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private ProductCategory category;
 }

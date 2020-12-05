@@ -1,15 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {DashboardComponent} from "./components/dashboard/dashboard.component";
+
+// My components/modules
 import {ProductListComponent} from "./components/product-list/product-list.component";
+import {ProductDetailsComponent} from "./components/product-details/product-details.component";
+import {CartDetailsComponent} from "./components/cart-details/cart-details.component";
 
 const routes: Routes = [
-  {path: 'dashboard', component: DashboardComponent},
-  {path: 'category/:id', component: ProductListComponent},
+  {path: 'cart-details', component: CartDetailsComponent},
+  {path: 'products/:id', component: ProductDetailsComponent},
+  {path: 'search/:searchStr', component: ProductListComponent},
+  {path: 'category/:categoryType', component: ProductListComponent},
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
-  {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-  {path: '**', redirectTo: '/dashboard', pathMatch: 'full'}
+  {path: '', redirectTo: '/products', pathMatch: 'full'},
+  {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];
 
 @NgModule({

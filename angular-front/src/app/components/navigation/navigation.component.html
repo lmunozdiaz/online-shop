@@ -1,23 +1,41 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
-               [opened]="(isHandset$ | async) === false"
-               class="sidenav"
-               fixedInViewport>
-    <mat-toolbar>Menu</mat-toolbar>
+<!-- navigation component -->
+<mat-drawer-container class="container" hasBackdrop="false">
+
+  <!-- the side panel container -->
+  <mat-drawer #drawer class="drawer" mode="side">
+    <!-- this component selector is used to display the category menu -->
     <app-category-menu></app-category-menu>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        type="button">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </mat-drawer>
+
+  <!-- the main part of the page -->
+  <mat-drawer-content>
+    <mat-toolbar class="position-fixed">
+      <button (click)="drawer.toggle()" mat-button type="button">
+        <mat-icon>menu</mat-icon>
       </button>
-      <span>angular-front</span>
+
+      <!-- to fill empty space; it helps position other items -->
+      <span class="fill-space"></span>
+
+      <button mat-button>
+        <mat-icon>person_outlined</mat-icon>
+      </button>
+
+      <a routerLink="/cart-details">
+        <!-- this component selector is used to display the status of the cart on the button-->
+        <app-cart-status></app-cart-status>
+      </a>
     </mat-toolbar>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+
+    <div class="app-search-container">
+      <!-- this component selector is used to display the search bar -->
+      <app-search></app-search>
+    </div>
+
+    <div>
+      <!-- where a routerLink's corresponding component html will display -->
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+
+</mat-drawer-container>

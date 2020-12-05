@@ -1,4 +1,7 @@
 export interface Category {
-  id: string;
-  categoryName: string;
+  id: number;
+  name: string;
+  categoryType: number;
+  createTime: Date;
+  updateTime: Date;
 }

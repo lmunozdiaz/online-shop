@@ -1,11 +1,12 @@
 export interface Product {
-  sku: string;
-  name: string;
+  id: string;
+  categoryType: number;
+  createTime: Date;
   description: string;
-  unitPrice: number;
   imageUrl: string;
-  active: boolean;
-  unitsInStock: number;
-  dateCreated: Date;
-  lastUpdated: Date;
+  name: string;
+  price: number;
+  status: boolean;
+  stock: number;
+  updateTime: Date;
 }

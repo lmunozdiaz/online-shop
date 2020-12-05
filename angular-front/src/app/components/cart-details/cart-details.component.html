@@ -1,0 +1,87 @@
+<!-- card-details component -->
+<div class="header-container">
+  <h1>Shopping Cart</h1>
+</div>
+
+<!-- if the cart is not empty, then show the table -->
+<div *ngIf="cartItems.length > 0" class="table-container">
+
+  <!-- the following ng-container tags declare the columns of the table with the help of the 'displayColumns' variable
+  in the ts file; each item from the 'cartItems' array is added as a row, with its fields matching the columns. -->
+
+
+  <!-- [dataSource] uses the cartItems array from the ts file to fill the table data -->
+  <table [dataSource]="cartItems" class="mat-elevation-z8" mat-table>
+
+    <!-- image column -->
+    <ng-container matColumnDef="imageUrl">
+      <th *matHeaderCellDef mat-header-cell>Product Image</th>
+      <td *matCellDef="let cartItem" mat-cell>
+        <!-- interpolation is used below to set the image url dynamically -->
+        <img src="{{cartItem.imageUrl}}" width="150">
+      </td>
+      <!-- the footer; it's set to appear in this first column as 'Total' -->
+      <td *matFooterCellDef mat-footer-cell>
+        <div>Total</div>
+      </td>
+    </ng-container>
+
+    <!-- product-details column -->
+    <ng-container matColumnDef="product-detail">
+      <th *matHeaderCellDef mat-header-cell>Product Detail</th>
+      <td *matCellDef="let cartItem" mat-cell>
+        <div>{{cartItem.name}}</div>
+        <div>{{cartItem.price | currency: 'USD'}}</div>
+      </td>
+      <td *matFooterCellDef mat-footer-cell></td>
+    </ng-container>
+
+    <!-- subtotal column -->
+    <ng-container matColumnDef="subtotal">
+      <th *matHeaderCellDef mat-header-cell>Subtotal</th>
+      <td *matCellDef="let cartItem" mat-cell>
+
+        <!-- product quantity -->
+        <button [matMenuTriggerFor]="quantityMenu" mat-button>Quantity:</button>
+        <mat-menu #quantityMenu="matMenu">
+          <button (click)="changeQuantity(cartItem, 1)" mat-menu-item>1</button>
+          <button (click)="changeQuantity(cartItem, 2)" mat-menu-item>2</button>
+          <button (click)="changeQuantity(cartItem, 3)" mat-menu-item>3</button>
+          <button (click)="changeQuantity(cartItem, 4)" mat-menu-item>4</button>
+          <button (click)="changeQuantity(cartItem, 5)" mat-menu-item>5</button>
+          <button (click)="changeQuantity(cartItem, 6)" mat-menu-item>6</button>
+          <button (click)="changeQuantity(cartItem, 7)" mat-menu-item>7</button>
+          <button (click)="changeQuantity(cartItem, 8)" mat-menu-item>8</button>
+          <button (click)="changeQuantity(cartItem, 9)" mat-menu-item>9</button>
+        </mat-menu>
+        <span> {{cartItem.quantity}}</span>
+
+        <!-- fill space -->
+        <br> <br>
+        <mat-divider></mat-divider>
+        <br>
+
+        <!-- product subtotal -->
+        <span>Subtotal: {{cartItem.quantity * cartItem.price | currency: 'USD'}}</span>
+      </td>
+
+      <!-- total price footer -->
+      <td *matFooterCellDef mat-footer-cell>
+        <div>{{totalPrice | currency: 'USD'}}</div>
+      </td>
+    </ng-container>
+
+    <!-- row definition -->
+    <tr *matHeaderRowDef="displayedColumns; sticky: true" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    <tr *matFooterRowDef="displayedColumns; sticky: true" mat-footer-row></tr>
+  </table>
+
+</div>
+
+<!-- if the cart is empty, then show a message -->
+<div *ngIf="cartItems.length == 0" class="card-container">
+  <mat-card class="mat-elevation-z3">
+    <span>Your shopping cart is empty.</span>
+  </mat-card>
+</div>
