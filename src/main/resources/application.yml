@@ -2,8 +2,8 @@
 spring:
   datasource:
     driver-class-name: org.apache.derby.jdbc.ClientDriver
-    username: onlineshop
-    password: onlineshop
+    username: ecommerce
+    password: ecommerce
     url: jdbc:derby://localhost:1527/ecommerce
     platform: derby
     initialization-mode: always
