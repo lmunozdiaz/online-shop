@@ -15,7 +15,7 @@ public class PopulateDB_ecommerce  {
      */
     public static void main(String[] args) throws SQLException {
 
-        Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/onlineshop", "onlineshop", "onlineshop");
+        Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ecommerce", "ecommerce", "ecommerce");
 
         boolean succeeds = false;
         String[] tbname = {"ORDER_DETAILS","CART", "USERS", "PRODUCTS", "CATEGORY", "ORDERS", };

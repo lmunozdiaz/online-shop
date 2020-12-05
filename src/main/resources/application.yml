@@ -4,7 +4,7 @@ spring:
     driver-class-name: org.apache.derby.jdbc.ClientDriver
     username: onlineshop
     password: onlineshop
-    url: jdbc:derby://localhost:1527/onlineshop
+    url: jdbc:derby://localhost:1527/ecommerce
     platform: derby
     initialization-mode: always
     continue-on-error: true
