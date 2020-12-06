@@ -19,6 +19,8 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false;
     database-platform: org.hibernate.dialect.DerbyDialect
+  session:
+    store-type: jdbc
 server:
   servlet:
     contextPath: /api
