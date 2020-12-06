@@ -2,15 +2,17 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // My components/modules
-import {ProductListComponent} from "./components/product-list/product-list.component";
-import {ProductDetailsComponent} from "./components/product-details/product-details.component";
-import {CartDetailsComponent} from "./components/cart-details/cart-details.component";
+import {ProductListComponent} from './components/product-list/product-list.component';
+import {ProductDetailsComponent} from './components/product-details/product-details.component';
+import {CartDetailsComponent} from './components/cart-details/cart-details.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 const routes: Routes = [
   {path: 'cart-details', component: CartDetailsComponent},
   {path: 'products/:id', component: ProductDetailsComponent},
   {path: 'search/:searchStr', component: ProductListComponent},
   {path: 'category/:categoryType', component: ProductListComponent},
+  {path: 'signup', component: SignupComponent},
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
   {path: '', redirectTo: '/products', pathMatch: 'full'},

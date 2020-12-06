@@ -17,6 +17,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { CartStatusComponent } from './components/cart-status/cart-status.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
+import { SignupComponent } from './components/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CartDetailsComponent } from './components/cart-details/cart-details.com
     CartStatusComponent,
     ProductDetailsComponent,
     CartDetailsComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,

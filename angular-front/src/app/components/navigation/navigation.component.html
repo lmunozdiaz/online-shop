@@ -15,6 +15,7 @@
         <button (click)="drawer.toggle()" mat-button type="button">
           <mat-icon>menu</mat-icon>
         </button>
+
         <button (click)="refreshPage()" mat-button type="button">
           <mat-icon>home</mat-icon>
         </button>
@@ -27,20 +28,19 @@
         <button mat-button>
           <mat-icon>login</mat-icon> Login
         </button>
-        <button mat-button>
-            Signup
+        <button mat-button routerLink="/signup">
+          Signup
         </button>
         <a routerLink="/cart-details">
           <!-- this component selector is used to display the status of the cart on the button-->
           <app-cart-status></app-cart-status>
         </a>
+        <!-- this component selector is used to display the search bar -->
+        <app-search></app-search>
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <div class="app-search-container">
-      <!-- this component selector is used to display the search bar -->
-      <app-search></app-search>
-    </div>
+    <br/><br/><br/><br/>
 
     <div>
       <!-- where a routerLink's corresponding component html will display -->
