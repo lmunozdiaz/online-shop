@@ -11,9 +11,8 @@ import java.util.Date;
 
 /**
  * This Category class is used to represent
- * an entity from the database table 'PRODUCT_CATEGORY'.
+ * a Category entity from the database table 'CATEGORY'.
  */
-
 @Entity
 @Data
 public class Category implements Serializable {

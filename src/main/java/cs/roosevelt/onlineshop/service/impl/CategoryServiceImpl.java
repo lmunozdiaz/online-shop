@@ -21,7 +21,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    // get all the categories from the db
+    /**
+     * The getAll() retrieves all the categories from the db.
+     * @return All the categories.
+     */
     @Override
     public List<Category> getAll() {
         return categoryRepository.findAll();

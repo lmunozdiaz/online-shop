@@ -22,23 +22,41 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    // get all the products from the db
+    /**
+     * The getAll() retrieves all the products from the db.
+     * @return All the products.
+     */
     @Override
     public List<Product> getAll() {
         return productRepository.findAll();
     }
 
-    // get a product by the given ID
+    /**
+     * The getOne() retrieves a product by the
+     * given ID from the db.
+     * @param id
+     * @return The user by ID.
+     */
     @Override
     public Optional<Product> getOne(String id) { return productRepository.findById(id); }
 
-    // get all the products by the given category type from the db
+    /**
+     * The getAllByCategory() retrieves all the products by
+     * the given category type from the db.
+     * @param categoryType
+     * @return All the products by category.
+     */
     @Override
     public List<Product> getAllByCategory(Integer categoryType) {
         return productRepository.findAllByCategoryType(categoryType);
     }
 
-    // get all the products containing the search string from the db
+    /**
+     * The getAllContainingSearchString() retrieves all the
+     * products containing the search string from the db.
+     * @param searchStr
+     * @return All the products containing the search string.
+     */
     @Override
     public List<Product> getAllContainingSearchString(String searchStr) {
         return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchStr, searchStr);

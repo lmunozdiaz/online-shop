@@ -17,7 +17,7 @@ public class ProductController {
     private ProductService productService;
 
     // fetch-all-products endpoint
-    // NOTE: Used only for debugging; this
+    // NOTE: Used only for debugging or admins; this
     // is not used in the angular project
     @GetMapping(value = {"/", ""})
     public List<Product> fetchAllProducts() {

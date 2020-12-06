@@ -14,9 +14,8 @@ import java.util.Date;
 
 /**
  * This Product class is used to represent
- * an entity from the database table 'PRODUCTS'.
+ * a Product entity from the database table 'PRODUCTS'.
  */
-
 @Entity
 @Table(name = "products")
 @Data
