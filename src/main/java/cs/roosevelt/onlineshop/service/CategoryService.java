@@ -1,6 +1,6 @@
 package cs.roosevelt.onlineshop.service;
 
-import cs.roosevelt.onlineshop.entity.Category;
+import cs.roosevelt.onlineshop.model.Category;
 
 import java.util.List;
 

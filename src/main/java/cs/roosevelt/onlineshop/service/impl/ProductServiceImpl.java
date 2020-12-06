@@ -1,6 +1,6 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import cs.roosevelt.onlineshop.entity.Product;
+import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.repository.ProductRepository;
 import cs.roosevelt.onlineshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import cs.roosevelt.onlineshop.entity.Category;
+import cs.roosevelt.onlineshop.model.Category;
 import cs.roosevelt.onlineshop.repository.CategoryRepository;
 import cs.roosevelt.onlineshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

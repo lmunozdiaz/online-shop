@@ -1,6 +1,6 @@
 package cs.roosevelt.onlineshop.service;
 
-import cs.roosevelt.onlineshop.entity.Product;
+import cs.roosevelt.onlineshop.model.Product;
 
 import java.util.List;
 import java.util.Optional;

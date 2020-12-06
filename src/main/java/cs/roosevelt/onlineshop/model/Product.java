@@ -1,6 +1,5 @@
-package cs.roosevelt.onlineshop.entity;
+package cs.roosevelt.onlineshop.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;

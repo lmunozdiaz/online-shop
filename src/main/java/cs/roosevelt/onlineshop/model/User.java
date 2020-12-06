@@ -1,4 +1,4 @@
-package cs.roosevelt.onlineshop.entity;
+package cs.roosevelt.onlineshop.model;
 
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
@@ -58,5 +58,14 @@ public class User implements Serializable {
 
     @Column(name = "password")
     private  String password;
+
+    public User() {
+        super();
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
 }

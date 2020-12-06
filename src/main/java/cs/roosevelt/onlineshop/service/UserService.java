@@ -1,10 +1,11 @@
 package cs.roosevelt.onlineshop.service;
 
-import cs.roosevelt.onlineshop.entity.User;
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The methods that must be implemented. Typically,
@@ -16,10 +17,14 @@ public interface UserService {
 
     List<User> getAll();
 
-    Optional<User> getOne(String email);
+    User getOne(String email);
 
     ResponseEntity<User> register(User user);
 
     ResponseEntity<User> update(User user);
+
+    ResponseEntity<User> login(LoginForm credentials, HttpSession session);
+
+    ResponseEntity<String> logout(HttpSession session);
 
 }

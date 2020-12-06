@@ -1,6 +1,7 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import cs.roosevelt.onlineshop.entity.User;
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.repository.UserRepository;
 import cs.roosevelt.onlineshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * UserServiceImpl defines the method signatures provided
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
      * @return The user by email.
      */
     @Override
-    public Optional<User> getOne(String email) {
+    public User getOne(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<User> register(User user) {
 
         // find the user
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        User existingUser = userRepository.findByEmail(user.getEmail());
 
         // was the user found?
         if (existingUser == null) {
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<User> update(User user) {
 
         // find the user
-        Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+        User existingUser = userRepository.findByEmail(user.getEmail());
 
         // was the user found?
         if (existingUser != null) {
@@ -85,6 +86,65 @@ public class UserServiceImpl implements UserService {
             // no, the user wasn't found
             return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
         }
+
+    }
+
+    /**
+     * The login() attempts to find an existing user in the db
+     * using the passed credentials to start an http session.
+     *
+     * An http session is started using the found user data;
+     * it returns a negative http response if the user wasn't
+     * found based on the credentials.
+     * @param credentials
+     * @param session
+     * @return An http status response verifying or denying the start of an http session.
+     */
+    @Override
+    public ResponseEntity<User> login(LoginForm credentials, HttpSession session) {
+
+        // find the user
+        User existingUser = getOne(credentials.getEmail());
+
+        // was the user found?
+        if (existingUser != null) {
+            // yes, the user was found; is the password valid?
+            if (existingUser.getPassword().equals(credentials.getPassword())) {
+                // yes, the password is valid
+                session.setAttribute("user", existingUser);
+
+                return  new ResponseEntity<>(existingUser, HttpStatus.OK);
+            } else {
+                // no, the password is not valid
+
+                // create a return user to display the invalid credentials
+                User invalidUser = new User(credentials.getEmail(), credentials.getPassword());
+
+                return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
+            }
+        } else {
+            // no, the user was not found
+
+            // create a return user to display the invalid credentials
+            User invalidUser = new User(credentials.getEmail(), credentials.getPassword());
+
+            return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    /**
+     * The logout() ends the active http session.
+     * @param session
+     * @return An http response verifying the session termination.
+     */
+    @Override
+    public ResponseEntity<String> logout(HttpSession session) {
+
+        // end the session
+        session.invalidate();
+
+        return new ResponseEntity<>("session ended", HttpStatus.OK);
 
     }
 }

@@ -1,4 +1,4 @@
-package cs.roosevelt.onlineshop.entity;
+package cs.roosevelt.onlineshop.model;
 
 import lombok.Data;
 import org.hibernate.annotations.NaturalId;
