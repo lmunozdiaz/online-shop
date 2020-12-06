@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Inject} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navigation',
@@ -7,7 +9,12 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NavigationComponent implements OnInit{
 
-  constructor() { }
+  constructor(@Inject(DOCUMENT) private _document: Document,private router: Router) { }
+
+  refreshPage() {
+    this.router.navigateByUrl('/', {skipLocationChange: false}).then(()=>
+     this._document.defaultView.location.reload());
+  }
 
   ngOnInit(): void {
   }
