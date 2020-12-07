@@ -18,7 +18,7 @@ public class PopulateDB_ecommerce  {
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ecommerce", "ecommerce", "ecommerce");
 
         boolean succeeds = false;
-        String[] tbname = {"ORDER_DETAILS","CART", "USERS", "PRODUCTS", "CATEGORY", "ORDERS", };
+        String[] tbname = {"ORDER_DETAILS","CART", "USERS", "PRODUCTS", "CATEGORY", "ORDERS","USER_SIGNUP_OTP" };
         
         for(String i: tbname) {
             try{
@@ -92,6 +92,25 @@ public class PopulateDB_ecommerce  {
 
                 sqle.printStackTrace();
                 conn.createStatement().execute("DROP TABLE PRODUCTS");
+                
+            }
+        }
+        succeeds = false;
+
+        while (!succeeds) {
+            String sql = "CREATE TABLE USER_SIGNUP_OTP("
+                    + "EMAILID VARCHAR(200) PRIMARY KEY,"
+                    + "OTP INT)";
+            try {
+
+                conn.createStatement().execute(sql);
+                System.out.println("Created USER_SIGNUP_OTP");
+                succeeds = true;
+
+            } catch (SQLException sqle) {
+
+                sqle.printStackTrace();
+                conn.createStatement().execute("DROP TABLE USER_SIGNUP_OTP");
                 
             }
         }

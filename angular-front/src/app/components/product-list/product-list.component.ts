@@ -71,7 +71,7 @@ export class ProductListComponent implements OnInit {
       this.currentCategoryType = +this.route.snapshot.paramMap.get('categoryType');
     } else {
       // no, there isn't; set a default value
-      this.currentCategoryType = 1;
+      this.currentCategoryType = 0;
     }
 
     // retrieve the products for given category

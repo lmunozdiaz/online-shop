@@ -48,7 +48,10 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> getAllByCategory(Integer categoryType) {
-        return productRepository.findAllByCategoryType(categoryType);
+    	if(0==categoryType)
+    		return productRepository.findAll();
+    	else
+    		return productRepository.findAllByCategoryType(categoryType);
     }
 
     /**

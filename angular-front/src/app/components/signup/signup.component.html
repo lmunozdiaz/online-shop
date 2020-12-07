@@ -1,0 +1,56 @@
+<mat-toolbar>
+	<div fxLayout="row">
+		<img md-card-image src="" fxFlex="25">
+		<span fxFlex="10"></span>
+		<md-card-content fxFlex="65">
+
+			Registration
+
+		</md-card-content>
+	</div>
+</mat-toolbar>
+
+<md-card>
+
+	<div fxLayout="row">
+		<img md-card-image src="" fxFlex="25">
+		<span fxFlex="10"></span>
+		<md-card-content fxFlex="65">
+
+
+			<form #registrationform class="my-form">
+				<mat-form-field class="full-width">
+					<mat-label>First Name</mat-label>
+					<input matInput placeholder="First name" name="fname" required>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>Last Name</mat-label>
+					<input matInput placeholder="Last Name" name="lname" required>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>Address</mat-label>
+					<input matInput placeholder="Address" name="address" required>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>Email</mat-label>
+					<input matInput placeholder="Email" name="email">					
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>Password</mat-label>
+					<input matInput placeholder="Password" name="password">
+				</mat-form-field>
+				<mat-form-field class="full-width">
+					<mat-label>One Time Code</mat-label>
+					<input matInput placeholder="oneTimeCode" name="oneTimeCode">
+				</mat-form-field>
+			</form>
+			<mat-card-actions>
+				<button mat-raised-button color="primary">REGISTER</button>
+				<button (click)="generateOnetimeCode(registrationform.email.value)" mat-raised-button color="secondary" >
+						Generate One Time Code
+					</button>
+			</mat-card-actions>
+		</md-card-content>
+
+	</div>
+</md-card>

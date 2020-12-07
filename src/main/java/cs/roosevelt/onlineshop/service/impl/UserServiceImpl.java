@@ -2,15 +2,23 @@ package cs.roosevelt.onlineshop.service.impl;
 
 import cs.roosevelt.onlineshop.dto.LoginForm;
 import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.model.UserSignupOtp;
 import cs.roosevelt.onlineshop.repository.UserRepository;
+import cs.roosevelt.onlineshop.repository.UserSignupOtpRepository;
 import cs.roosevelt.onlineshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
 import java.util.List;
+import java.util.Random;
 
 /**
  * UserServiceImpl defines the method signatures provided
@@ -22,8 +30,18 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Value( "${OnetimeCodeLength}" )
+	private int len;
+	  
+    @Autowired
+	private JavaMailSender javaMailSender;
+
+	
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private UserSignupOtpRepository userSignupOtpRepository;
 
     /**
      * The getAll() retrieves all the users from the db.
@@ -147,4 +165,32 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>("session ended", HttpStatus.OK);
 
     }
+
+	@Override
+	@Transactional
+	public UserSignupOtp generateOTP(String email) {
+		String numbers = "0123456789";
+		// Numbers range 
+
+		// Randomizer
+		Random rndm_method = new Random();
+
+		char[] otp = new char[len];
+
+		for (int i = 0; i < len; i++) {
+
+			otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
+		}
+		
+		UserSignupOtp userOtp = new UserSignupOtp(email,Integer.parseInt(String.valueOf(otp)));
+		userOtp = userSignupOtpRepository.save(userOtp);
+		
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(email);
+		msg.setSubject("One time code for Signup");
+		msg.setText(String.valueOf(otp));
+		System.out.println("Email Sent");
+		javaMailSender.send(msg);
+		return userOtp;
+	}
 }

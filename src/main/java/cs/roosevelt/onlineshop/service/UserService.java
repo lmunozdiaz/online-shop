@@ -2,6 +2,8 @@ package cs.roosevelt.onlineshop.service;
 
 import cs.roosevelt.onlineshop.dto.LoginForm;
 import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.model.UserSignupOtp;
+
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpSession;
@@ -26,5 +28,7 @@ public interface UserService {
     ResponseEntity<User> login(LoginForm credentials, HttpSession session);
 
     ResponseEntity<String> logout(HttpSession session);
+    
+    UserSignupOtp generateOTP(String emailId);
 
 }

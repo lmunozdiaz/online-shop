@@ -1,24 +1,36 @@
 package cs.roosevelt.onlineshop.controller;
 
-import cs.roosevelt.onlineshop.dto.LoginForm;
-import cs.roosevelt.onlineshop.model.User;
-import cs.roosevelt.onlineshop.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.service.UserService;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
+	
+	
 
     @Autowired
     private UserService userService;
-
+  
     /**
      * fetch-all-users endpoint
      *
@@ -99,5 +111,13 @@ public class UserController {
 
         return message;
     }
+    
+    @GetMapping("/getOnetimeCode/{emailId}") 
+    public int generateOnetimeCode(@PathVariable("emailId") String emailId) {
+        
+    	return userService.generateOTP(emailId).getOtp();
+    	
+    }
+
 
 }
