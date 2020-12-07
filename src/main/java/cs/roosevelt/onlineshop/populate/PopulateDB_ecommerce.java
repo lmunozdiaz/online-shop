@@ -381,6 +381,7 @@ public class PopulateDB_ecommerce  {
           insert = "INSERT INTO category"
                 + "(CATEGORY_ID,CATEGORY_NAME,CATEGORY_TYPE,CREATE_TIME,UPDATE_TIME) "
                 + "VALUES "
+                + "(2345440205, 'All', 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),"
                 + "(2313940205, 'Electronics', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),"
                 + "(4223546480, 'Food & Grocery', 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),"
                 + "(3516176897, 'Pet Supplies', 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),"
