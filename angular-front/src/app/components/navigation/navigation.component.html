@@ -20,23 +20,29 @@
           <mat-icon>home</mat-icon>
         </button>
 
-        <!-- to fill empty space; it helps position other items -->
-        <button mat-button>
-          <mat-icon>person_outlined</mat-icon>
+        <!-- TODO: login or sign up, or logout if a user is already signed in. -->
+        <button [matMenuTriggerFor]="userMenu" mat-button>
+          <mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <div class="menu-button">
+            <button routerLink="/login" mat-flat-button color="primary">Sign in</button>
+          </div>
+          <div class="menu-button">
+            <button routerLink="/signup" mat-flat-button color="accent">Sign up</button>
+          </div>
+        </mat-menu>
+
+        <button (click)="logoutUser()" mat-button routerLink="/login">
+          Logout
         </button>
 
-        <button mat-button>
-          <mat-icon>login</mat-icon> Login
-        </button>
-        <button mat-button routerLink="/signup">
-          Signup
-        </button>
-        <a routerLink="/cart-details">
-          <!-- this component selector is used to display the status of the cart on the button-->
-          <app-cart-status></app-cart-status>
-        </a>
+        <!-- this component selector is used to display the status of the cart on the button-->
+        <app-cart-status routerLink="/cart-details"></app-cart-status>
+
         <!-- this component selector is used to display the search bar -->
         <app-search></app-search>
+
       </mat-toolbar-row>
     </mat-toolbar>
 

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-
 import java.util.List;
 import java.util.Random;
 
@@ -30,21 +29,22 @@ import java.util.Random;
 @Service
 public class UserServiceImpl implements UserService {
 
-	@Value( "${OnetimeCodeLength}" )
-	private int len;
-	  
-    @Autowired
-	private JavaMailSender javaMailSender;
+    @Value("${OnetimeCodeLength}")
+    private int len;
 
-	
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private UserSignupOtpRepository userSignupOtpRepository;
 
     /**
      * The getAll() retrieves all the users from the db.
+     *
      * @return All the users.
      */
     @Override
@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
     /**
      * The getOne() retrieves a user by their
      * email (natural id)from the db.
+     *
      * @param email
      * @return The user by email.
      */
@@ -65,6 +66,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * The register() saves a new user to the db.
+     *
      * @param user
      * @return The registered user and an http response.
      */
@@ -82,11 +84,12 @@ public class UserServiceImpl implements UserService {
             // user was found
             return new ResponseEntity<>(user, HttpStatus.FOUND);
         }
-        
+
     }
 
     /**
      * The update() updates an existing user in the db.
+     *
      * @param user
      * @return The updated user and an http response.
      */
@@ -114,6 +117,7 @@ public class UserServiceImpl implements UserService {
      * An http session is started using the found user data;
      * it returns a negative http response if the user wasn't
      * found based on the credentials.
+     *
      * @param credentials
      * @param session
      * @return An http status response verifying or denying the start of an http session.
@@ -128,31 +132,36 @@ public class UserServiceImpl implements UserService {
         if (existingUser != null) {
             // yes, the user was found; is the password valid?
             if (existingUser.getPassword().equals(credentials.getPassword())) {
-                // yes, the password is valid
+                // yes, the password is valid; set the session's user
                 session.setAttribute("user", existingUser);
 
-                return  new ResponseEntity<>(existingUser, HttpStatus.OK);
+                return new ResponseEntity<>(existingUser, HttpStatus.OK);
+
             } else {
                 // no, the password is not valid
 
                 // create a return user to display the invalid credentials
-                User invalidUser = new User(credentials.getEmail(), credentials.getPassword());
+                User invalidUser = new User(credentials.getEmail(), credentials.getPassword() + ": not valid");
 
                 return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
+
             }
         } else {
             // no, the user was not found
 
             // create a return user to display the invalid credentials
-            User invalidUser = new User(credentials.getEmail(), credentials.getPassword());
+            User invalidUser = new User(credentials.getEmail() + ": not valid",
+                                        credentials.getPassword() + ": not valid");
 
             return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
+
         }
 
     }
 
     /**
      * The logout() ends the active http session.
+     *
      * @param session
      * @return An http response verifying the session termination.
      */
@@ -166,31 +175,31 @@ public class UserServiceImpl implements UserService {
 
     }
 
-	@Override
-	@Transactional
-	public UserSignupOtp generateOTP(String email) {
-		String numbers = "0123456789";
-		// Numbers range 
+    @Override
+    @Transactional
+    public UserSignupOtp generateOTP(String email) {
+        String numbers = "0123456789";
+        // Numbers range
 
-		// Randomizer
-		Random rndm_method = new Random();
+        // Randomizer
+        Random rndm_method = new Random();
 
-		char[] otp = new char[len];
+        char[] otp = new char[len];
 
-		for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++) {
 
-			otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
-		}
-		
-		UserSignupOtp userOtp = new UserSignupOtp(email,Integer.parseInt(String.valueOf(otp)));
-		userOtp = userSignupOtpRepository.save(userOtp);
-		
-		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(email);
-		msg.setSubject("One time code for Signup");
-		msg.setText(String.valueOf(otp));
-		System.out.println("Email Sent");
-		javaMailSender.send(msg);
-		return userOtp;
-	}
+            otp[i] = numbers.charAt(rndm_method.nextInt(numbers.length()));
+        }
+
+        UserSignupOtp userOtp = new UserSignupOtp(email, Integer.parseInt(String.valueOf(otp)));
+        userOtp = userSignupOtpRepository.save(userOtp);
+
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setTo(email);
+        msg.setSubject("One time code for Signup");
+        msg.setText(String.valueOf(otp));
+        System.out.println("Email Sent");
+        javaMailSender.send(msg);
+        return userOtp;
+    }
 }

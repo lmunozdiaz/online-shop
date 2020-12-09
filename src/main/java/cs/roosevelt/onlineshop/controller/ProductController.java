@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.service.ProductService;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/products")
 public class ProductController {

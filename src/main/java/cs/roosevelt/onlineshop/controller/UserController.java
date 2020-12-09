@@ -9,19 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cs.roosevelt.onlineshop.dto.LoginForm;
 import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.service.UserService;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -66,7 +60,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PostMapping(value = {"/user/update", "/user/update/"})
+    @PutMapping(value = {"/user/update", "/user/update/"})
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         return userService.update(user);
     }
@@ -90,6 +84,16 @@ public class UserController {
     @GetMapping(value = {"/user/logout", "/user/logout/"})
     public ResponseEntity<String> logout(HttpSession session) {
         return userService.logout(session);
+    }
+
+    /**
+     * is-logged-in verification endpoint
+     * @param session
+     * @return
+     */
+    @GetMapping(value = {"user/loggedIn"})
+    public boolean isLoggedIn(HttpSession session) {
+        return (session != null) && (session.getAttribute("user") != null);
     }
 
     /**

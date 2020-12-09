@@ -1,0 +1,24 @@
+<div class="container" fxLayout="column" fxLayoutAlign="center center">
+  <div fxFlex="25%">
+    <form (ngSubmit)="onSubmit()">
+
+      <mat-form-field>
+        <mat-label>Enter your email</mat-label>
+        <input #email="ngModel" [(ngModel)]="credentials.email" matInput name="email" placeholder="pat@example.com"
+               type="text">
+      </mat-form-field>
+
+      <br>
+
+      <mat-form-field>
+        <mat-label>Enter your password</mat-label>
+        <input #email="ngModel" [(ngModel)]="credentials.password" matInput name="password" type="password">
+      </mat-form-field>
+
+      <br>
+
+      <button color="primary" mat-flat-button type="submit">Sign in</button>
+
+    </form>
+  </div>
+</div>

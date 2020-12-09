@@ -1,10 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import { ProductService } from "./services/product.service";
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
@@ -18,6 +17,10 @@ import { CartStatusComponent } from './components/cart-status/cart-status.compon
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { LoginComponent } from './components/login/login.component';
+import {UserService} from "./services/user.service";
+import {FormsModule} from "@angular/forms";
+import {AddCredentialsInterceptor} from "./interceptors/add-credentials.interceptor";
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { SignupComponent } from './components/signup/signup.component';
     ProductDetailsComponent,
     CartDetailsComponent,
     SignupComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,8 +44,9 @@ import { SignupComponent } from './components/signup/signup.component';
     LayoutModule,
     MaterialModule,
     FlexLayoutModule,
+    FormsModule,
   ],
-  providers: [ProductService],
+  providers: [ProductService, UserService, [{ provide: HTTP_INTERCEPTORS, useClass: AddCredentialsInterceptor, multi: true }]],
   bootstrap: [AppComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
