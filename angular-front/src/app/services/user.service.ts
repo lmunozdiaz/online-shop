@@ -38,6 +38,18 @@ export class UserService {
         return this.http.post<LoginForm>(searchUrl, credentials);
 
     }
+    createUser(user: User): Observable<Object> {
+        console.log(user);
+        var header = new HttpHeaders({
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        });
+
+        return this.http.post<User>(`${this.apiUrl}/users/createUser`, JSON.stringify(user), {
+            headers: header
+        });
+
+    }
 
     logout(): Observable<any> {
 
@@ -63,18 +75,7 @@ export class UserService {
         return this.http.get<string>(searchUrl);
 
     }
-    createUser(user: User): Observable<Object> {
-        console.log(user);
-        var header = new HttpHeaders({
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        });
-
-        return this.http.post(`${this.apiUrl}/user/createUser`, JSON.stringify(user), {
-            headers: header
-        });
-
-    }
+   
 
 
     /**

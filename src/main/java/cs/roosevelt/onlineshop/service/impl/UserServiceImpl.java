@@ -1,11 +1,11 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import cs.roosevelt.onlineshop.dto.LoginForm;
-import cs.roosevelt.onlineshop.model.User;
-import cs.roosevelt.onlineshop.model.UserSignupOtp;
-import cs.roosevelt.onlineshop.repository.UserRepository;
-import cs.roosevelt.onlineshop.repository.UserSignupOtpRepository;
-import cs.roosevelt.onlineshop.service.UserService;
+import java.util.List;
+import java.util.Random;
+
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Random;
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.model.UserSignupOtp;
+import cs.roosevelt.onlineshop.repository.UserRepository;
+import cs.roosevelt.onlineshop.repository.UserSignupOtpRepository;
+import cs.roosevelt.onlineshop.service.UserService;
 
 /**
  * UserServiceImpl defines the method signatures provided
@@ -196,10 +198,42 @@ public class UserServiceImpl implements UserService {
 
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(email);
-        msg.setSubject("One time code for Signup");
-        msg.setText(String.valueOf(otp));
+        msg.setSubject("Welcome to Roosevelt Shop");
+        msg.setText("Activate user by clicking the link http://localhost:8080/api/users/activateUser/"+String.valueOf(otp));
         System.out.println("Email Sent");
         javaMailSender.send(msg);
         return userOtp;
     }
+
+	@Override
+	@Transactional
+	public String createUser(User user) {
+		if(userRepository.findByEmail(user.getEmail())== null) {
+			user.setActive(false);		
+			Random rnd = new Random();
+			long n = 100000 + rnd.nextInt(900000);
+			user.setId(n);
+	        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user = userRepository.save(user);
+			generateOTP(user.getEmail());
+			return "User Registered Successfully";
+		}
+		return "User Already Exists Please user a new email id";
+		
+	}
+
+	@Override
+	public String activateUser(int otp) {
+		 UserSignupOtp userOtp = userSignupOtpRepository.findByOtp(otp);
+		 User user = userRepository.findByEmail(userOtp.getEmailId());
+		 if(user == null) {
+			 return "Invalid Activation URL"; 
+		 }else if(user.isActive()) {
+			 return "User is already Active, Start Shopping"; 
+		 }else{
+			 user.setActive(true);
+			 userRepository.save(user);
+			 return "User Registration Successfully Completed, Start Shopping"; 
+		 }
+	}
 }

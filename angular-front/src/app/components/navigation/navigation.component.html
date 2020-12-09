@@ -20,17 +20,15 @@
           <mat-icon>home</mat-icon>
         </button>
 
-        <!-- TODO: login or sign up, or logout if a user is already signed in. -->
-        <button [matMenuTriggerFor]="userMenu" mat-button>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
           <mat-icon>person</mat-icon>
         </button>
         <mat-menu #userMenu="matMenu">
-          <div class="menu-button">
-            <button routerLink="/login" mat-flat-button color="primary">Sign in</button>
-          </div>
-          <div class="menu-button">
-            <button routerLink="/signup" mat-flat-button color="accent">Sign up</button>
-          </div>
+          <button mat-menu-item routerLink="/login">
+            <mat-icon>login</mat-icon>
+            <span>Login</span>
+          </button>
+          <button mat-menu-item routerLink="/signup" color="accent">Sign up</button>
         </mat-menu>
 
         <button (click)="logoutUser()" mat-button routerLink="/login">
@@ -46,7 +44,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <br/><br/><br/><br/>
+    <br /><br /><br /><br />
 
     <div>
       <!-- where a routerLink's corresponding component html will display -->

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -130,12 +129,30 @@ public class UserController {
     	return userService.generateOTP(emailId).getOtp();
     	
     }
+    @GetMapping("/activateUser/{otp}") 
+    public ResponseEntity<String> activateUser(@PathVariable("otp") int otp) {
+        
+    	String msg = userService.activateUser(otp);
+    	if(msg.contains("Success")) {
+    		return new ResponseEntity(msg, HttpStatus.OK);
+    	}
+        else if(msg.contains("Invalid")) {
+        	return new ResponseEntity(msg, HttpStatus.CONFLICT);
+        }else {
+        	return new ResponseEntity(msg, HttpStatus.CONFLICT);
+        }
+    	
+    }
  // 2.1 Add an User
  	@PostMapping(value = "/createUser", consumes = MediaType.APPLICATION_JSON_VALUE)
- 	public ResponseEntity<User> createUser(@RequestBody @Valid final User s) {
+ 	public ResponseEntity<String> createUser(@RequestBody @Valid final User s) {
  		try {
- 			System.out.println(s);
- 			return new ResponseEntity("User with Email:" + s.getEmail() + " Already // Exists", HttpStatus.CONFLICT);
+ 			String msg = userService.createUser(s);
+ 			if(msg.contains("Success")) {
+ 				return new ResponseEntity("An email has been sent with activation Link Please check", HttpStatus.OK);
+ 			}
+ 			else
+ 				return new ResponseEntity("User with Email:" + s.getEmail() + " Already // Exists", HttpStatus.CONFLICT);
  		} catch (Exception e) {
  			return new ResponseEntity("Error in creatung User\n" + e.getMessage(),
  					HttpStatus.INTERNAL_SERVER_ERROR);

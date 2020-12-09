@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <mat-toolbar>
 	<div fxLayout="row">
@@ -18,24 +19,25 @@
 		<img md-card-image src="" fxFlex="20">
 		<span fxFlex="10"></span>
 		<md-card-content fxFlex="30">
+			 
+			
 
 			<form #registrationform="ngForm" (ngSubmit)="onSubmit()" novalidate>
 				<div class="form-group">
 					<label>Email</label>
 					<span
 						[ngClass]="{'invalidLabel': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }">
-						<span style="color:red" *ngIf="emailAlreadyExists && email.pristine">(EID already exists, please
-							enter a new EID)</span>
+						<span style="color:red" *ngIf="emailAlreadyExists">(Email already exists, please
+							enter a new Email)</span>
 						<span style="color:red"
-							*ngIf="!emailAlreadyExists && (email.invalid && email.errors.required) && (email.dirty || email.touched)">(EID
+							*ngIf="!emailAlreadyExists && (email.invalid && email.errors.required) && (email.dirty || email.touched)">(Email
 							Cannot be blank)</span>
 						<span style="color:red"
 							*ngIf="!emailAlreadyExists && (email.invalid && !email.errors.required && email.errors.notint) && (email.dirty || email.touched)">({{email.errors.notintmess}})</span>
 					</span>
 					<input type="email" required
 						[ngClass]="{'invalidTB': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }"
-						mustbeint minlength="5" maxlength="5" class="form-control" id="email" [(ngModel)]="user.email"
-						name="email" #email="ngModel">
+						class="form-control" id="email" [(ngModel)]="user.email" name="email" #email="ngModel">
 					<p>
 					</p>
 				</div>
@@ -46,6 +48,16 @@
 					<input maxlength="30" [ngClass]="{'invalidTB': (name.invalid && (name.touched || name.dirty))}"
 						required type="text" class="form-control" id="name" [(ngModel)]="user.name" name="name"
 						#name="ngModel">
+				</div>
+				<div class="form-group">
+					<label>Password</label>
+					<span [ngClass]="{'invalidLabel': (password.invalid && (password.touched || password.dirty)) }"
+						*ngIf="password.invalid && (password.touched || password.dirty)">(Password cannot be
+						blank)</span>
+					<input maxlength="30"
+						[ngClass]="{'invalidTB': (password.invalid && (password.touched || password.dirty))}" required
+						type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password"
+						#password="ngModel">
 				</div>
 
 				<div class="form-group">
@@ -108,8 +120,16 @@
 						#country="ngModel">
 
 
-					<mat-select-country style="width:50vw">
-					</mat-select-country>
+					<!-- <mat-select-country style="width:50vw">
+					</mat-select-country> -->
+				</div>
+				<div class="form-group">
+					<label> Phone</label>
+					<span [ngClass]="{'invalidLabel': (phone.invalid && (phone.touched || phone.dirty)) }"
+						*ngIf="phone.invalid && (phone.touched || phone.dirty)">(Phone cannot be blank)</span>
+					<input [ngClass]="{'invalidTB': (phone.invalid && (phone.touched || phone.dirty))}" min="0" required
+						type="number" class="form-control" id="phone" [(ngModel)]="user.phone" name="phone"
+						#phone="ngModel">
 				</div>
 
 

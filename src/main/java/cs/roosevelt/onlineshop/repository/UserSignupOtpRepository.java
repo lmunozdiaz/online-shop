@@ -6,5 +6,5 @@ import cs.roosevelt.onlineshop.model.UserSignupOtp;
 
 public interface UserSignupOtpRepository extends JpaRepository<UserSignupOtp, Long> {
 
-
+	UserSignupOtp findByOtp(int otp);
 }

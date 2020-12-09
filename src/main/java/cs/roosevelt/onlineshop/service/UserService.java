@@ -1,13 +1,14 @@
 package cs.roosevelt.onlineshop.service;
 
-import cs.roosevelt.onlineshop.dto.LoginForm;
-import cs.roosevelt.onlineshop.model.User;
-import cs.roosevelt.onlineshop.model.UserSignupOtp;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpSession;
-import java.util.List;
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.model.UserSignupOtp;
 
 /**
  * The methods that must be implemented. Typically,
@@ -30,5 +31,9 @@ public interface UserService {
     ResponseEntity<String> logout(HttpSession session);
     
     UserSignupOtp generateOTP(String emailId);
+    
+    String createUser(User user);
+
+	String activateUser(int otp);
 
 }

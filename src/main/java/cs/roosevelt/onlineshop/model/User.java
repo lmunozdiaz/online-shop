@@ -15,8 +15,12 @@ import java.io.Serializable;
 @Data
 public class User implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     private Long id;
 
     @Column(name = "active")
