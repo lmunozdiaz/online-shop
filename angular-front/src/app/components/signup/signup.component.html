@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 <mat-toolbar>
 	<div fxLayout="row">
 		<img md-card-image src="" fxFlex="25">
@@ -13,44 +15,117 @@
 <md-card>
 
 	<div fxLayout="row">
-		<img md-card-image src="" fxFlex="25">
+		<img md-card-image src="" fxFlex="20">
 		<span fxFlex="10"></span>
-		<md-card-content fxFlex="65">
+		<md-card-content fxFlex="30">
+
+			<form #registrationform="ngForm" (ngSubmit)="onSubmit()" novalidate>
+				<div class="form-group">
+					<label>Email</label>
+					<span
+						[ngClass]="{'invalidLabel': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }">
+						<span style="color:red" *ngIf="emailAlreadyExists && email.pristine">(EID already exists, please
+							enter a new EID)</span>
+						<span style="color:red"
+							*ngIf="!emailAlreadyExists && (email.invalid && email.errors.required) && (email.dirty || email.touched)">(EID
+							Cannot be blank)</span>
+						<span style="color:red"
+							*ngIf="!emailAlreadyExists && (email.invalid && !email.errors.required && email.errors.notint) && (email.dirty || email.touched)">({{email.errors.notintmess}})</span>
+					</span>
+					<input type="email" required
+						[ngClass]="{'invalidTB': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }"
+						mustbeint minlength="5" maxlength="5" class="form-control" id="email" [(ngModel)]="user.email"
+						name="email" #email="ngModel">
+					<p>
+					</p>
+				</div>
+				<div class="form-group">
+					<label>Name</label>
+					<span [ngClass]="{'invalidLabel': (name.invalid && (name.touched || name.dirty)) }"
+						*ngIf="name.invalid && (name.touched || name.dirty)">(Name cannot be blank)</span>
+					<input maxlength="30" [ngClass]="{'invalidTB': (name.invalid && (name.touched || name.dirty))}"
+						required type="text" class="form-control" id="name" [(ngModel)]="user.name" name="name"
+						#name="ngModel">
+				</div>
+
+				<div class="form-group">
+					<label>Adress1</label>
+					<span [ngClass]="{'invalidLabel': (address1.invalid && (address1.touched || address1.dirty)) }"
+						*ngIf="address1.invalid && (address1.touched || address1.dirty)">(Adress1 cannot be
+						blank)</span>
+					<input required
+						[ngClass]="{'invalidTB': (address1.invalid && (address1.touched || address1.dirty))}"
+						type="text" min="0" class="form-control" id="address1" [(ngModel)]="user.address1"
+						name="address1" #address1="ngModel">
+				</div>
+
+				<div class="form-group">
+					<label>Adress2</label>
+					<span [ngClass]="{'invalidLabel': (address2.invalid && (address2.touched || address2.dirty)) }"
+						*ngIf="address2.invalid && (address2.touched || address2.dirty)">(Adress2 cannot be
+						blank)</span>
+					<input required
+						[ngClass]="{'invalidTB': (address2.invalid && (address2.touched || address2.dirty))}"
+						type="text" min="0" class="form-control" id="address2" [(ngModel)]="user.address2"
+						name="address2" #address2="ngModel">
+				</div>
+
+				<div class="form-group">
+					<label> City</label>
+					<span [ngClass]="{'invalidLabel': (city.invalid && (city.touched || city.dirty)) }"
+						*ngIf="city.invalid && (city.touched || city.dirty)">(City cannot be
+						blank)</span>
+					<input maxlength="30" [ngClass]="{'invalidTB': (city.invalid && (city.touched || city.dirty))}"
+						required type="text" class="form-control" id="city" [(ngModel)]="user.city" name="city"
+						#city="ngModel">
+				</div>
+				<div class="form-group">
+					<label> State</label>
+					<span [ngClass]="{'invalidLabel': (state.invalid && (state.touched || state.dirty)) }"
+						*ngIf="state.invalid && (state.touched || state.dirty)">(State cannot be
+						blank)</span>
+					<input maxlength="30" [ngClass]="{'invalidTB': (state.invalid && (state.touched || state.dirty))}"
+						required type="text" class="form-control" id="state" [(ngModel)]="user.state" name="state"
+						#state="ngModel">
+				</div>
+
+				<div class="form-group">
+					<label> Zip</label>
+					<span [ngClass]="{'invalidLabel': (zip.invalid && (zip.touched || zip.dirty)) }"
+						*ngIf="zip.invalid && (zip.touched || zip.dirty)">(Zip cannot be blank)</span>
+					<input [ngClass]="{'invalidTB': (zip.invalid && (zip.touched || zip.dirty))}" min="0" required
+						type="number" class="form-control" id="zip" [(ngModel)]="user.zip" name="zip" #zip="ngModel">
+				</div>
+
+				<div class="form-group">
+					<label> Country</label>
+					<span [ngClass]="{'invalidLabel': (country.invalid && (country.touched || country.dirty)) }"
+						*ngIf="country.invalid && (country.touched || country.dirty)">(Country cannot be
+						blank)</span>
+					<input maxlength="30"
+						[ngClass]="{'invalidTB': (country.invalid && (country.touched || country.dirty))}" required
+						type="text" class="form-control" id="country" [(ngModel)]="user.country" name="country"
+						#country="ngModel">
 
 
-			<form #registrationform class="my-form">
-				<mat-form-field class="full-width">
-					<mat-label>First Name</mat-label>
-					<input matInput placeholder="First name" name="fname" required>
-				</mat-form-field>
-				<mat-form-field class="full-width">
-					<mat-label>Last Name</mat-label>
-					<input matInput placeholder="Last Name" name="lname" required>
-				</mat-form-field>
-				<mat-form-field class="full-width">
-					<mat-label>Address</mat-label>
-					<input matInput placeholder="Address" name="address" required>
-				</mat-form-field>
-				<mat-form-field class="full-width">
-					<mat-label>Email</mat-label>
-					<input matInput placeholder="Email" name="email">					
-				</mat-form-field>
-				<mat-form-field class="full-width">
-					<mat-label>Password</mat-label>
-					<input matInput placeholder="Password" name="password">
-				</mat-form-field>
-				<mat-form-field class="full-width">
-					<mat-label>One Time Code</mat-label>
-					<input matInput placeholder="oneTimeCode" name="oneTimeCode">
-				</mat-form-field>
+					<mat-select-country style="width:50vw">
+					</mat-select-country>
+				</div>
+
+
+				<!-- <div class="form-group">
+					<label> SID</label>
+					<select [(ngModel)]="user.sid" name="sid" class="form-control">
+						<option *ngFor="let c of supervisors" [ngValue]="c.sid">{{c.sid}}({{c.name}})</option>
+					</select>
+				</div>
+				 -->
+				<button class="btn btn-success" type="submit">Submit</button> |
+				<button class="btn btn-primary" type="reset">Start over?</button>
+
 			</form>
-			<mat-card-actions>
-				<button mat-raised-button color="primary">REGISTER</button>
-				<button (click)="generateOnetimeCode(registrationform.email.value)" mat-raised-button color="secondary" >
-						Generate One Time Code
-					</button>
-			</mat-card-actions>
 		</md-card-content>
+		<img md-card-image src="" fxFlex="30">
 
 	</div>
 </md-card>

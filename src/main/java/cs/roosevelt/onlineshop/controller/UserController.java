@@ -4,15 +4,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +23,7 @@ import cs.roosevelt.onlineshop.dto.LoginForm;
 import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.service.UserService;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -93,6 +95,16 @@ public class UserController {
     }
 
     /**
+     * is-logged-in verification endpoint
+     * @param session
+     * @return
+     */
+    @GetMapping(value = {"user/loggedIn"})
+    public boolean isLoggedIn(HttpSession session) {
+        return (session != null) && (session.getAttribute("user") != null);
+    }
+
+    /**
      * login-test endpoint; only used for debugging
      * @param request
      * @return A message log.
@@ -118,6 +130,17 @@ public class UserController {
     	return userService.generateOTP(emailId).getOtp();
     	
     }
+ // 2.1 Add an User
+ 	@PostMapping(value = "/createUser", consumes = MediaType.APPLICATION_JSON_VALUE)
+ 	public ResponseEntity<User> createUser(@RequestBody @Valid final User s) {
+ 		try {
+ 			System.out.println(s);
+ 			return new ResponseEntity("User with Email:" + s.getEmail() + " Already // Exists", HttpStatus.CONFLICT);
+ 		} catch (Exception e) {
+ 			return new ResponseEntity("Error in creatung User\n" + e.getMessage(),
+ 					HttpStatus.INTERNAL_SERVER_ERROR);
+ 		}
+ 	}	
 
 
 }

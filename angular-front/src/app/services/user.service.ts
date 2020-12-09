@@ -1,7 +1,10 @@
+import { LoginForm } from "../model/login-form";
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { User } from '../model/user';
+
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +15,44 @@ export class UserService {
 
     public nameTerms = new Subject<string>();
     public name$ = this.nameTerms.asObservable();
+
     constructor(private http: HttpClient) {
         const memo = localStorage.getItem('currentUser');
+    }
+
+    // TODO: this method will retrieve a user by email from the backend.
+    getOne(): Observable<User> {
+
+        // the modified url for the backend endpoint
+        const searchUrl = `${this.apiUrl}/users/user/login`;
+
+        return null;
+
+    }
+
+    login(credentials: LoginForm): Observable<any> {
+
+        // the modified url for the backend endpoint
+        const searchUrl = `${this.apiUrl}/users/user/login`;
+
+        return this.http.post<LoginForm>(searchUrl, credentials);
+
+    }
+
+    logout(): Observable<any> {
+
+        // clear local storage
+        localStorage.clear();
+
+        // the modified url for the backend endpoint
+        const searchUrl = `${this.apiUrl}/users/user/logout`;
+
+        return this.http.get<string>(searchUrl);
+
+    }
+
+    isLoggedIn(): Observable<any> {
+        return this.http.get<boolean>(`${this.apiUrl}/users/user/loggedIn`);
     }
 
     getOneTimeCode(emailId: string): Observable<string> {
@@ -22,6 +61,18 @@ export class UserService {
         const searchUrl = `${this.apiUrl}/users/getOnetimeCode/${emailId}`;
 
         return this.http.get<string>(searchUrl);
+
+    }
+    createUser(user: User): Observable<Object> {
+        console.log(user);
+        var header = new HttpHeaders({
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        });
+
+        return this.http.post(`${this.apiUrl}/user/createUser`, JSON.stringify(user), {
+            headers: header
+        });
 
     }
 
@@ -41,4 +92,6 @@ export class UserService {
             return of(result as T);
         };
     }
+
+
 }
