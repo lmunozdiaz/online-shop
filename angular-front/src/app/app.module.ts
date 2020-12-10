@@ -23,6 +23,8 @@ import {AddCredentialsInterceptor} from "./interceptors/add-credentials.intercep
 import { FormsModule} from '@angular/forms';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -48,6 +50,7 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
     MaterialModule,
     FlexLayoutModule,
     FormsModule,
+    MatDialogModule,
     MatSelectCountryModule.forRoot('de')
   ],
   providers: [ProductService, UserService, [{ provide: HTTP_INTERCEPTORS, useClass: AddCredentialsInterceptor, multi: true }]],

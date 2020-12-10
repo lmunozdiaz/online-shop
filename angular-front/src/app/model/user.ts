@@ -23,6 +23,4 @@ export class User {
     phone: string;
 
 	role: string;
-	
-	name:string;
 }

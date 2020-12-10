@@ -211,9 +211,10 @@ public class UserServiceImpl implements UserService {
 		if(userRepository.findByEmail(user.getEmail())== null) {
 			user.setActive(false);		
 			Random rnd = new Random();
-			long n = 100000 + rnd.nextInt(900000);
+			long n = 10000000 + rnd.nextInt(90000000);
 			user.setId(n);
 	        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+			user.setRole("ROLE_CUSTOMER");
 			user = userRepository.save(user);
 			generateOTP(user.getEmail());
 			return "User Registered Successfully";

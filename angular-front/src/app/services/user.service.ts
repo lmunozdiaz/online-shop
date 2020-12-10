@@ -39,7 +39,6 @@ export class UserService {
 
     }
     createUser(user: User): Observable<Object> {
-        console.log(user);
         var header = new HttpHeaders({
             "Content-Type": "application/json",
             "Accept": "application/json"
