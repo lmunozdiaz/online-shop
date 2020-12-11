@@ -3,6 +3,7 @@ package cs.roosevelt.onlineshop.service;
 import cs.roosevelt.onlineshop.model.Category;
 import org.springframework.http.ResponseEntity;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -13,12 +14,12 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    List<Category> getAll();
+    ResponseEntity<List<Category>> getAll();
 
-    ResponseEntity<Category> add(Category categoryToAdd);
+    ResponseEntity<String> add(Category categoryToAdd, HttpSession session);
 
-    ResponseEntity<Category> update(Category categoryToUpdate);
+    ResponseEntity<String> update(Category categoryToUpdate, HttpSession session);
 
-    ResponseEntity<Category> delete(Long categoryId);
+    ResponseEntity<String> delete(Long categoryId, HttpSession session);
 
 }

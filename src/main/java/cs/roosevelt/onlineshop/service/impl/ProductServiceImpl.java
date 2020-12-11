@@ -1,7 +1,9 @@
 package cs.roosevelt.onlineshop.service.impl;
 
+import cs.roosevelt.onlineshop.model.Category;
 import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.repository.CategoryRepository;
 import cs.roosevelt.onlineshop.repository.ProductRepository;
 import cs.roosevelt.onlineshop.repository.UserRepository;
 import cs.roosevelt.onlineshop.service.ProductService;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +32,14 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     /**
      * The getAll() retrieves all the products from the db.
+     * Only used by admins.
      *
      * @return All the products.
      */
@@ -53,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; get all users
                     return new ResponseEntity<>(productRepository.findAll(), HttpStatus.OK);
@@ -91,7 +96,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<Optional<Product>> getOne(String id) {
 
-        return null;
+        // find the product
+        Optional<Product> existingProduct = productRepository.findById(id);
+
+        // did we find it?
+        if (existingProduct.isPresent()) {
+
+            // yes, we found it
+            return new ResponseEntity<>(existingProduct, HttpStatus.OK);
+
+        } else {
+
+            // no, we didnt find it
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
 
     }
 
@@ -103,11 +121,25 @@ public class ProductServiceImpl implements ProductService {
      * @return All the products by category.
      */
     @Override
-    public List<Product> getAllByCategory(Integer categoryType) {
-        if (0 == categoryType)
-            return productRepository.findAll();
-        else
-            return productRepository.findAllByCategoryType(categoryType);
+    public ResponseEntity<List<Product>> getAllByCategory(Integer categoryType) {
+
+        // does the category exist?
+        if (categoryRepository.findByCategoryType(categoryType)) {
+
+            // yes, the category exists; proceed with request
+
+            if (0 == categoryType)
+                return new ResponseEntity<>(productRepository.findAll(), HttpStatus.OK);
+            else
+                return new ResponseEntity<>(productRepository.findAllByCategoryType(categoryType), HttpStatus.FOUND);
+
+        } else {
+
+            //no, the category doesn't exist
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        }
+
     }
 
     /**
@@ -118,38 +150,31 @@ public class ProductServiceImpl implements ProductService {
      * @return All the products containing the search string.
      */
     @Override
-    public List<Product> getAllContainingSearchString(String searchStr) {
-        return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchStr, searchStr);
-    }
+    public ResponseEntity<List<Product>> getAllContainingSearchString(String searchStr) {
 
-    @Override
-    public ResponseEntity<String> save(Product productToSave, HttpSession session) {
+        // find products with given search string
+        List<Product> existingProducts = productRepository
+                .findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchStr, searchStr);
 
-    	Product existingProduct = productRepository.findByName(productToSave.getName().trim());
+        // did we find any?
+        if (existingProducts != null) {
 
-        // does the product exist already?
-        if (existingProduct == null) {
-        	Random rnd = new Random();
-			long n = 10000000 + rnd.nextInt(90000000);
-        	productToSave.setId(String.valueOf(n));
-        	productToSave.setCreateTime(new Date());
-        	productToSave.setUpdateTime(new Date());
-        	productToSave.setStatus(0);
-            // no, it doesn't exist; save the new product
-            return new ResponseEntity(productRepository.save(productToSave), HttpStatus.OK);
+            // yes, we did
+            return new ResponseEntity<>(existingProducts, HttpStatus.FOUND);
 
         } else {
 
-            // yes, it exists; return null and found status
-            return new ResponseEntity<>("Product Already Exists", HttpStatus.FOUND);
+            // no, we didn't find any
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         }
 
     }
 
     @Override
-    public ResponseEntity<Optional<Product>> update(Product productToUpdate, HttpSession session) {
+    public ResponseEntity<String> save(Product productToSave, HttpSession session) {
 
+        // is there an active session?
         if (session != null && session.getAttribute("user") != null) {
 
             // get the user from the session
@@ -161,7 +186,78 @@ public class ProductServiceImpl implements ProductService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "Manager") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin
+
+                    // does the product exist already?
+                    if (productRepository.findByName(productToSave.getName().trim()) != null) {
+
+                        // no, it doesn't exist; construct and save the new product
+
+                        // make a product ID
+                        Random rnd = new Random();
+                        long n = 10000000 + rnd.nextInt(90000000);
+
+                        // set the new product's lower level details
+                        productToSave.setId(String.valueOf(n));
+                        productToSave.setCreateTime(new Date());
+                        productToSave.setUpdateTime(new Date());
+                        productToSave.setStatus(0);
+
+                        // save and return an OK status
+                        productRepository.save(productToSave);
+
+                        return new ResponseEntity<>("Product added", HttpStatus.OK);
+
+                    } else {
+
+                        // yes, the product exists; return found status
+                        return new ResponseEntity<>("Product Already Exists", HttpStatus.FOUND);
+
+                    }
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>("Current user not valid", HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
+
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<String> update(Product productToUpdate, HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // yes, there's an active session
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; proceed with the request
 
@@ -169,46 +265,52 @@ public class ProductServiceImpl implements ProductService {
                     Optional<Product> existingProduct = productRepository.findById(productToUpdate.getId());
 
                     // does the product exist already?
-                    if (existingProduct != null) {
+                    if (existingProduct.isPresent()) {
 
-                        // yes, it does exist; update the new product
-                        return new ResponseEntity(productRepository.save(productToUpdate), HttpStatus.OK);
+                        // yes, the product exist; update the product and return OK status
+                        productToUpdate.setUpdateTime(new Date());
+
+                        productRepository.save(productToUpdate);
+
+                        return new ResponseEntity<>("Product updated", HttpStatus.OK);
 
                     } else {
 
                         // no, it doesn't exists; return null and not found status
-                        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                        return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
 
                     }
 
                 } else {
 
                     // no, the user is not an admin; deny the request
-                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
 
                 }
 
             } else {
 
                 // no valid user found
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Current user is not valid", HttpStatus.NOT_FOUND);
 
             }
 
         } else {
 
             // no, there's no active session; return denial response
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
         }
-        // is there an active session?
 
     }
 
     @Override
-    public ResponseEntity<Optional<Product>> delete(String productId, HttpSession session) {
+    public ResponseEntity<String> delete(String productId, HttpSession session) {
 
+        // is there an active session?
         if (session != null && session.getAttribute("user") != null) {
+
+            // yes, there's an active session
 
             // get the user from the session
             User sessionUser = (User) session.getAttribute("user");
@@ -219,44 +321,44 @@ public class ProductServiceImpl implements ProductService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "Manager") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; proceed with the request
 
                     // does the product exist?
                     if (productRepository.existsById(productId)) {
 
-                        // yes, it does exist; delete the new product
+                        // yes, the product exist; delete it
                         productRepository.deleteById(productId);
 
                         // return an OK status
-                        return new ResponseEntity(null, HttpStatus.OK);
+                        return new ResponseEntity<>("Product deleted", HttpStatus.OK);
 
                     } else {
 
-                        // no, it doesn't exists; return null and not found status
-                        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                        // no, the product doesn't exists; return not found
+                        return new ResponseEntity<>("Product does not exist", HttpStatus.NOT_FOUND);
 
                     }
 
                 } else {
 
                     // no, the user is not an admin; deny the request
-                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
 
                 }
 
             } else {
 
                 // no valid user found
-                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("No valid user", HttpStatus.NOT_FOUND);
 
             }
 
         } else {
 
             // no, there's no active session; return denial response
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
         }
 

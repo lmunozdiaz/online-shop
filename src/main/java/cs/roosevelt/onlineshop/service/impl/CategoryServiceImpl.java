@@ -1,13 +1,16 @@
 package cs.roosevelt.onlineshop.service.impl;
 
 import cs.roosevelt.onlineshop.model.Category;
+import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.repository.CategoryRepository;
+import cs.roosevelt.onlineshop.repository.UserRepository;
 import cs.roosevelt.onlineshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,13 +27,19 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     /**
      * The getAll() retrieves all the categories from the db.
      * @return All the categories.
      */
     @Override
-    public List<Category> getAll() {    
-        return categoryRepository.findByOrderByCategoryTypeAsc();
+    public ResponseEntity<List<Category>> getAll() {
+
+        // return all the categories
+        return new ResponseEntity<>(categoryRepository.findByOrderByCategoryTypeAsc(), HttpStatus.OK);
+
     }
 
     /**
@@ -39,23 +48,61 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public ResponseEntity<Category> add(Category categoryToAdd) {
+    public ResponseEntity<String> add(Category categoryToAdd, HttpSession session) {
 
-        // find the category
-        Optional<Category> existingCategory = categoryRepository.findById(categoryToAdd.getId());
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
 
-        // does the category exist?
-        if (existingCategory != null) {
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
 
-            // yes, it does exist; don't add it
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
 
-            // return a denial response
-            return new ResponseEntity<>(null, HttpStatus.FOUND);
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin
+
+                    // find the category
+                    Optional<Category> existingCategory = categoryRepository.findById(categoryToAdd.getId());
+
+                    // does the category exist?
+                    if (existingCategory.isPresent()) {
+
+                        // yes, the category exists; return a denial response
+                        return new ResponseEntity<>("Category already exists", HttpStatus.FOUND);
+
+                    } else {
+
+                        // no, the category doesn't exist; add the category and return OK status
+
+                        categoryRepository.save(categoryToAdd);
+
+                        return new ResponseEntity<>("Category added", HttpStatus.OK);
+
+                    }
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>("Current user not valid", HttpStatus.NOT_FOUND);
+
+            }
 
         } else {
 
-            //no, it doesn't exist; add it to the db
-            return new ResponseEntity<>(categoryRepository.save(categoryToAdd), HttpStatus.OK);
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
         }
 
@@ -67,21 +114,61 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public ResponseEntity<Category> update(Category categoryToUpdate) {
+    public ResponseEntity<String> update(Category categoryToUpdate, HttpSession session) {
 
-        // find the category
-        Optional<Category> existingCategory = categoryRepository.findById(categoryToUpdate.getId());
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
 
-        // does the category exist?
-        if (existingCategory != null) {
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
 
-            // yes, it does exist; update the category
-            return new ResponseEntity<>(categoryRepository.save(categoryToUpdate), HttpStatus.OK);
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin
+
+                    // find the category
+                    Optional<Category> existingCategory = categoryRepository.findById(categoryToUpdate.getId());
+
+                    // does the category exist?
+                    if (existingCategory.isPresent()) {
+
+                        // yes, the category exists; update the category and return OK status
+
+                        categoryRepository.save(categoryToUpdate);
+
+                        return new ResponseEntity<>("Category updated", HttpStatus.OK);
+
+                    } else {
+
+                        // no, the category doesn't exist; return denial response
+                        return new ResponseEntity<>("Category does not exist", HttpStatus.NOT_FOUND);
+
+                    }
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>("Current user not valid", HttpStatus.NOT_FOUND);
+
+            }
 
         } else {
 
-            //no, it doesn't exist; return denial response
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
         }
 
@@ -93,21 +180,58 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
-    public ResponseEntity<Category> delete(Long categoryId) {
+    public ResponseEntity<String> delete(Long categoryId, HttpSession session) {
 
-        // does the category exist?
-        if (categoryRepository.existsById(categoryId)) {
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
 
-            // yes, it does exist; delete it
-            categoryRepository.deleteById(categoryId);
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
 
-            // respond with confirmation
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin
+
+                    // does the category exist?
+                    if (categoryRepository.existsById(categoryId)) {
+
+                        // yes, it does exist; delete it
+                        categoryRepository.deleteById(categoryId);
+
+                        // respond with confirmation
+                        return new ResponseEntity<>("Category deleted", HttpStatus.OK);
+
+                    } else {
+
+                        // no, it doesn't exist; return a denial response
+                        return new ResponseEntity<>("Category does not exist", HttpStatus.NOT_FOUND);
+
+                    }
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>("Current user not valid", HttpStatus.NOT_FOUND);
+
+            }
 
         } else {
 
-            // no, it doesn't exist; return a denial response
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
         }
 

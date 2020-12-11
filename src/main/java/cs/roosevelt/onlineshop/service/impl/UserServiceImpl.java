@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; get all users
                     return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; get all users
                     return new ResponseEntity<>(userRepository.findByEmail(email), HttpStatus.OK);
@@ -148,6 +148,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * The register() saves a new user to the db.
+     * Used by admins only.
      *
      * @param user
      * @return The registered user and an http response.
@@ -167,7 +168,7 @@ public class UserServiceImpl implements UserService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, the user's an admin; update the user
                     return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
@@ -218,7 +219,7 @@ public class UserServiceImpl implements UserService {
                 // yes, they're valid
 
                 // is the session user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // yes, they're an admin; proceed with request
 
@@ -236,7 +237,7 @@ public class UserServiceImpl implements UserService {
                     }
 
                     // is the session user registered or an employee?
-                } else if (sessionUser.getRole() == "ROLE_CUSTOMER" || sessionUser.getRole() == "ROLE_EMPLOYEE") {
+                } else if (sessionUser.getRole().equals("ROLE_CUSTOMER") || sessionUser.getRole().equals("ROLE_EMPLOYEE")) {
 
                     // yes, they are; they can only update their own profile
 
@@ -309,7 +310,7 @@ public class UserServiceImpl implements UserService {
                 // yes, the user is valid
 
                 // is the valid user an admin?
-                if (sessionUser.getRole() == "ROLE_MANAGER") {
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
                     // does the user with given email exist?
                     if (userRepository.findByEmail(email) != null) {

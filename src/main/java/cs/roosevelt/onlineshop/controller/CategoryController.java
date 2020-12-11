@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
@@ -22,7 +23,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping(value = {"", "/"})
-    public List<Category> fetchAllCategories() { return categoryService.getAll(); }
+    public ResponseEntity<List<Category>> fetchAllCategories() { return categoryService.getAll(); }
 
     /**
      * add-category endpoint
@@ -30,8 +31,8 @@ public class CategoryController {
      * @return
      */
     @PostMapping(value = {"/add", "/add/"})
-    public ResponseEntity<Category> addCategory(@RequestBody Category categoryToAdd) {
-        return categoryService.add(categoryToAdd);
+    public ResponseEntity<String> addCategory(@RequestBody Category categoryToAdd, HttpSession session) {
+        return categoryService.add(categoryToAdd, session);
     }
 
     /**
@@ -40,8 +41,8 @@ public class CategoryController {
      * @return
      */
     @PutMapping(value = {"/edit", "/edit/"})
-    public ResponseEntity<Category> editCategory(@RequestBody Category categoryToUpdate) {
-        return categoryService.add(categoryToUpdate);
+    public ResponseEntity<String> editCategory(@RequestBody Category categoryToUpdate, HttpSession session) {
+        return categoryService.add(categoryToUpdate, session);
     }
 
     /**
@@ -50,8 +51,8 @@ public class CategoryController {
      * @return
      */
     @DeleteMapping(value = {"/delete/{id}", "/delete/{id}/"})
-    public ResponseEntity<Category> deleteCategory(@PathVariable("id") Long categoryId) {
-        return categoryService.delete(categoryId);
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") Long categoryId, HttpSession session) {
+        return categoryService.delete(categoryId, session);
     }
 
 }

@@ -21,14 +21,14 @@ public interface ProductService {
 
     ResponseEntity<Optional<Product>> getOne(String productId);
 
-    List<Product> getAllByCategory(Integer categoryType);
+    ResponseEntity<List<Product>> getAllByCategory(Integer categoryType);
 
-    List<Product> getAllContainingSearchString(String searchStr);
+    ResponseEntity<List<Product>> getAllContainingSearchString(String searchStr);
 
     public ResponseEntity<String>  save(Product productToSave, HttpSession session);
 
-    ResponseEntity<Optional<Product>> update(Product productToUpdate, HttpSession session);
+    ResponseEntity<String> update(Product productToUpdate, HttpSession session);
 
-    ResponseEntity<Optional<Product>> delete(String productId, HttpSession session);
+    ResponseEntity<String> delete(String productId, HttpSession session);
 
 }

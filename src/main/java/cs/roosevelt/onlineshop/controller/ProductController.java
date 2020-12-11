@@ -17,9 +17,6 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/products")
 public class ProductController {
 
-	
-
-    
 	@Autowired
     private ProductService productService;
 
@@ -28,17 +25,19 @@ public class ProductController {
      *
      * NOTE: Used only for debugging or admins; this
      * is not used in the angular project
-     * @return
+     *
+     * @param session The http session.
+     * @return A list of all the products.
      */
-    @GetMapping(value = {"/", ""})
+    @GetMapping(value = {"/admin/allProducts", "/admin/allProducts/"})
     public ResponseEntity<List<Product>> fetchAllProducts(HttpSession session) {
         return productService.getAll(session);
     }
 
     /**
      * fetch-one-product endpoint
-     * @param productId
-     * @return
+     * @param productId The ID of the product to fetch.
+     * @return The product with given ID.
      */
     @GetMapping("/product/{id}")
     public ResponseEntity<Optional<Product>> fetchProduct(@PathVariable("id") String productId) {
@@ -47,28 +46,29 @@ public class ProductController {
 
     /**
      * fetch-all-by-category endpoint
-     * @param categoryType
-     * @return
+     * @param categoryType The category type to filter with when fetching all products.
+     * @return A filtered-by-category-type list of products.
      */
     @GetMapping("/search/category/{categoryType}")
-    public List<Product> fetchAllProductsByCategory(@PathVariable("categoryType") Integer categoryType) {
+    public ResponseEntity<List<Product>> fetchAllProductsByCategory(@PathVariable("categoryType") Integer categoryType) {
         return productService.getAllByCategory(categoryType);
     }
 
     /**
      * fetch-all-containing-search-string endpoint
-     * @param searchStr
-     * @return
+     * @param searchStr The search string to use to find the product(s).
+     * @return The product(s) containing the given search string.
      */
     @GetMapping("/search/product/{searchStr}")
-    public List<Product> fetchAllProductsContainingSearchString(@PathVariable("searchStr") String searchStr) {
+    public ResponseEntity<List<Product>> fetchAllProductsContainingSearchString(@PathVariable("searchStr") String searchStr) {
         return productService.getAllContainingSearchString(searchStr);
     }
 
     /**
      * add-product endpoint
-     * @param productToAdd
-     * @return
+     * @param productToAdd The product to add.
+     * @param session The http session.
+     * @return A confirmation or denial message.
      */
     @PostMapping(value = {"/add", "/add/"})
      public ResponseEntity<String>  addProduct(@RequestBody Product productToAdd, HttpSession session) {
@@ -77,21 +77,23 @@ public class ProductController {
 
     /**
      * edit-product endpoint
-     * @param productToUpdate
-     * @return
+     * @param productToUpdate The product to update.
+     * @param session The http session.
+     * @return A confirmation or denial message.
      */
     @PutMapping(value = {"/edit", "/edit/"})
-    public ResponseEntity<Optional<Product>> editProduct(@RequestBody Product productToUpdate, HttpSession session) {
+    public ResponseEntity<String> editProduct(@RequestBody Product productToUpdate, HttpSession session) {
         return productService.update(productToUpdate, session);
     }
 
     /**
      * delete-product endpoint
-     * @param productId
-     * @return
+     * @param productId The product ID of the product to delete.
+     * @param session The http session.
+     * @return A confirmation or denial message.
      */
     @DeleteMapping(value = {"/delete/{id}", "/delete/{id}/"})
-    public ResponseEntity<Optional<Product>> deleteProduct(@PathVariable("id") String productId, HttpSession session) {
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") String productId, HttpSession session) {
         return productService.delete(productId, session);
     }
 
