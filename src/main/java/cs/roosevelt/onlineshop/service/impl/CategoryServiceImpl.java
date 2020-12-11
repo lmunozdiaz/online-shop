@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * CategoryServiceImpl defines the method signatures provided
@@ -78,9 +79,16 @@ public class CategoryServiceImpl implements CategoryService {
 
                     } else {
 
-                        // no, the category doesn't exist; add the category and return OK status
+                        // no, the category doesn't exist; construct the category and return OK status
 
+                        // make a product ID
+                        Random rnd = new Random();
+                        long n = 10000000 + rnd.nextInt(90000000);
+
+                        // set the lower level details
+                        categoryToAdd.setId(n);
                         categoryToAdd.setCreateTime(new Date());
+                        categoryToAdd.setUpdateTime(new Date());
 
                         categoryRepository.save(categoryToAdd);
 

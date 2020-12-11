@@ -150,11 +150,11 @@ public class UserServiceImpl implements UserService {
      * The register() saves a new user to the db.
      * Used by admins only.
      *
-     * @param user
+     * @param userToAdd
      * @return The registered user and an http response.
      */
     @Override
-    public ResponseEntity<User> register(User user, HttpSession session) {
+    public ResponseEntity<User> register(User userToAdd, HttpSession session) {
 
         // is there an active session?
         if (session != null && session.getAttribute("user") != null) {
@@ -170,8 +170,12 @@ public class UserServiceImpl implements UserService {
                 // is the valid user an admin?
                 if (sessionUser.getRole().equals("ROLE_MANAGER")) {
 
-                    // yes, the user's an admin; update the user
-                    return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+                    // yes, the user's an admin; construct the user and save
+
+                    // set the registered user's role
+                    userToAdd.setRole("ROLE_CUSTOMER");
+
+                    return new ResponseEntity<>(userRepository.save(userToAdd), HttpStatus.OK);
 
                 } else {
 
