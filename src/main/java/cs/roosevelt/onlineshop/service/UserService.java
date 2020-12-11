@@ -18,13 +18,15 @@ import cs.roosevelt.onlineshop.model.UserSignupOtp;
  */
 public interface UserService {
 
-    List<User> getAll();
+    ResponseEntity<List<User>> getAll(HttpSession session);
 
-    User getOne(String email);
+    ResponseEntity<User> getOne(String email, HttpSession session);
 
-    ResponseEntity<User> register(User user);
+    ResponseEntity<User> register(User userToRegister, HttpSession session);
 
-    ResponseEntity<User> update(User user);
+    ResponseEntity<User> update(User userToUpdate, HttpSession session);
+
+    ResponseEntity<User> delete(String email, HttpSession session);
 
     ResponseEntity<User> login(LoginForm credentials, HttpSession session);
 

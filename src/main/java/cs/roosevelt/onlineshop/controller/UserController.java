@@ -10,13 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cs.roosevelt.onlineshop.dto.LoginForm;
 import cs.roosevelt.onlineshop.model.User;
@@ -40,8 +34,8 @@ public class UserController {
      * @return
      */
     @GetMapping(value = {"", "/"})
-    public List<User> fetchAllUsers() {
-        return userService.getAll();
+    public ResponseEntity<List<User>> fetchAllUsers(HttpSession session) {
+        return userService.getAll(session);
     }
 
     /**
@@ -49,9 +43,9 @@ public class UserController {
      * @param email
      * @return
      */
-    @GetMapping(value = {"/{email}", "/{email}/"})
-    public User fetchUser(@PathVariable("email") String email) {
-        return userService.getOne(email);
+    @GetMapping(value = {"/user/{email}", "/user/{email}/"})
+    public ResponseEntity<User> fetchUser(@PathVariable("email") String email, HttpSession session) {
+        return userService.getOne(email, session);
     }
 
     /**
@@ -60,16 +54,23 @@ public class UserController {
      * @return
      */
     @PostMapping(value = {"/register", "/register/"})
-    public ResponseEntity<User> registerUser(@RequestBody User user) { return userService.register(user); }
+    public ResponseEntity<User> registerUser(@RequestBody User user, HttpSession session) {
+        return userService.register(user, session);
+    }
 
     /**
      * update-user endpoint
      * @param user
      * @return
      */
-    @PostMapping(value = {"/user/update", "/user/update/"})
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        return userService.update(user);
+    @PutMapping(value = {"/user/update", "/user/update/"})
+    public ResponseEntity<User> updateUser(@RequestBody User user, HttpSession session) {
+        return userService.update(user, session);
+    }
+
+    @DeleteMapping(value = {"/user/delete/{id}", "/user/delete/{id}/"})
+    public ResponseEntity<User> deleteUser(@PathVariable("id") String email, HttpSession session) {
+        return userService.delete(email, session);
     }
 
     /**

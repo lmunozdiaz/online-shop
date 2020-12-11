@@ -1,11 +1,11 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
-
+import cs.roosevelt.onlineshop.dto.LoginForm;
+import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.model.UserSignupOtp;
+import cs.roosevelt.onlineshop.repository.UserRepository;
+import cs.roosevelt.onlineshop.repository.UserSignupOtpRepository;
+import cs.roosevelt.onlineshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -14,17 +14,15 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import cs.roosevelt.onlineshop.dto.LoginForm;
-import cs.roosevelt.onlineshop.model.User;
-import cs.roosevelt.onlineshop.model.UserSignupOtp;
-import cs.roosevelt.onlineshop.repository.UserRepository;
-import cs.roosevelt.onlineshop.repository.UserSignupOtpRepository;
-import cs.roosevelt.onlineshop.service.UserService;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Random;
 
 /**
  * UserServiceImpl defines the method signatures provided
  * by the UserService interface for the controller to use.
- *
+ * <p>
  * Within each method, it uses methods from
  * the UserRepository.
  */
@@ -50,8 +48,46 @@ public class UserServiceImpl implements UserService {
      * @return All the users.
      */
     @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public ResponseEntity<List<User>> getAll(HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole() == "ROLE_MANAGER") {
+
+                    // yes, the user's an admin; get all users
+                    return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+
     }
 
     /**
@@ -62,8 +98,46 @@ public class UserServiceImpl implements UserService {
      * @return The user by email.
      */
     @Override
-    public User getOne(String email) {
-        return userRepository.findByEmail(email);
+    public ResponseEntity<User> getOne(String email, HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole() == "ROLE_MANAGER") {
+
+                    // yes, the user's an admin; get all users
+                    return new ResponseEntity<>(userRepository.findByEmail(email), HttpStatus.OK);
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+
     }
 
     /**
@@ -73,44 +147,195 @@ public class UserServiceImpl implements UserService {
      * @return The registered user and an http response.
      */
     @Override
-    public ResponseEntity<User> register(User user) {
+    public ResponseEntity<User> register(User user, HttpSession session) {
 
-        // find the user
-        User existingUser = userRepository.findByEmail(user.getEmail());
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
 
-        // was the user found?
-        if (existingUser == null) {
-            // no user found; save the user to the db
-            return new ResponseEntity<>(userRepository.save(user), HttpStatus.CREATED);
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole() == "ROLE_MANAGER") {
+
+                    // yes, the user's an admin; update the user
+                    return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
         } else {
-            // user was found
-            return new ResponseEntity<>(user, HttpStatus.FOUND);
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
         }
 
     }
 
     /**
-     * The update() updates an existing user in the db.
+     * The update() allows admins to update any user in
+     * the db, while only letting registered users and employees
+     * update their self.
      *
-     * @param user
+     * @param userToUpdate
      * @return The updated user and an http response.
      */
     @Override
-    public ResponseEntity<User> update(User user) {
+    public ResponseEntity<User> update(User userToUpdate, HttpSession session) {
 
-        // find the user
-        User existingUser = userRepository.findByEmail(user.getEmail());
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
 
-        // was the user found?
-        if (existingUser != null) {
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
 
-            // yes, the user was found; update the user
-            return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, they're valid
+
+                // is the session user an admin?
+                if (sessionUser.getRole() == "ROLE_MANAGER") {
+
+                    // yes, they're an admin; proceed with request
+
+                    // does the user-to-update exist?
+                    if (userRepository.existsById(userToUpdate.getId())) {
+
+                        // yes, the user exists
+                        return new ResponseEntity<>(userRepository.save(userToUpdate), HttpStatus.OK);
+
+                    } else {
+
+                        // no, the user-to-update doesn't exist
+                        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+                    }
+
+                    // is the session user registered or an employee?
+                } else if (sessionUser.getRole() == "ROLE_CUSTOMER" || sessionUser.getRole() == "ROLE_EMPLOYEE") {
+
+                    // yes, they are; they can only update their own profile
+
+                    // does the user-to-update exist?
+                    if (userRepository.existsById(userToUpdate.getId())) {
+
+                        // yes, the user exists
+
+                        // are they updating their self?
+                        if (sessionUser.equals(userToUpdate)) {
+
+                            // yes, they are; proceed with request
+                            return new ResponseEntity<>(userRepository.save(userToUpdate), HttpStatus.OK);
+
+                        } else {
+
+                            // no, they are not; deny the request
+                            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                        }
+
+                    } else {
+
+                        // no, the user-to-update doesn't exist
+                        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+                    }
+
+                } else {
+
+                    // no, they're neither registered nor an employee; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
 
         } else {
 
-            // no, the user wasn't found
-            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+
+    }
+
+    /**
+     * The delete() deletes a user in the db.
+     *
+     * @param email
+     * @return A http status response verifying or denying the deletion.
+     */
+    @Override
+    public ResponseEntity<User> delete(String email, HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole() == "ROLE_MANAGER") {
+
+                    // does the user with given email exist?
+                    if (userRepository.findByEmail(email) != null) {
+
+                        // yes, the user exists; delete the user
+                        return new ResponseEntity<>(userRepository.deleteByEmail(email), HttpStatus.OK);
+
+                    } else {
+
+                        // no, the user doesn't exist; return Not_Found status
+                        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+                    }
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
         }
 
@@ -119,7 +344,7 @@ public class UserServiceImpl implements UserService {
     /**
      * The login() attempts to find an existing user in the db
      * using the passed credentials to start an http session.
-     *
+     * <p>
      * An http session is started using the found user data;
      * it returns a negative http response if the user wasn't
      * found based on the credentials.
@@ -132,13 +357,14 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<User> login(LoginForm credentials, HttpSession session) {
 
         // find the user
-        User existingUser = getOne(credentials.getEmail());
+        User existingUser = userRepository.findByEmail(credentials.getEmail());
 
         // was the user found?
         if (existingUser != null) {
 
             // yes, the user was found; is the password valid?
             if (existingUser.getPassword().equals(credentials.getPassword())) {
+
                 // yes, the password is valid; set the session's user
                 session.setAttribute("user", existingUser);
 
@@ -148,7 +374,7 @@ public class UserServiceImpl implements UserService {
 
                 // no, the password is not valid
 
-                // create a return user to display the invalid credentials
+                // create a return-user to display the invalid credentials
                 User invalidUser = new User(credentials.getEmail(), credentials.getPassword() + ": not valid");
 
                 return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
@@ -160,7 +386,7 @@ public class UserServiceImpl implements UserService {
 
             // create a return user to display the invalid credentials
             User invalidUser = new User(credentials.getEmail() + ": not valid",
-                                        credentials.getPassword() + ": not valid");
+                    credentials.getPassword() + ": not valid");
 
             return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
 
@@ -206,41 +432,41 @@ public class UserServiceImpl implements UserService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(email);
         msg.setSubject("Welcome to Roosevelt Shop");
-        msg.setText("Activate user by clicking the link http://localhost:8080/api/users/activateUser/"+String.valueOf(otp));
+        msg.setText("Activate user by clicking the link http://localhost:8080/api/users/activateUser/" + String.valueOf(otp));
         System.out.println("Email Sent");
         javaMailSender.send(msg);
         return userOtp;
     }
 
-	@Override
-	@Transactional
-	public String createUser(User user) {
-		if(userRepository.findByEmail(user.getEmail())== null) {
-			user.setActive(false);		
-			Random rnd = new Random();
-			long n = 100000 + rnd.nextInt(900000);
-			user.setId(n);
-	        //user.setPassword(passwordEncoder.encode(user.getPassword()));
-			user = userRepository.save(user);
-			generateOTP(user.getEmail());
-			return "User Registered Successfully";
-		}
-		return "User Already Exists Please user a new email id";
-		
-	}
+    @Override
+    @Transactional
+    public String createUser(User user) {
+        if (userRepository.findByEmail(user.getEmail()) == null) {
+            user.setActive(false);
+            Random rnd = new Random();
+            long n = 100000 + rnd.nextInt(900000);
+            user.setId(n);
+            //user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user = userRepository.save(user);
+            generateOTP(user.getEmail());
+            return "User Registered Successfully";
+        }
+        return "User Already Exists Please user a new email id";
 
-	@Override
-	public String activateUser(int otp) {
-		 UserSignupOtp userOtp = userSignupOtpRepository.findByOtp(otp);
-		 User user = userRepository.findByEmail(userOtp.getEmailId());
-		 if(user == null) {
-			 return "Invalid Activation URL"; 
-		 }else if(user.isActive()) {
-			 return "User is already Active, Start Shopping"; 
-		 }else{
-			 user.setActive(true);
-			 userRepository.save(user);
-			 return "User Registration Successfully Completed, Start Shopping"; 
-		 }
-	}
+    }
+
+    @Override
+    public String activateUser(int otp) {
+        UserSignupOtp userOtp = userSignupOtpRepository.findByOtp(otp);
+        User user = userRepository.findByEmail(userOtp.getEmailId());
+        if (user == null) {
+            return "Invalid Activation URL";
+        } else if (user.isActive()) {
+            return "User is already Active, Start Shopping";
+        } else {
+            user.setActive(true);
+            userRepository.save(user);
+            return "User Registration Successfully Completed, Start Shopping";
+        }
+    }
 }
