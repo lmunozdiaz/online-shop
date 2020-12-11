@@ -29,7 +29,11 @@
             <span>Login</span>
           </button>
           <button mat-menu-item routerLink="/signup" color="accent">Sign up</button>
-           <button mat-menu-item routerLink="/orders" color="accent">Orders</button>
+          <button mat-menu-item routerLink="/orders" color="accent">Orders</button>
+           <button mat-menu-item routerLink="/productadd">
+            <mat-icon>add_circle</mat-icon>
+            <span>Add Product</span>
+          </button>        
         </mat-menu>
 
         <button (click)="logoutUser()" mat-button routerLink="/login">

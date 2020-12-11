@@ -8,6 +8,7 @@ import {CartDetailsComponent} from './components/cart-details/cart-details.compo
 import { SignupComponent } from './components/signup/signup.component';
 import {LoginComponent} from "./components/login/login.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
+import { ProductAddComponent } from './components/product-add/product-add.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   {path: 'signup', component: SignupComponent},
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
+  {path:  'productadd', component: ProductAddComponent},
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];

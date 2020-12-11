@@ -36,7 +36,7 @@ public class PopulateDB_ecommerce  {
         while (!succeeds) {
             String sql = "CREATE TABLE USERS("
                     + "ID BIGINT PRIMARY KEY,"
-                    + "ACTIVE BOOLEAN,"
+                    + "USER_ACTIVE VARCHAR(1),"
                     + "EMAIL VARCHAR(100),"
                     + "FIRST_NAME VARCHAR(100),"
                     + "LAST_NAME VARCHAR(100),"
@@ -312,7 +312,7 @@ public class PopulateDB_ecommerce  {
 
                 + " ('1365270235', 5, '2019-12-14 07:43:37', 'STEM Toy for Boys and Girls Age 8 and Up', 'https://images-na.ssl-images-amazon.com/images/I/71KJQygS1OL._AC_SL1300_.jpg', 'ThinkFun Circuit Maze', 29.99, 0, 20, null), "
 
-                + " ('1506653440', 5, '2019-09-03 17:22:09', 'Six double-sided, interactive pages feature animals from 12 categories such as the forest, the ocean and the shore', 'https://images-na.ssl-images-amazon.com/images/I/71SDfj4aXHL._AC_SL1500_.jpg', 'LeapFrog 100 Animals Book', 17.99, 0, 21, null), "
+                + " ('1506653440', 5, '2019-09-03 17:22:09', 'Six double-sided, interUSER_ACTIVE pages feature animals from 12 categories such as the forest, the ocean and the shore', 'https://images-na.ssl-images-amazon.com/images/I/71SDfj4aXHL._AC_SL1500_.jpg', 'LeapFrog 100 Animals Book', 17.99, 0, 21, null), "
 
                 + " ('4895468860', 5, '2019-11-18 22:40:28', 'Rechargeable Light Up Ball Drone Infrared Induction Helicopter', 'https://images-na.ssl-images-amazon.com/images/I/61Gc5SPf4kL._AC_SL1500_.jpg', 'Betheaces Flying Ball Toys', 12.99, 0, 37, null), "
 
@@ -326,7 +326,7 @@ public class PopulateDB_ecommerce  {
 
                 + " ('0446777953', 5, '2019-10-06 05:23:32', 'Animals Jigsaw Puzzle Sorting and Stacking Games', 'https://images-na.ssl-images-amazon.com/images/I/61XjvLcqD0L._AC_SL1000_.jpg', 'LIKEE Wooden Pattern Blocks', 18.39, 0, 17, null), "
 
-                + " ('7523780730', 5, '2019-06-22 08:45:19', 'Active Toy for Babies and Toddlers 9 Months and Up with 4 Balls', 'https://images-na.ssl-images-amazon.com/images/I/71JE-2xUiHL._AC_SL1500_.jpg', 'Playskool Chase n Go Ball Popper', 30.99, 0, 33, null), "
+                + " ('7523780730', 5, '2019-06-22 08:45:19', 'USER_ACTIVE Toy for Babies and Toddlers 9 Months and Up with 4 Balls', 'https://images-na.ssl-images-amazon.com/images/I/71JE-2xUiHL._AC_SL1500_.jpg', 'Playskool Chase n Go Ball Popper', 30.99, 0, 33, null), "
 
                 + " ('7929634051', 6, '2017-10-23 22:26:07', 'Household Hand Tool Kit', 'https://images-na.ssl-images-amazon.com/images/I/91JQZ%2BjOi4L._AC_SL1500_.jpg', 'Cartman 148-Piece Tool Set', 27.99, 0, 8, null), "
 
@@ -400,12 +400,12 @@ public class PopulateDB_ecommerce  {
 
             }
           
-            insert = "Insert into users (id, active, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
+            insert = "Insert into users (id, USER_ACTIVE, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
                     + "values "
-                    + "(2147483641, true, 'saily@gmail.com', 'Saily', 'Marudwar', '222 N Lake st', 'Unit 4444', 'Chicago', 'Illinois', '60606','US','999999999','ROLE_CUSTOMER', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483642,true,'louis@email.com','Louis','Diaz','1234 dee rd','Apt 444','Chicago','Illinois','55555','US','9876543211','ROLE_MANAGER','$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483643,true,'andy@email.com','Andy','Brown','1266 west rd', '6547','Aurora','Illinois','87665','US','9874356789','ROLE_EMPLOYEE', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483645,true,'lilly@gmail.com','Lilly','Adams','765 kite rd','0988','Hudson','New York','12345','US','1234567899','ROLE_CUSTOMER','$2a$10$0oho5eUbDqKrLH026A2YXuCGnpq07xJpuG/Qu.PYb1VCvi2VMXWNi')";
+                    + "(2147483641, 'Y', 'saily@gmail.com', 'Saily', 'Marudwar', '222 N Lake st', 'Unit 4444', 'Chicago', 'Illinois', '60606','US','999999999','ROLE_CUSTOMER', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
+                    + "(2147483642,'Y','louis@email.com','Louis','Diaz','1234 dee rd','Apt 444','Chicago','Illinois','55555','US','9876543211','ROLE_MANAGER','$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
+                    + "(2147483643,'Y','andy@email.com','Andy','Brown','1266 west rd', '6547','Aurora','Illinois','87665','US','9874356789','ROLE_EMPLOYEE', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
+                    + "(2147483645,'Y','lilly@gmail.com','Lilly','Adams','765 kite rd','0988','Hudson','New York','12345','US','1234567899','ROLE_CUSTOMER','$2a$10$0oho5eUbDqKrLH026A2YXuCGnpq07xJpuG/Qu.PYb1VCvi2VMXWNi')";
           try {
 
                 conn.createStatement().execute(insert);

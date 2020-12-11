@@ -153,7 +153,7 @@ public class UserController {
  				return new ResponseEntity("An email has been sent with activation Link Please check", HttpStatus.OK);
  			}
  			else
- 				return new ResponseEntity("User with Email:" + s.getEmail() + " Already  Exists", HttpStatus.CONFLICT);
+ 				return new ResponseEntity(msg, HttpStatus.CONFLICT);
  		} catch (Exception e) {
  			return new ResponseEntity("Error in creatung User\n" + e.getMessage(),
  					HttpStatus.INTERNAL_SERVER_ERROR);

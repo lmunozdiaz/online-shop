@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import cs.roosevelt.onlineshop.dto.LoginForm;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private JavaMailSender javaMailSender;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -443,33 +447,41 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public String createUser(User user) {
-		if(userRepository.findByEmail(user.getEmail())== null) {
-			user.setActive(false);		
+		User user1 = userRepository.findByEmail(user.getEmail());
+		if(user1== null) {
+			user.setUserActive("N");		
 			Random rnd = new Random();
 			long n = 10000000 + rnd.nextInt(90000000);
 			user.setId(n);
-	        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setRole("ROLE_CUSTOMER");
 			user = userRepository.save(user);
 			generateOTP(user.getEmail());
 			return "User Registered Successfully";
-		}
-		return "User Already Exists Please user a new email id";
+		}else if("Y".equals(user1.getUserActive()))
+			return "User with Email:" + user.getEmail() + " Already  Exists";
+		else
+			return "User is already Registered but not active.Please check activation Email";
 		
 	}
 
 	@Override
 	public String activateUser(int otp) {
 		 UserSignupOtp userOtp = userSignupOtpRepository.findByOtp(otp);
-		 User user = userRepository.findByEmail(userOtp.getEmailId());
-		 if(user == null) {
+		 if(userOtp != null) {
+			 User user = userRepository.findByEmail(userOtp.getEmailId());
+			 if(user == null) {
+				 return "Invalid Activation URL"; 
+			 }else if("Y".equals(user.getUserActive())) {
+				 return "User is already Active, Start Shopping"; 
+			 }else{
+				 user.setUserActive("Y");
+				 userRepository.save(user);
+				 return "User Registration Successfully Completed, Start Shopping"; 
+			 } 
+		 }else {
 			 return "Invalid Activation URL"; 
-		 }else if(user.isActive()) {
-			 return "User is already Active, Start Shopping"; 
-		 }else{
-			 user.setActive(true);
-			 userRepository.save(user);
-			 return "User Registration Successfully Completed, Start Shopping"; 
 		 }
+		
 	}	
 }

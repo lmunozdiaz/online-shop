@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Product} from "../model/product";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+    apiUrl = "http://localhost:8080/api"
 
   // the backend url for products, hardcoded
   readonly baseUrl: string = 'http://localhost:8080/api/products';
@@ -41,6 +43,22 @@ export class ProductService {
     return this.http.get<Product>(searchUrl);
 
   }
+   /**
+   * The createUser() retrieves a product by the given
+   * id from the backend endpoint
+   * @param id
+   */
+  createProduct(product: Product): Observable<Object> {
+        var header = new HttpHeaders({
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        });
+
+        return this.http.post<Product>(`${this.apiUrl}/products/add`, JSON.stringify(product), {
+            headers: header
+        });
+
+    }
 
   /**
    * The getAllContainingSearchString() retrieves all products

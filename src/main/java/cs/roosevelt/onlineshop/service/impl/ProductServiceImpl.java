@@ -11,8 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * ProductServiceImpl defines the method signatures provided
@@ -120,20 +123,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<Optional<Product>> save(Product productToSave, HttpSession session) {
+    public ResponseEntity<String> save(Product productToSave, HttpSession session) {
 
-        Optional<Product> existingProduct = productRepository.findById(productToSave.getId());
+    	Product existingProduct = productRepository.findByName(productToSave.getName().trim());
 
         // does the product exist already?
-        if (existingProduct != null) {
-
+        if (existingProduct == null) {
+        	Random rnd = new Random();
+			long n = 10000000 + rnd.nextInt(90000000);
+        	productToSave.setId(String.valueOf(n));
+        	productToSave.setCreateTime(new Date());
+        	productToSave.setUpdateTime(new Date());
+        	productToSave.setStatus(0);
             // no, it doesn't exist; save the new product
             return new ResponseEntity(productRepository.save(productToSave), HttpStatus.OK);
 
         } else {
 
             // yes, it exists; return null and found status
-            return new ResponseEntity<>(null, HttpStatus.FOUND);
+            return new ResponseEntity<>("Product Already Exists", HttpStatus.FOUND);
 
         }
 

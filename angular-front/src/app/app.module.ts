@@ -25,7 +25,8 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { ProductAddComponent } from './components/product-add/product-add.component';
+import { CategoryAddComponent } from './components/category-add/category-add.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     CartDetailsComponent,
     SignupComponent,
     LoginComponent,
+    ProductAddComponent,
+    CategoryAddComponent,
   ],
   imports: [
     BrowserModule,

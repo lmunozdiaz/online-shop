@@ -25,7 +25,7 @@ public interface ProductService {
 
     List<Product> getAllContainingSearchString(String searchStr);
 
-    ResponseEntity<Optional<Product>> save(Product productToSave, HttpSession session);
+    public ResponseEntity<String>  save(Product productToSave, HttpSession session);
 
     ResponseEntity<Optional<Product>> update(Product productToUpdate, HttpSession session);
 

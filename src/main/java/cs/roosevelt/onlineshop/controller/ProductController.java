@@ -71,7 +71,7 @@ public class ProductController {
      * @return
      */
     @PostMapping(value = {"/add", "/add/"})
-    public ResponseEntity<Optional<Product>> addProduct(@RequestBody Product productToAdd, HttpSession session) {
+     public ResponseEntity<String>  addProduct(@RequestBody Product productToAdd, HttpSession session) {
         return productService.save(productToAdd, session);
     }
 

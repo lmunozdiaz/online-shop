@@ -9,7 +9,7 @@ import {Category} from "../model/category";
 export class CategoryService {
 
   // the backend url for products, hardcoded
-  readonly baseUrl: string = 'http://localhost:8080/api/products/categories';
+  readonly baseUrl: string = 'http://localhost:8080/api/categories';
 
   constructor(private http: HttpClient) {
   }

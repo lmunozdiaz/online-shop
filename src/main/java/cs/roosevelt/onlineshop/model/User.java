@@ -23,8 +23,8 @@ public class User implements Serializable {
 	@Id
     private Long id;
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "user_active")
+    private String userActive;
 
     @NaturalId
     @Column(name = "email")

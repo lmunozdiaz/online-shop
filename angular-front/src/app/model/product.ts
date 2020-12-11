@@ -1,4 +1,4 @@
-export interface Product {
+export class Product {
   id: string;
   categoryType: number;
   createTime: Date;
