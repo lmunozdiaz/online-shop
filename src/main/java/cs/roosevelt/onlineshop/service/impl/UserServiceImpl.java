@@ -373,8 +373,9 @@ public class UserServiceImpl implements UserService {
         // was the user found?
         if (existingUser != null) {
 
-            // yes, the user was found; is the password valid?
-            if (existingUser.getPassword().equals(credentials.getPassword())) {
+            // yes, the user was found; is the password valid?]
+        	
+            if (passwordEncoder.matches(credentials.getPassword(), existingUser.getPassword())) {
 
                 // yes, the password is valid; set the session's user
                 session.setAttribute("user", existingUser);

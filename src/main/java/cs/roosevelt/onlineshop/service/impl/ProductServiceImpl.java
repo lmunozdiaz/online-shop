@@ -124,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
     public ResponseEntity<List<Product>> getAllByCategory(Integer categoryType) {
 
         // does the category exist?
-        if (categoryRepository.findByCategoryType(categoryType)) {
+        if (categoryRepository.findByCategoryType(categoryType) != null) {
 
             // yes, the category exists; proceed with request
 
