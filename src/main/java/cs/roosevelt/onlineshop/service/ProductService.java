@@ -1,7 +1,9 @@
 package cs.roosevelt.onlineshop.service;
 
 import cs.roosevelt.onlineshop.model.Product;
+import org.springframework.http.ResponseEntity;
 
+import javax.xml.ws.Response;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,5 +22,11 @@ public interface ProductService {
     List<Product> getAllByCategory(Integer categoryType);
 
     List<Product> getAllContainingSearchString(String searchStr);
+
+    ResponseEntity<Optional<Product>> save(Product productToSave);
+
+    ResponseEntity<Optional<Product>> update(Product productToUpdate);
+
+    ResponseEntity<Optional<Product>> delete(String id);
 
 }

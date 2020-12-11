@@ -4,6 +4,8 @@ import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.repository.ProductRepository;
 import cs.roosevelt.onlineshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,4 +67,67 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchStr, searchStr);
     }
 
+    @Override
+    public ResponseEntity<Optional<Product>> save(Product productToSave) {
+
+        Optional<Product> existingProduct = productRepository.findById(productToSave.getId());
+
+        // does the product exist already?
+        if (existingProduct != null) {
+
+            // no, it doesn't exist; save the new product
+            return new ResponseEntity(productRepository.save(productToSave), HttpStatus.OK);
+
+        } else {
+
+            // yes, it exists; return null and found status
+            return new ResponseEntity<>(null, HttpStatus.FOUND);
+
+        }
+
+    }
+
+    @Override
+    public ResponseEntity<Optional<Product>> update(Product productToUpdate) {
+
+        Optional<Product> existingProduct = productRepository.findById(productToUpdate.getId());
+
+        // does the product exist already?
+        if (existingProduct != null) {
+
+            // yes, it does exist; update the new product
+            return new ResponseEntity(productRepository.save(productToUpdate), HttpStatus.OK);
+
+        } else {
+
+            // no, it doesn't exists; return null and not found status
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        }
+    }
+
+    @Override
+    public ResponseEntity<Optional<Product>> delete(String id) {
+
+        Optional<Product> existingProduct = productRepository.findById(id);
+
+        // does the product exist?
+        if (existingProduct != null) {
+
+            // yes, it does exist; delete product
+            productRepository.delete(existingProduct.get());
+
+            // mold the return variable for readability
+            Optional<Product> deletedProduct = existingProduct;
+
+            return new ResponseEntity(deletedProduct, HttpStatus.OK);
+
+        } else {
+
+            // no, it doesn't exists; return null and not found status
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        }
+
+    }
 }

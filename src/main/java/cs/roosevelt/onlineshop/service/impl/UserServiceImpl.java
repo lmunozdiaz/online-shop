@@ -103,11 +103,15 @@ public class UserServiceImpl implements UserService {
 
         // was the user found?
         if (existingUser != null) {
+
             // yes, the user was found; update the user
             return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+
         } else {
+
             // no, the user wasn't found
             return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+
         }
 
     }
@@ -132,6 +136,7 @@ public class UserServiceImpl implements UserService {
 
         // was the user found?
         if (existingUser != null) {
+
             // yes, the user was found; is the password valid?
             if (existingUser.getPassword().equals(credentials.getPassword())) {
                 // yes, the password is valid; set the session's user
@@ -140,6 +145,7 @@ public class UserServiceImpl implements UserService {
                 return new ResponseEntity<>(existingUser, HttpStatus.OK);
 
             } else {
+
                 // no, the password is not valid
 
                 // create a return user to display the invalid credentials
@@ -149,6 +155,7 @@ public class UserServiceImpl implements UserService {
 
             }
         } else {
+
             // no, the user was not found
 
             // create a return user to display the invalid credentials
