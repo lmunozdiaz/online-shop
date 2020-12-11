@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,6 +80,8 @@ public class CategoryServiceImpl implements CategoryService {
 
                         // no, the category doesn't exist; add the category and return OK status
 
+                        categoryToAdd.setCreateTime(new Date());
+
                         categoryRepository.save(categoryToAdd);
 
                         return new ResponseEntity<>("Category added", HttpStatus.OK);
@@ -139,6 +142,8 @@ public class CategoryServiceImpl implements CategoryService {
                     if (existingCategory.isPresent()) {
 
                         // yes, the category exists; update the category and return OK status
+
+                        categoryToUpdate.setUpdateTime(new Date());
 
                         categoryRepository.save(categoryToUpdate);
 
