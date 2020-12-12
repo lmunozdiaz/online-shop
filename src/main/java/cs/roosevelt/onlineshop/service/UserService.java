@@ -34,7 +34,6 @@ public interface UserService {
 
     ResponseEntity<String> logout(HttpSession session);
     
-    UserSignupOtp generateOTP(String emailId);
     
     String createUser(User user);
 

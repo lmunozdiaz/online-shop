@@ -36,7 +36,7 @@ public class PopulateDB_ecommerce  {
         while (!succeeds) {
             String sql = "CREATE TABLE USERS("
                     + "ID BIGINT PRIMARY KEY,"
-                    + "USER_ACTIVE VARCHAR(1),"
+                    + "ACTIVE BOOLEAN,"
                     + "EMAIL VARCHAR(100),"
                     + "FIRST_NAME VARCHAR(100),"
                     + "LAST_NAME VARCHAR(100),"
@@ -400,12 +400,9 @@ public class PopulateDB_ecommerce  {
 
             }
           
-            insert = "Insert into users (id, USER_ACTIVE, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
+            insert = "Insert into users (id, active, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
                     + "values "
-                    + "(2147483641, 'Y', 'saily@gmail.com', 'Saily', 'Marudwar', '222 N Lake st', 'Unit 4444', 'Chicago', 'Illinois', '60606','US','999999999','ROLE_CUSTOMER', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483642,'Y','louis@email.com','Louis','Diaz','1234 dee rd','Apt 444','Chicago','Illinois','55555','US','9876543211','ROLE_MANAGER','$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483643,'Y','andy@email.com','Andy','Brown','1266 west rd', '6547','Aurora','Illinois','87665','US','9874356789','ROLE_EMPLOYEE', '$2a$10$PrI5Gk9L.tSZiW9FXhTS8O8Mz9E97k2FZbFvGFFaSsiTUIl.TCrFu'),"
-                    + "(2147483645,'Y','lilly@gmail.com','Lilly','Adams','765 kite rd','0988','Hudson','New York','12345','US','1234567899','ROLE_CUSTOMER','$2a$10$0oho5eUbDqKrLH026A2YXuCGnpq07xJpuG/Qu.PYb1VCvi2VMXWNi')";
+                    + "(2147483641, true, 'admin@rooseveltshoping.com', 'Roosevelt', 'Admin', '430 S Michigan Ave', '01', 'Chicago', 'Illinois', '60605','US','3123413500','ROLE_MANAGER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.')";                   
           try {
 
                 conn.createStatement().execute(insert);
