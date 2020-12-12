@@ -1,17 +1,26 @@
 package cs.roosevelt.onlineshop.service.impl;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +53,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    ResourceLoader resourceLoader;
 
     @Autowired
     private UserSignupOtpRepository userSignupOtpRepository;
@@ -452,9 +464,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
+    
     @Transactional
-    public UserSignupOtp generateOTP(String email) {
+    public UserSignupOtp generateOTP(String email,User user) {
         String numbers = "0123456789";
         // Numbers range
 
@@ -474,10 +486,58 @@ public class UserServiceImpl implements UserService {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(email);
         msg.setSubject("Welcome to Roosevelt Shop");
-        msg.setText("Activate user by clicking the link http://localhost:8080/api/users/activateUser/" + String.valueOf(otp));
+        msg.setText(getTemplate("signup",user,String.valueOf(otp)));
         System.out.println("Email Sent");
-        javaMailSender.send(msg);
+      //  javaMailSender.send(msg);
+        
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        String htmlMsg = getTemplate("signup",user,String.valueOf(otp));
+        //mimeMessage.setContent(htmlMsg, "text/html"); /** Use this or below line **/
+        try {
+			helper.setText(htmlMsg, true);
+			 helper.setTo(email);
+		        helper.setSubject("Welcome to Roosevelt Shop");
+		} catch (MessagingException e) {
+			
+			e.printStackTrace();
+		} 
+        javaMailSender.send(mimeMessage);
+       
         return userOtp;
+    }
+    
+    public String getTemplate(String str1,User user,String otp) {
+    	if("signup".equals(str1)) {
+    		
+    		
+    		try {
+    			Resource resource=resourceLoader.getResource("classpath:emailTemplate.html");
+    			File file = resource.getFile();
+	    		StringBuilder contentBuilder = new StringBuilder();
+	    		try {
+	    		    BufferedReader in = new BufferedReader(new FileReader(file));
+	    		    String str;
+	    		    while ((str = in.readLine()) != null) {
+	    		        contentBuilder.append(str);
+	    		    }
+	    		    in.close();
+	    		} catch (IOException e) {
+	    		}
+	    		String content = contentBuilder.toString();
+	    		content = content.replaceAll("NAMETOREPLACE", (user.getFirstName()+" "+user.getLastName()));
+	    		content = content.replaceAll("EMAILTOREPLACE",user.getEmail());
+	    		String url ="http://localhost:8080/api/users/activateUser/" + String.valueOf(otp);
+	    		content = content.replaceAll("ACTIVATIONURLTOREPLACE",url);
+	    		return content;
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    			return "";
+    		}
+    	}
+    	
+    	return "";
+    	
     }
 
 	@Override
@@ -492,7 +552,7 @@ public class UserServiceImpl implements UserService {
 	        user.setPassword(passwordEncoder.encode(user.getPassword()));
 			user.setRole("ROLE_CUSTOMER");
 			user = userRepository.save(user);
-			generateOTP(user.getEmail());
+			generateOTP(user.getEmail(),user);
 			return "User Registered Successfully";
 		}else if(user1.isUserActive())
 			return "User with Email:" + user.getEmail() + " Already  Exists";

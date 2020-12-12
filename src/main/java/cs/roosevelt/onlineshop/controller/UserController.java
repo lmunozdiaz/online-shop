@@ -128,13 +128,7 @@ public class UserController {
 
         return message;
     }
-    
-    @GetMapping("/getOnetimeCode/{emailId}") 
-    public int generateOnetimeCode(@PathVariable("emailId") String emailId) {
-        
-    	return userService.generateOTP(emailId).getOtp();
-    	
-    }
+      
     @GetMapping("/activateUser/{otp}") 
     public ResponseEntity<String> activateUser(@PathVariable("otp") int otp) {
         
@@ -160,6 +154,7 @@ public class UserController {
  			else
  				return new ResponseEntity(msg, HttpStatus.CONFLICT);
  		} catch (Exception e) {
+ 			e.printStackTrace();
  			return new ResponseEntity("Error in creatung User\n" + e.getMessage(),
  					HttpStatus.INTERNAL_SERVER_ERROR);
  		}
