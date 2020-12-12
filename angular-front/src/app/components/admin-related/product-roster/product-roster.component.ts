@@ -13,7 +13,8 @@ import {MatPaginator} from "@angular/material/paginator";
 export class ProductRosterComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['image', 'name', 'price', 'category', 'status', 'stock', 'createTime', 'updateTime'];
+  displayedColumns: string[] = ['image', 'name', 'price', 'categoryType',
+    'status', 'stock', 'createTime', 'updateTime'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

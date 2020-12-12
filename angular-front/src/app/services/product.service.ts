@@ -69,6 +69,15 @@ export class ProductService {
 
     }
 
+    deleteProduct(productId: String) {
+
+      // the modified url for the backend endpoint
+      const searchUrl = `${this.baseUrl}/delete/${productId}`;
+
+      return this.http.delete(searchUrl);
+
+    }
+
   /**
    * The getAllContainingSearchString() retrieves all products
    * that contain the given search string from the backend endpoint
