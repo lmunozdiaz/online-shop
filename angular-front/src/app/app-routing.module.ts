@@ -2,18 +2,18 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // My components/modules
-import {ProductListComponent} from './components/product-list/product-list.component';
-import {ProductDetailsComponent} from './components/product-details/product-details.component';
-import {CartDetailsComponent} from './components/cart-details/cart-details.component';
-import { SignupComponent } from './components/signup/signup.component';
-import {LoginComponent} from "./components/login/login.component";
+import {ProductListComponent} from './components/shop-related/product-list/product-list.component';
+import {ProductDetailsComponent} from './components/shop-related/product-details/product-details.component';
+import {CartDetailsComponent} from './components/shop-related/cart-details/cart-details.component';
+import { SignupComponent } from './components/user-related/signup/signup.component';
+import {LoginComponent} from "./components/user-related/login/login.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
-import { ProductAddComponent } from './components/product-add/product-add.component';
-import {AdminMenuComponent} from "./components/admin/admin-menu/admin-menu.component";
+import { ProductAddComponent } from './components/admin-related/product-add/product-add.component';
+import {AdminMenuComponent} from "./components/admin-related/admin-menu/admin-menu.component";
 import {AdminGuard} from "./guards/admin-guard.service";
-import {DashComponent} from "./components/admin/dash/dash.component";
-import {ProductRosterComponent} from "./components/admin/product-roster/product-roster.component";
-import {CategoryRosterComponent} from "./components/admin/category-roster/category-roster.component";
+import {DashComponent} from "./components/admin-related/admin-dashboard/dash.component";
+import {ProductRosterComponent} from "./components/admin-related/product-roster/product-roster.component";
+import {CategoryRosterComponent} from "./components/admin-related/category-roster/category-roster.component";
 
 
 const routes: Routes = [

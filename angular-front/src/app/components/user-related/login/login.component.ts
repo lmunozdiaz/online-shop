@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {LoginForm} from "../../model/login-form";
-import {UserService} from "../../services/user.service";
-import {User} from "../../model/user";
+import {LoginForm} from "../../../model/login-form";
+import {UserService} from "../../../services/user.service";
+import {User} from "../../../model/user";
 import {Router} from "@angular/router";
 import {DOCUMENT} from "@angular/common";
 

@@ -1,6 +1,6 @@
 import { Component, OnInit,Inject } from '@angular/core';
-import { ProductService } from '../../services/product.service';
-import { Product } from '../../model/product';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../model/user';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import { HttpClientModule } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
@@ -13,38 +13,44 @@ export interface DialogData {
 
 
 @Component({
-  selector: 'app-product-add',
-  templateUrl: './product-add.component.html',
-  styleUrls: ['./product-add.component.css']
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.css']
 })
-export class ProductAddComponent implements OnInit {
+export class SignupComponent implements OnInit {
 
-  constructor(private productService: ProductService,public dialog: MatDialog,private router: Router) {
+  constructor(private userService: UserService,public dialog: MatDialog,private router: Router) {
     this.errors = [];
   }
-  productAlreadyExists = false;
+  emailAlreadyExists = false;
   errors: string[];
   msg: string[];
 
-  product: Product = new Product();
+  user: User = new User();
   ngOnInit(): void {
+  }
+
+  generateOnetimeCode(emailId) {
+    this.userService.getOneTimeCode(emailId).subscribe(
+      data => {
+        alert('One time code generated Successfully' + data);
+      }
+    );
   }
 
   onSubmit(form: NgForm) {
     this.errors = [];
     this.msg = [];
-    this.saveProduct(form);
+    this.saveUser(form);
   }
 
-  saveProduct(form: NgForm) {
-    this.productService.createProduct(this.product).subscribe(data => {
-      this.msg.push("Product Added");
-          form.resetForm();
-          this.openDialog("Product Added Successfully");
+  saveUser(form: NgForm) {
+    this.userService.createUser(this.user).subscribe(data => {
+
     },
       error => {
         if (error.status == '409') {
-          this.productAlreadyExists = false;
+          this.emailAlreadyExists = false;
           this.errors.push(error.error);
         }else if (error.status == '200') {
           this.msg.push(error.text);
@@ -71,7 +77,7 @@ export class ProductAddComponent implements OnInit {
 }
 @Component({
   selector: 'dialog-overview-example-dialog',
-  templateUrl: '../../components/dialog-elements-example-dialog.html',
+  templateUrl: '../../dialog-elements-example-dialog.html',
 })
 export class DialogElementsExampleDialog {
 

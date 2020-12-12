@@ -1,8 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {Router} from "@angular/router";
-import {UserService} from "../../services/user.service";
-import {User} from "../../model/user";
+import {UserService} from "../../../services/user.service";
+import {User} from "../../../model/user";
 
 @Component({
   selector: 'app-navigation',

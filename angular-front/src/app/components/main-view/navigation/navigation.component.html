@@ -3,6 +3,7 @@
 
   <!-- the side panel container -->
   <mat-drawer #drawer class="drawer" mode="side">
+    <!-- if a user is logged in, then display their name. Else, display 'Guest' -->
     <div *ngIf="isLoggedIn; else guestGreeting" class="user-greeting">
       <h1>Hello, {{activeUser.firstName}}</h1>
     </div>
@@ -15,6 +16,7 @@
 
     <mat-divider></mat-divider>
 
+    <!-- this component selector is used to display the admin tools -->
     <app-admin-menu class="admin-menu" *ngIf="activeUser.role == 'ROLE_MANAGER'"></app-admin-menu>
 
     <mat-divider></mat-divider>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {CategoryService} from "../../services/category.service";
-import {Category} from "../../model/category";
+import {CategoryService} from "../../../services/category.service";
+import {Category} from "../../../model/category";
 import {Router} from "@angular/router";
 
 @Component({
@@ -22,7 +22,7 @@ export class CategoryMenuComponent implements OnInit {
   onChange(e, v) {
    for(let a of v) {
      this.router.navigateByUrl(`/category/`+a.value);
-    }    
+    }
   }
 
   /**
