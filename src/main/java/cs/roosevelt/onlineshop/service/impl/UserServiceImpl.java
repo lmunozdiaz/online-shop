@@ -404,7 +404,8 @@ public class UserServiceImpl implements UserService {
         if (existingUser != null) {
 
             // yes, the user was found; is the password valid?]
-            if (existingUser.getPassword().equals(credentials.getPassword())) {
+        	
+            if (passwordEncoder.matches(credentials.getPassword(), existingUser.getPassword())) {
 
                 // yes, the password is valid; set the session's user
                 session.setAttribute("user", existingUser);
@@ -484,7 +485,7 @@ public class UserServiceImpl implements UserService {
 	public String createUser(User user) {
 		User user1 = userRepository.findByEmail(user.getEmail());
 		if(user1== null) {
-			user.setUserActive("N");		
+			user.setUserActive(false);		
 			Random rnd = new Random();
 			long n = 10000000 + rnd.nextInt(90000000);
 			user.setId(n);
@@ -493,7 +494,7 @@ public class UserServiceImpl implements UserService {
 			user = userRepository.save(user);
 			generateOTP(user.getEmail());
 			return "User Registered Successfully";
-		}else if("Y".equals(user1.getUserActive()))
+		}else if(user1.isUserActive())
 			return "User with Email:" + user.getEmail() + " Already  Exists";
 		else
 			return "User is already Registered but not active.Please check activation Email";
@@ -507,10 +508,10 @@ public class UserServiceImpl implements UserService {
 			 User user = userRepository.findByEmail(userOtp.getEmailId());
 			 if(user == null) {
 				 return "Invalid Activation URL"; 
-			 }else if("Y".equals(user.getUserActive())) {
+			 }else if(user.isUserActive()) {
 				 return "User is already Active, Start Shopping"; 
 			 }else{
-				 user.setUserActive("Y");
+				 user.setUserActive(true);
 				 userRepository.save(user);
 				 return "User Registration Successfully Completed, Start Shopping"; 
 			 } 
