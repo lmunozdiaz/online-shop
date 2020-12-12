@@ -48,6 +48,11 @@ public class UserController {
         return userService.getOne(email, session);
     }
 
+    @GetMapping(value = {"/user/activeSession", "/user/activeSession/"})
+    public ResponseEntity<User> fetchSessionUser(HttpSession session) {
+        return userService.getSessionUser(session);
+    }
+
     /**
      * register-user endpoint
      * @param user

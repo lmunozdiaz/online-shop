@@ -5,6 +5,18 @@
   transform: inherit;
 }
 
+.admin-menu{
+  padding: 20px;
+}
+
+.category-menu{
+  padding: 20px;
+}
+
+.user-greeting{
+  padding: 16px;
+}
+
 .position-fixed{
   position: fixed;
   z-index:999;

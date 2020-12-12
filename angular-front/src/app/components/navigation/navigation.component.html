@@ -3,8 +3,24 @@
 
   <!-- the side panel container -->
   <mat-drawer #drawer class="drawer" mode="side">
+    <div *ngIf="isLoggedIn; else guestGreeting" class="user-greeting">
+      <h1>Hello, {{activeUser.firstName}}</h1>
+    </div>
+
+    <ng-template #guestGreeting>
+      <div class="user-greeting">
+        <h1>Hello, Guest</h1>
+      </div>
+    </ng-template>
+
+    <mat-divider></mat-divider>
+
+    <app-admin-menu class="admin-menu" *ngIf="activeUser.role == 'ROLE_MANAGER'"></app-admin-menu>
+
+    <mat-divider></mat-divider>
+
     <!-- this component selector is used to display the category menu -->
-    <app-category-menu></app-category-menu>
+    <app-category-menu class="category-menu"></app-category-menu>
   </mat-drawer>
 
   <!-- the main part of the page -->
@@ -17,28 +33,10 @@
         </button>
 
         <button (click)="refreshPage()" mat-button type="button">
-          <mat-icon>home</mat-icon>
+          <span>Home</span>
         </button>
 
-        <button mat-icon-button [matMenuTriggerFor]="userMenu">
-          <mat-icon>person</mat-icon>
-        </button>
-        <mat-menu #userMenu="matMenu">
-          <button mat-menu-item routerLink="/login">
-            <mat-icon>login</mat-icon>
-            <span>Login</span>
-          </button>
-          <button mat-menu-item routerLink="/signup" color="accent">Sign up</button>
-          <button mat-menu-item routerLink="/orders" color="accent">Orders</button>
-           <button mat-menu-item routerLink="/productadd">
-            <mat-icon>add_circle</mat-icon>
-            <span>Add Product</span>
-          </button>        
-        </mat-menu>
-
-        <button (click)="logoutUser()" mat-button routerLink="/login">
-          Logout
-        </button>
+        <app-user-status [isLoggedIn]="isLoggedIn"></app-user-status>
 
         <!-- this component selector is used to display the status of the cart on the button-->
         <app-cart-status routerLink="/cart-details"></app-cart-status>

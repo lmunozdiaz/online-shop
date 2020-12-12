@@ -146,6 +146,36 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    public ResponseEntity<User> getSessionUser(HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid; return the user
+                return new ResponseEntity<>(sessionUser, HttpStatus.OK);
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+
+    }
+
     /**
      * The register() saves a new user to the db.
      * Used by admins only.
@@ -374,8 +404,7 @@ public class UserServiceImpl implements UserService {
         if (existingUser != null) {
 
             // yes, the user was found; is the password valid?]
-        	
-            if (passwordEncoder.matches(credentials.getPassword(), existingUser.getPassword())) {
+            if (existingUser.getPassword().equals(credentials.getPassword())) {
 
                 // yes, the password is valid; set the session's user
                 session.setAttribute("user", existingUser);

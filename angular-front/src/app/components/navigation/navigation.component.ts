@@ -11,51 +11,71 @@ import {User} from "../../model/user";
 })
 export class NavigationComponent implements OnInit {
 
-  // to display dynamic user information;
-  // if the user is logged in, then don't display the menu of buttons (sign in, sign up) ...
-  // instead, show a logout button, and maybe their username.
+  // to display active (signed in) user information, dynamically
   isLoggedIn: boolean = false;
-  loggedInUser: User = new User();
+  activeUser: User = new User();
 
   constructor(@Inject(DOCUMENT) private _document: Document, private router: Router,
               private userService: UserService) {
   }
 
-  // TODO: this method validates whether a user is logged in.
-  checkLogInStatus() {
+  ngOnInit(): void {
 
-    this.userService.isLoggedIn().subscribe(
+    this.getActiveStatus();
+
+    this.fetchActiveUser();
+
+  }
+
+  /**
+   * The getActiveStatus() checks to see if a user is signed in.
+   */
+  getActiveStatus() {
+
+    this.userService.isUserActive().subscribe(
+
       data => {
+
         this.isLoggedIn = data;
-      }
-    );
 
-  }
+        // log the data
+        console.log("is a user logged in? " + this.isLoggedIn)
 
-  // TODO: this method will give us access to the user's username.
-  getLoggedInUser() {
-
-  }
-
-  logoutUser() {
-
-    this.userService.logout().subscribe(
-      data => {
-        this.router.navigate(['/login']);
       }, error => {
+
+        // log the error
         console.log(error);
+
       }
     );
+
+  }
+
+  /**
+   * The fetchActiveUser() retrieves the active user
+   * from the session.
+   */
+  fetchActiveUser() {
+
+      this.userService.getActiveUser().subscribe(
+
+        data => {
+
+          // store the active user
+          this.activeUser = data;
+
+        }, error => {
+
+          console.log(error);
+
+        }
+      );
 
   }
 
   refreshPage() {
     this.router.navigateByUrl('/', {skipLocationChange: false}).then(() =>
       this._document.defaultView.location.reload());
-  }
-
-  ngOnInit(): void {
-    this.checkLogInStatus();
   }
 
 }

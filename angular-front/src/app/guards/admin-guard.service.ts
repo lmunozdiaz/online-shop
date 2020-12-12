@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class LoggedInGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
 
   constructor(private router: Router) {
   }
@@ -14,7 +14,7 @@ export class LoggedInGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    if (localStorage.getItem("loggedIn") === "true") {
+    if (localStorage.getItem("loggedIn") === "true" && localStorage.getItem("role") === "ROLE_MANAGER") {
       return true;
     } else {
       this.router.navigateByUrl('/login');

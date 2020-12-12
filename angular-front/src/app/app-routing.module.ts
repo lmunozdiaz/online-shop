@@ -9,9 +9,34 @@ import { SignupComponent } from './components/signup/signup.component';
 import {LoginComponent} from "./components/login/login.component";
 import {LoggedInGuard} from "./guards/logged-in.guard";
 import { ProductAddComponent } from './components/product-add/product-add.component';
+import {AdminMenuComponent} from "./components/admin/admin-menu/admin-menu.component";
+import {AdminGuard} from "./guards/admin-guard.service";
+import {DashComponent} from "./components/admin/dash/dash.component";
+import {ProductRosterComponent} from "./components/admin/product-roster/product-roster.component";
+import {CategoryRosterComponent} from "./components/admin/category-roster/category-roster.component";
 
 
 const routes: Routes = [
+  {
+    path: 'admin-category-roster',
+    component: CategoryRosterComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin-product-roster',
+    component: ProductRosterComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin-dashboard',
+    component: DashComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'admin-menu',
+    component: AdminMenuComponent,
+    canActivate: [AdminGuard],
+  },
   {
     path: 'cart-details',
     component: CartDetailsComponent,

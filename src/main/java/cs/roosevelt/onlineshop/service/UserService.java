@@ -22,6 +22,8 @@ public interface UserService {
 
     ResponseEntity<User> getOne(String email, HttpSession session);
 
+    ResponseEntity<User> getSessionUser(HttpSession session);
+
     ResponseEntity<User> register(User userToRegister, HttpSession session);
 
     ResponseEntity<User> update(User userToUpdate, HttpSession session);

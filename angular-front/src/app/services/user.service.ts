@@ -62,9 +62,19 @@ export class UserService {
 
     }
 
-    isLoggedIn(): Observable<any> {
+    isUserActive(): Observable<any> {
         return this.http.get<boolean>(`${this.apiUrl}/users/user/loggedIn`);
     }
+
+
+  getActiveUser(): Observable<any> {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.apiUrl}/users/user/activeSession`;
+
+    return this.http.get(searchUrl);
+
+  }
 
     getOneTimeCode(emailId: string): Observable<string> {
 
@@ -74,8 +84,6 @@ export class UserService {
         return this.http.get<string>(searchUrl);
 
     }
-   
-
 
     /**
      * Handle Http operation that failed.

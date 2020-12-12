@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {LoginForm} from "../../model/login-form";
 import {UserService} from "../../services/user.service";
 import {User} from "../../model/user";
 import {Router} from "@angular/router";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ export class LoginComponent implements OnInit {
   credentials: LoginForm = new LoginForm();
   user: User = new User();
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(@Inject(DOCUMENT) private _document: Document,private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
 
         console.log(data);
 
-        this.router.navigateByUrl('/cart-details');
+        this.refreshPage()
 
       }, error => {
         console.log(error)
@@ -40,5 +41,10 @@ export class LoginComponent implements OnInit {
         this.credentials.password = "";
       }
     );
+  }
+
+  refreshPage() {
+    this.router.navigateByUrl('/', {skipLocationChange: false}).then(() =>
+      this._document.defaultView.location.reload());
   }
 }

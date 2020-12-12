@@ -27,6 +27,16 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProductAddComponent } from './components/product-add/product-add.component';
 import { CategoryAddComponent } from './components/category-add/category-add.component';
+import { DashComponent } from './components/admin/dash/dash.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { AdminMenuComponent } from './components/admin/admin-menu/admin-menu.component';
+import { UserStatusComponent } from './components/user-status/user-status.component';
+import { ProductRosterComponent } from './components/admin/product-roster/product-roster.component';
+import { CategoryRosterComponent } from './components/admin/category-roster/category-roster.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +53,11 @@ import { CategoryAddComponent } from './components/category-add/category-add.com
     LoginComponent,
     ProductAddComponent,
     CategoryAddComponent,
+    DashComponent,
+    AdminMenuComponent,
+    UserStatusComponent,
+    ProductRosterComponent,
+    CategoryRosterComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +69,12 @@ import { CategoryAddComponent } from './components/category-add/category-add.com
     FlexLayoutModule,
     FormsModule,
     MatDialogModule,
-    MatSelectCountryModule.forRoot('de')
+    MatSelectCountryModule.forRoot('de'),
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [ProductService, UserService, [{ provide: HTTP_INTERCEPTORS, useClass: AddCredentialsInterceptor, multi: true }]],
   bootstrap: [AppComponent],

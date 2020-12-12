@@ -30,6 +30,15 @@ export class ProductService {
 
   }
 
+  getAllElevated(): Observable<any> {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.baseUrl}/admin/allProducts`;
+
+    return this.http.get(searchUrl);
+
+  }
+
   /**
    * The getOne() retrieves a product by the given
    * id from the backend endpoint
