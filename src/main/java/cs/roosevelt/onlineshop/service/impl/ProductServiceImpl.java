@@ -128,10 +128,20 @@ public class ProductServiceImpl implements ProductService {
 
             // yes, the category exists; proceed with request
 
-            if (0 == categoryType)
-                return new ResponseEntity<>(productRepository.findAll(), HttpStatus.OK);
-            else
-                return new ResponseEntity<>(productRepository.findAllByCategoryType(categoryType), HttpStatus.FOUND);
+            // to hold the list of products-by-category
+            List<Product> productListByCategory;
+
+            if (0 == categoryType) {
+
+                productListByCategory = productRepository.findAll();
+
+            } else {
+
+                productListByCategory = productRepository.findAllByCategoryType(categoryType);
+
+            }
+
+            return new ResponseEntity<>(productListByCategory, HttpStatus.OK);
 
         } else {
 
