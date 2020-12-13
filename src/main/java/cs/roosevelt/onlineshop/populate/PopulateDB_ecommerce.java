@@ -18,24 +18,29 @@ public class PopulateDB_ecommerce  {
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ecommerce", "ecommerce", "ecommerce");
 
         boolean succeeds = false;
-        String[] tbname = {"ORDER_DETAILS","CART", "USERS", "PRODUCTS", "CATEGORY", "ORDERS","USER_SIGNUP_OTP" };
+        String[] tbname = {"CART_ITEMS", "USERS", "PRODUCTS", "CATEGORY", "USER_SIGNUP_OTP"};
         
         for(String i: tbname) {
             try{
+                System.out.println();
+                System.out.println("Attempting to drop table " + i);
                     conn.createStatement().execute("DROP TABLE " +i);
                     System.out.println("Dropped table " +i);
                     continue;                
             }
             catch(SQLException sqle) {
+                System.out.println(sqle.toString());
                 continue;
                 
             }
         }
+
+        System.out.println();
         
         succeeds = false;
         while (!succeeds) {
             String sql = "CREATE TABLE USERS("
-                    + "ID BIGINT PRIMARY KEY,"
+                    + "ID BIGINT NOT NULL,"
                     + "ACTIVE BOOLEAN,"
                     + "EMAIL VARCHAR(100),"
                     + "FIRST_NAME VARCHAR(100),"
@@ -48,7 +53,8 @@ public class PopulateDB_ecommerce  {
                     + "COUNTRY VARCHAR(100),"
                     + "PHONE VARCHAR(100),"
                     + "ROLE VARCHAR(100),"
-                    + "PASSWORD VARCHAR(500))";
+                    + "PASSWORD VARCHAR(500),"
+                    + "CONSTRAINT USER_ID_PK PRIMARY KEY(ID))";
 
             try {
 
@@ -71,7 +77,7 @@ public class PopulateDB_ecommerce  {
 
         while (!succeeds) {
             String sql = "CREATE TABLE PRODUCTS("
-                    + "PRODUCT_ID VARCHAR(100) PRIMARY KEY,"
+                    + "PRODUCT_ID VARCHAR(100) NOT NULL,"
                     + "CATEGORY_TYPE INT,"
                     + "CREATE_TIME TIMESTAMP,"
                     + "PRODUCT_DESCRIPTION VARCHAR(1000),"
@@ -80,7 +86,8 @@ public class PopulateDB_ecommerce  {
                     + "PRODUCT_PRICE DOUBLE,"
                     + "PRODUCT_STATUS INT,"
                     + "PRODUCT_STOCK INT,"
-                    + "UPDATE_TIME TIMESTAMP)";
+                    + "UPDATE_TIME TIMESTAMP,"
+                    + "CONSTRAINT PRODUCT_ID_PK PRIMARY KEY(PRODUCT_ID))";
 
             try {
 
@@ -139,90 +146,96 @@ public class PopulateDB_ecommerce  {
             }
         }
         
-        succeeds = false;
-
-        while (!succeeds) {
-            String sql = "CREATE TABLE ORDERS("
-                    + "ORDER_ID BIGINT PRIMARY KEY,"
-                    + "ORDER_ADDRESS1 VARCHAR(100),"
-                    + "ORDER_ADDRESS2 VARCHAR(100),"
-                    + "ORDER_CITY VARCHAR(100),"
-                    + "ORDER_STATE VARCHAR(100),"
-                    + "ORDER_ZIP VARCHAR(100),"
-                    + "ORDER_COUNTRY VARCHAR(100),"
-                    + "ORDER_EMAIL VARCHAR(100),"
-                    + "ORDER_NAME VARCHAR(100),"
-                    + "ORDER_PHONE VARCHAR(100),"
-                    + "CREATE_TIME TIMESTAMP,"
-                    + "ORDER_AMOUNT DOUBLE,"
-                    + "ORDER_STATUS INT,"
-                    + "UPDATE_TIME TIMESTAMP)";
-
-            try {
-
-                conn.createStatement().execute(sql);
-                System.out.println("Created ORDERS");
-                succeeds = true;
-
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-  //              conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
-  //              conn.createStatement().execute("DROP TABLE CART");                
-                conn.createStatement().execute("DROP TABLE ORDERS");
-
-            }
-        }
+//        succeeds = false;
+//
+//        while (!succeeds) {
+//            String sql = "CREATE TABLE ORDERS("
+//                    + "ORDER_ID BIGINT PRIMARY KEY,"
+//                    + "ORDER_ADDRESS1 VARCHAR(100),"
+//                    + "ORDER_ADDRESS2 VARCHAR(100),"
+//                    + "ORDER_CITY VARCHAR(100),"
+//                    + "ORDER_STATE VARCHAR(100),"
+//                    + "ORDER_ZIP VARCHAR(100),"
+//                    + "ORDER_COUNTRY VARCHAR(100),"
+//                    + "ORDER_EMAIL VARCHAR(100),"
+//                    + "ORDER_NAME VARCHAR(100),"
+//                    + "ORDER_PHONE VARCHAR(100),"
+//                    + "CREATE_TIME TIMESTAMP,"
+//                    + "ORDER_AMOUNT DOUBLE,"
+//                    + "ORDER_STATUS INT,"
+//                    + "UPDATE_TIME TIMESTAMP)";
+//
+//            try {
+//
+//                conn.createStatement().execute(sql);
+//                System.out.println("Created ORDERS");
+//                succeeds = true;
+//
+//            } catch (SQLException sqle) {
+//                sqle.printStackTrace();
+//  //              conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
+//  //              conn.createStatement().execute("DROP TABLE CART");
+//                conn.createStatement().execute("DROP TABLE ORDERS");
+//
+//            }
+//        }
         
         succeeds = false;
 
         while (!succeeds) {
-            String sql = "CREATE TABLE CART("
-                    + "USER_ID BIGINT PRIMARY KEY "
-                    + "REFERENCES USERS(ID))";
+            String sql = "CREATE TABLE CART_ITEMS ("
+                    + "ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                    + "PRODUCT_ID VARCHAR(100),"
+                    + "USER_ID BIGINT,"
+                    + "QUANTITY INT,"
+                    + "CONSTRAINT CART_ID PRIMARY KEY(ID),"
+                    + "CONSTRAINT FK_CART_PRODUCT FOREIGN KEY (PRODUCT_ID) REFERENCES PRODUCTS(PRODUCT_ID),"
+                    + "CONSTRAINT FK_CART_USER FOREIGN KEY (USER_ID) REFERENCES USERS(ID))";
+
 
             try {
 
                 conn.createStatement().execute(sql);
-                System.out.println("Created CART");
+                System.out.println("Created CART_ITEMS");
                 succeeds = true;
 
             } catch (SQLException sqle) {
 
       //          conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
-                conn.createStatement().execute("DROP TABLE CART");
+                conn.createStatement().execute("DROP TABLE CART_ITEMS");
 
             }
         }
         
-        succeeds = false;
-
-        while (!succeeds) {
-            String sql = "CREATE TABLE ORDER_DETAILS("
-                    + "ID BIGINT PRIMARY KEY,"
-                    + "CATEGORY_TYPE INT,"
-                    + "COUNT INT,"
-                    + "PRODUCT_DESCRIPTION VARCHAR(1000),"
-                    + "PRODUCT_ICON VARCHAR(1000),"
-                    + "PRODUCT_ID VARCHAR(100),"
-                    + "PRODUCT_NAME VARCHAR(255),"
-                    + "PRODUCT_PRICE DOUBLE,"
-                    + "PRODUCT_STOCK INT,"
-                    + "CART_USER_ID BIGINT REFERENCES CART(USER_ID),"
-                    + "ORDER_ID BIGINT,"
-                    + "FOREIGN KEY(ORDER_ID) REFERENCES ORDERS(ORDER_ID))";
-
-            try {
-
-                conn.createStatement().execute(sql);
-                System.out.println("Created ORDER_DETAILS");
-                succeeds = true;
-
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-                conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
-
-            }
-        }
+//        succeeds = false;
+//
+//        while (!succeeds) {
+//            String sql = "CREATE TABLE ORDER_DETAILS("
+//                    + "ID BIGINT PRIMARY KEY,"
+//                    + "CATEGORY_TYPE INT,"
+//                    + "COUNT INT,"
+//                    + "PRODUCT_DESCRIPTION VARCHAR(1000),"
+//                    + "PRODUCT_ICON VARCHAR(1000),"
+//                    + "PRODUCT_ID VARCHAR(100),"
+//                    + "PRODUCT_NAME VARCHAR(255),"
+//                    + "PRODUCT_PRICE DOUBLE,"
+//                    + "PRODUCT_STOCK INT,"
+//                    + "CART_USER_ID BIGINT REFERENCES CART(USER_ID),"
+//                    + "ORDER_ID BIGINT,"
+//                    + "FOREIGN KEY(ORDER_ID) REFERENCES ORDERS(ORDER_ID))";
+//
+//            try {
+//
+//                conn.createStatement().execute(sql);
+//                System.out.println("Created ORDER_DETAILS");
+//                succeeds = true;
+//
+//            } catch (SQLException sqle) {
+//                sqle.printStackTrace();
+//                conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
+//
+//            }
+//        }
         
         String insert = "INSERT INTO products "
                 + "(PRODUCT_ID,CATEGORY_TYPE,CREATE_TIME,PRODUCT_DESCRIPTION,PRODUCT_ICON,"
@@ -414,21 +427,21 @@ public class PopulateDB_ecommerce  {
 
             }
           
-          insert = "INSERT INTO ORDERS "
-                  + "(ORDER_ID, ORDER_ADDRESS1,ORDER_ADDRESS2,ORDER_CITY,ORDER_STATE,ORDER_ZIP,ORDER_COUNTRY,ORDER_EMAIL,ORDER_NAME,ORDER_PHONE,CREATE_TIME,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME)"
-                  + "VALUES"
-                  + "(3147483643, '555 Hello Ave', '123','Los Angeles','California','98990','US','louis@email.com', 'Louis Diaz', '23434562223', CURRENT_TIMESTAMP, 100.00, 0, CURRENT_TIMESTAMP)";
-          try {
-
-                conn.createStatement().execute(insert);
-                System.out.println("ORDERS POPULATED");
-                succeeds = true;
-
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-
-            }
-        
+//          insert = "INSERT INTO ORDERS "
+//                  + "(ORDER_ID, ORDER_ADDRESS1,ORDER_ADDRESS2,ORDER_CITY,ORDER_STATE,ORDER_ZIP,ORDER_COUNTRY,ORDER_EMAIL,ORDER_NAME,ORDER_PHONE,CREATE_TIME,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME)"
+//                  + "VALUES"
+//                  + "(3147483643, '555 Hello Ave', '123','Los Angeles','California','98990','US','louis@email.com', 'Louis Diaz', '23434562223', CURRENT_TIMESTAMP, 100.00, 0, CURRENT_TIMESTAMP)";
+//          try {
+//
+//                conn.createStatement().execute(insert);
+//                System.out.println("ORDERS POPULATED");
+//                succeeds = true;
+//
+//            } catch (SQLException sqle) {
+//                sqle.printStackTrace();
+//
+//            }
+//
     }
 
     
