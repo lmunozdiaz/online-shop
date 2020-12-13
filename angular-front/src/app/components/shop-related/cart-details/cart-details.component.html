@@ -18,7 +18,7 @@
       <th *matHeaderCellDef mat-header-cell>Product Image</th>
       <td *matCellDef="let cartItem" mat-cell>
         <!-- interpolation is used below to set the image url dynamically -->
-        <img src="{{cartItem.imageUrl}}" width="150">
+        <img src="{{cartItem.imageUrl}}" height="50">
       </td>
       <!-- the footer; it's set to appear in this first column as 'Total' -->
       <td *matFooterCellDef mat-footer-cell>
@@ -57,8 +57,6 @@
         <span> {{cartItem.quantity}}</span>
 
         <!-- fill space -->
-        <br> <br>
-        <mat-divider></mat-divider>
         <br>
 
         <!-- product subtotal -->

@@ -49,7 +49,11 @@ const routes: Routes = [
   {path: 'signup', component: SignupComponent},
   {path: 'category', component: ProductListComponent},
   {path: 'products', component: ProductListComponent},
-  {path:  'productadd', component: ProductAddComponent},
+  {
+    path:  'product-add',
+    component: ProductAddComponent,
+    canActivate: [AdminGuard],
+  },
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];

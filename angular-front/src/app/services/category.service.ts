@@ -21,4 +21,32 @@ export class CategoryService {
   getAll(): Observable<Category[]> {
     return this.http.get<Category[]>(this.baseUrl);
   }
+
+  addCategory(categoryToAdd: Category) {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.baseUrl}/add`;
+
+    this.http.put(searchUrl, categoryToAdd);
+
+  }
+
+  editCategory(categoryToEdit: Category) {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.baseUrl}/edit`;
+
+    this.http.put(searchUrl, categoryToEdit);
+
+  }
+
+  deleteCategory(categoryId: number) {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.baseUrl}/delete/${categoryId}`;
+
+    return this.http.delete(searchUrl);
+
+  }
+
 }
