@@ -35,13 +35,18 @@
         </button>
 
         <button (click)="refreshPage()" mat-button type="button">
-             <mat-icon>home</mat-icon>
+          <mat-icon>home</mat-icon>
         </button>
 
-        <app-user-status [isLoggedIn]="isLoggedIn"></app-user-status>
 
+        <button mat-button type="button">
+          <app-user-status [isLoggedIn]="isLoggedIn"></app-user-status>
+        </button>
+        <button mat-button type="button">
+          <app-cart-status routerLink="/cart-details"></app-cart-status>
+        </button>
         <!-- this component selector is used to display the status of the cart on the button-->
-        <app-cart-status routerLink="/cart-details"></app-cart-status>
+
 
         <!-- this component selector is used to display the search bar -->
         <app-search></app-search>

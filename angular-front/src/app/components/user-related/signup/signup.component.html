@@ -18,10 +18,10 @@
 	<div fxLayout="row">
 		<img md-card-image src="" fxFlex="20">
 		<span fxFlex="10"></span>
-		<md-card-content fxFlex="30">			 		
-			<form #registrationform="ngForm" (ngSubmit)="onSubmit(registrationform)" >
+		<md-card-content fxFlex="30">
+			<form #registrationform="ngForm" (ngSubmit)="onSubmit(registrationform)">
 				<div class="form-group">
-				<span style="color:red" *ngFor="let err of errors">{{err}}<br/></span>
+					<span style="color:red" *ngFor="let err of errors">{{err}}<br /></span>
 					<label>Email</label>
 					<span
 						[ngClass]="{'invalidLabel': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }">
@@ -30,12 +30,11 @@
 						<span style="color:red"
 							*ngIf="!emailAlreadyExists && (email.invalid && email.errors.required) && (email.dirty || email.touched)">(Email
 							Cannot be blank)</span>
-						<span style="color:red"
-							*ngIf="email.errors?.pattern">(Invalid Email)</span>
+						<span style="color:red" *ngIf="email.errors?.pattern">(Invalid Email)</span>
 						<span style="color:red"
 							*ngIf="!emailAlreadyExists && (email.invalid && !email.errors.required && email.errors.notint) && (email.dirty || email.touched)">({{email.errors.notintmess}})</span>
 					</span>
-					<input type="email" required  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" 
+					<input type="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
 						[ngClass]="{'invalidTB': (emailAlreadyExists || (email.invalid && (email.dirty || email.touched))) }"
 						class="form-control" id="email" [(ngModel)]="user.email" name="email" #email="ngModel">
 					<p>
@@ -44,17 +43,21 @@
 				<div class="form-group">
 					<label>First Name</label>
 					<span [ngClass]="{'invalidLabel': (firstName.invalid && (firstName.touched || firstName.dirty)) }"
-						*ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">(First Name cannot be blank)</span>
-					<input maxlength="30" [ngClass]="{'invalidTB': (firstName.invalid && (firstName.touched || firstName.dirty))}"
-						required type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName" name="firstName"
-						#firstName="ngModel">
+						*ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">(First Name cannot be
+						blank)</span>
+					<input maxlength="30"
+						[ngClass]="{'invalidTB': (firstName.invalid && (firstName.touched || firstName.dirty))}"
+						required type="text" class="form-control" id="firstName" [(ngModel)]="user.firstName"
+						name="firstName" #firstName="ngModel">
 				</div>
 				<div class="form-group">
 					<label>Last Name</label>
 					<span [ngClass]="{'invalidLabel': (lastName.invalid && (lastName.touched || lastName.dirty)) }"
-						*ngIf="lastName.invalid && (lastName.touched || lastName.dirty)">(Last lastName cannot be blank)</span>
-					<input maxlength="30" [ngClass]="{'invalidTB': (lastName.invalid && (lastName.touched || lastName.dirty))}"
-						required type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName"
+						*ngIf="lastName.invalid && (lastName.touched || lastName.dirty)">(Last lastName cannot be
+						blank)</span>
+					<input maxlength="30"
+						[ngClass]="{'invalidTB': (lastName.invalid && (lastName.touched || lastName.dirty))}" required
+						type="text" class="form-control" id="lastName" [(ngModel)]="user.lastName" name="lastName"
 						#lastName="ngModel">
 				</div>
 				<div class="form-group">
@@ -99,15 +102,16 @@
 						required type="text" class="form-control" id="city" [(ngModel)]="user.city" name="city"
 						#city="ngModel">
 				</div>
+
 				<div class="form-group">
 					<label> State</label>
 					<span [ngClass]="{'invalidLabel': (state.invalid && (state.touched || state.dirty)) }"
 						*ngIf="state.invalid && (state.touched || state.dirty)">(State cannot be
 						blank)</span>
-					<input maxlength="30" [ngClass]="{'invalidTB': (state.invalid && (state.touched || state.dirty))}"
-						required type="text" class="form-control" id="state" [(ngModel)]="user.state" name="state"
-						#state="ngModel">
-				</div>
+					<select required #state="ngModel" [(ngModel)]="user.state" name="state" class="form-control">
+						<option value="IL">IL</option>
+					</select>
+				</div>				
 
 				<div class="form-group">
 					<label> Zip</label>
@@ -116,21 +120,18 @@
 					<input [ngClass]="{'invalidTB': (zip.invalid && (zip.touched || zip.dirty))}" min="0" required
 						type="number" class="form-control" id="zip" [(ngModel)]="user.zip" name="zip" #zip="ngModel">
 				</div>
+		
 
 				<div class="form-group">
 					<label> Country</label>
 					<span [ngClass]="{'invalidLabel': (country.invalid && (country.touched || country.dirty)) }"
 						*ngIf="country.invalid && (country.touched || country.dirty)">(Country cannot be
 						blank)</span>
-					<input maxlength="30"
-						[ngClass]="{'invalidTB': (country.invalid && (country.touched || country.dirty))}" required
-						type="text" class="form-control" id="country" [(ngModel)]="user.country" name="country"
-						#country="ngModel">
-
-
-					<!-- <mat-select-country style="width:50vw">
-					</mat-select-country> -->
+					<select required #country="ngModel" [(ngModel)]="user.country" name="country" class="form-control">
+						<option value="USA">USA</option>
+					</select>
 				</div>
+
 				<div class="form-group">
 					<label> Phone</label>
 					<span [ngClass]="{'invalidLabel': (phone.invalid && (phone.touched || phone.dirty)) }"
@@ -140,15 +141,8 @@
 						#phone="ngModel">
 				</div>
 
-
-				<!-- <div class="form-group">
-					<label> SID</label>
-					<select [(ngModel)]="user.sid" name="sid" class="form-control">
-						<option *ngFor="let c of supervisors" [ngValue]="c.sid">{{c.sid}}({{c.name}})</option>
-					</select>
-				</div>
-				 -->
-				<button class="btn btn-success" [disabled]="registrationform.form.invalid" type="submit">Submit</button> |
+				<button class="btn btn-success" [disabled]="registrationform.form.invalid" type="submit">Submit</button>
+				|
 				<button class="btn btn-primary" type="reset">Start over?</button>
 
 			</form>

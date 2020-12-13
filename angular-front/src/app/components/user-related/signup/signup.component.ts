@@ -1,11 +1,10 @@
 import { Component, OnInit,Inject } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../model/user';
-import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
-import { HttpClientModule } from '@angular/common/http';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 export interface DialogData {
   msg: string;
@@ -50,8 +49,8 @@ export class SignupComponent implements OnInit {
     },
       error => {
         if (error.status == '409') {
-          this.emailAlreadyExists = false;
-          this.errors.push(error.error);
+          this.emailAlreadyExists = true;
+         // this.errors.push(error.error);
         }else if (error.status == '200') {
           this.msg.push(error.text);
           form.resetForm();

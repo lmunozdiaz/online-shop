@@ -1,7 +1,7 @@
 <div class="container" fxLayout="column" fxLayoutAlign="center center">
   <div fxFlex="25%">
     <form (ngSubmit)="onSubmit()">
-
+      <span style="color:red" *ngFor="let err of errors">{{err}}<br /></span>
       <mat-form-field>
         <mat-label>Enter your email</mat-label>
         <input #email="ngModel" [(ngModel)]="credentials.email" matInput name="email" placeholder="pat@example.com"
