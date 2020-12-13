@@ -9,29 +9,29 @@ import {CartService} from "../../../services/cart.service";
 export class CartStatusComponent implements OnInit {
 
   // to hold the cart's total quantity
-  totalQuantity: number = 0;
+  // totalQuantity: number = 0;
 
   constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
-    this.updateCartStatus();
-  }
-
-  /**
-   * The updateCartStatus() will retrieve
-   * the totalQuantity from the cart service class
-   * and publish it in the cart-status html page.
-   * @private
-   */
-  private updateCartStatus() {
-
-    // subscribe to the cart service's Subject variable 'totalQuantity'
-    // to display the quantity badge on the cart button
-    this.cartService.totalQuantity.subscribe(
-      data => {
-        this.totalQuantity = data
-      }
-    );
 
   }
+
+  // /**
+  //  * The updateCartStatus() will retrieve
+  //  * the totalQuantity from the cart service class
+  //  * and publish it in the cart-status html page.
+  //  * @private
+  //  */
+  // private updateCartStatus() {
+  //
+  //   // subscribe to the cart service's Subject variable 'totalQuantity'
+  //   // to display the quantity badge on the cart button
+  //   this.cartService.totalQuantity.subscribe(
+  //     data => {
+  //       this.totalQuantity = data
+  //     }
+  //   );
+  //
+  // }
 }

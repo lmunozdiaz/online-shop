@@ -26,21 +26,8 @@ export class CardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  /**
-   * TODO: write a description
-   * @param product
-   */
+  // @TODO: add to server side cart
   addToCart(product: Product) {
 
-    // for debugging
-    console.log(`product_name: ${product.name} -- product_price: ${product.price}`);
-
-    // the variable 'itemToAdd' is the item to be
-    // to be added to the cart; the CartItem class instance
-    // is a simplified Product object meant simply
-    // for transferring data. DTO.
-    const itemToAdd = new CartItem(product)
-
-    this.cartService.addToCart(itemToAdd);
   }
 }

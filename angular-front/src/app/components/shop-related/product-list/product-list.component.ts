@@ -78,8 +78,6 @@ export class ProductListComponent implements OnInit {
     this.productService.getAll(this.currentCategoryType).subscribe(
       data => {
         this.products = data;
-        // log the data for debugging
-        console.log(data);
       }
     );
 
@@ -100,8 +98,6 @@ export class ProductListComponent implements OnInit {
     this.productService.getAllContainingSearchString(searchStr).subscribe(
       data => {
         this.products = data;
-        // log the data for debugging
-        console.log(data);
       }
     );
 

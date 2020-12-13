@@ -34,8 +34,6 @@ export class CategoryMenuComponent implements OnInit {
     this.categoryService.getAll().subscribe(
       data => {
         this.categories = data;
-        //log the data for debugging
-        console.log(data);
       }
     );
 
