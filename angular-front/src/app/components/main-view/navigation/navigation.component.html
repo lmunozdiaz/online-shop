@@ -5,7 +5,7 @@
   <mat-drawer #drawer class="drawer" mode="side">
     <!-- if a user is logged in, then display their name. Else, display 'Guest' -->
     <div *ngIf="isLoggedIn; else guestGreeting" class="user-greeting">
-      <h1>Hello, {{activeUser.firstName}}</h1>
+      <h1>Hello, {{activeUser.firstName}} </h1>
     </div>
 
     <ng-template #guestGreeting>
