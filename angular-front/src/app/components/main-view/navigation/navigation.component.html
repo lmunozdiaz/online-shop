@@ -17,7 +17,7 @@
     <mat-divider></mat-divider>
 
     <!-- this component selector is used to display the admin tools -->
-    <app-admin-menu class="admin-menu" *ngIf="activeUser.role == 'ROLE_MANAGER'"></app-admin-menu>
+    <app-admin-menu *ngIf="activeUser.role == 'ROLE_MANAGER'" class="admin-menu"></app-admin-menu>
 
     <mat-divider></mat-divider>
 
@@ -39,12 +39,11 @@
         </button>
 
 
-        <button mat-button type="button">
-          <app-user-status [isLoggedIn]="isLoggedIn"></app-user-status>
-        </button>
-        <button mat-button type="button">
-          <app-cart-status routerLink="/cart-details"></app-cart-status>
-        </button>
+        <app-user-status [isLoggedIn]="isLoggedIn"></app-user-status>
+
+
+        <app-cart-status routerLink="/cart-details"></app-cart-status>
+
         <!-- this component selector is used to display the status of the cart on the button-->
 
 
@@ -54,7 +53,7 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <br /><br /><br /><br />
+    <br/><br/><br/><br/>
 
     <div>
       <!-- where a routerLink's corresponding component html will display -->
