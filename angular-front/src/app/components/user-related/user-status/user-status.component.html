@@ -1,9 +1,9 @@
-<button *ngIf="!isLoggedIn; else signedIn" [matMenuTriggerFor]="userMenu" mat-icon-button>
-  <span>Account</span>
+<button *ngIf="!isLoggedIn; else signedIn" [matMenuTriggerFor]="userMenu" mat-button>
+  <mat-icon>person</mat-icon>
 </button>
 
 <ng-template #signedIn>
-  <button [matMenuTriggerFor]="accountMenu" mat-icon-button>
+  <button [matMenuTriggerFor]="accountMenu" mat-button>
     <mat-icon>account_circle</mat-icon>
   </button>
 </ng-template>

@@ -1,8 +1,11 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {CategoryService} from "../../../services/category.service";
+import {Router} from "@angular/router";
+import {DOCUMENT} from "@angular/common";
+import {Product} from "../../../model/product";
 
 @Component({
   selector: 'app-category-roster',
@@ -12,12 +15,13 @@ import {CategoryService} from "../../../services/category.service";
 export class CategoryRosterComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['name', 'categoryType', 'createTime', 'updateTime'];
+  displayedColumns: string[] = ['name', 'categoryType', 'createTime', 'updateTime', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(private categoryService: CategoryService, private router: Router,
+              @Inject(DOCUMENT) private _document: Document) { }
 
   ngOnInit(): void {
     this.fetchAllCategories()
@@ -39,6 +43,27 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
       }
     );
 
+  }
+
+  onDelete(categoryId: number) {
+
+    this.categoryService.deleteCategory(categoryId).subscribe(
+
+      data => {
+
+        console.log(data);
+
+      }
+
+    );
+
+    this.refreshPage();
+
+  }
+
+  refreshPage() {
+    this.router.navigateByUrl('/admin-category-roster', {skipLocationChange: false}).then(() =>
+      this._document.defaultView.location.reload());
   }
 
 }
