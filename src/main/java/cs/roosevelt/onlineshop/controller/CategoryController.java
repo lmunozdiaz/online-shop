@@ -1,6 +1,7 @@
 package cs.roosevelt.onlineshop.controller;
 
 import cs.roosevelt.onlineshop.model.Category;
+import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
@@ -32,7 +34,7 @@ public class CategoryController {
      */
     @PostMapping(value = {"/add", "/add/"})
     public ResponseEntity<String> addCategory(@RequestBody Category categoryToAdd, HttpSession session) {
-        return categoryService.add(categoryToAdd, session);
+        return categoryService.save(categoryToAdd, session);
     }
 
     /**
@@ -43,6 +45,16 @@ public class CategoryController {
     @PutMapping(value = {"/edit", "/edit/"})
     public ResponseEntity<String> editCategory(@RequestBody Category categoryToUpdate, HttpSession session) {
         return categoryService.add(categoryToUpdate, session);
+    }
+    
+    /**
+     * fetch-one-product endpoint
+     * @param categoryId The ID of the category to fetch.
+     * @return The category with given ID.
+     */
+    @GetMapping("/category/{id}")
+    public ResponseEntity<Optional<Category>> fetchCategory(@PathVariable("id") String categoryId) {
+        return categoryService.getOne(categoryId);
     }
 
     /**

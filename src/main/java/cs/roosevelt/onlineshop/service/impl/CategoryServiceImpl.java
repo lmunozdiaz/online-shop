@@ -118,6 +118,92 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
     }
+    
+    /**
+     * The add() saves a new category to the db.
+     * @param categoryToAdd
+     * @return
+     */   
+    @Override
+    public ResponseEntity<String> save(Category categoryToSave, HttpSession session) {
+
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin
+
+                    // does the category exist already?
+                	if(categoryToSave.getId() == null) {
+                		 if (categoryRepository.findByName(categoryToSave.getName().trim()) == null) {
+
+                             // no, it doesn't exist; construct and save the new category
+
+                             // make a category ID
+                             Random rnd = new Random();
+                             long n = 10000000 + rnd.nextInt(90000000);
+
+                             // set the new category's lower level details
+                             categoryToSave.setId(n);
+                             categoryToSave.setCreateTime(new Date());
+                             categoryToSave.setUpdateTime(new Date());
+                             
+                             n = 1000 + rnd.nextInt(9000);
+                             categoryToSave.setCategoryType((int)n);
+                             // save and return an OK status
+                             categoryRepository.save(categoryToSave);
+
+                             return new ResponseEntity<>("Category added Successfully", HttpStatus.OK);
+
+                         } else {
+                             // yes, the category exists; return found status
+                             return new ResponseEntity<>("Category Already Exists", HttpStatus.FOUND);
+                         }
+                    }else {
+                		List<Category> categorys = categoryRepository.findAllByNameAndIdNot(categoryToSave.getName().trim(),categoryToSave.getId());
+                		if(categorys !=null && categorys.size() >0) {
+                			 return new ResponseEntity<>("Another Category Exisits with Same name", HttpStatus.FOUND);
+                		}else {
+                			  // save and return an OK status
+                            categoryRepository.save(categoryToSave);
+                            return new ResponseEntity<>("Category Updated Successfully", HttpStatus.OK);
+                		}
+                			
+                	}
+                   
+
+                } else {
+
+                    // no, the user is not an admin; deny the request
+                    return new ResponseEntity<>("User is unauthorized", HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>("Current user not valid", HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
+
+        }
+
+    }
 
     /**
      * The update() updates an existing category in the db.
@@ -246,6 +332,32 @@ public class CategoryServiceImpl implements CategoryService {
             // no, there's no active session; return denial response
             return new ResponseEntity<>("No active session", HttpStatus.UNAUTHORIZED);
 
+        }
+
+    }
+
+    /**
+     * The getOne() retrieves a category by the
+     * given ID from the db.
+     *
+     * @param id
+     * @return The user by ID.
+     */
+    @Override
+    public ResponseEntity<Optional<Category>> getOne(String id) {
+
+        // find the category
+        Optional<Category> existingCategory = categoryRepository.findById(Long.parseLong(id));
+
+        // did we find it?
+        if (existingCategory.isPresent()) {
+
+            // yes, we found it
+            return new ResponseEntity<>(existingCategory, HttpStatus.OK);
+
+        } else {
+            // no, we didnt find it
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
     }

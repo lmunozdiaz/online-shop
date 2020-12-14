@@ -20,23 +20,25 @@ export class ProductAddComponent implements OnInit {
   hasSearchString: boolean;
   productId:string;
   element: HTMLElement;
+  pageTitle:string;
   constructor(private productService: ProductService, public dialog: MatDialog, private router: Router,private route: ActivatedRoute) {
     this.errors = [];
   }
   productAlreadyExists = false;
   errors: string[];
   msg: string[];
-
   product: Product = new Product();
+
   ngOnInit(): void {
     this.hasSearchString = this.route.snapshot.paramMap.has('id');
+     this.pageTitle = 'Product Add';
     if (this.hasSearchString) {
       // yes, there is
+      this.pageTitle = "Product Update";
       this.productId = this.route.snapshot.paramMap.get('id')
       this.productService.getProduct(this.productId).subscribe(
         data => {
           this.product = data;
-          
         }, error => {
             alert(error.error);
         }
@@ -52,10 +54,10 @@ export class ProductAddComponent implements OnInit {
 
   ngAfterViewInit() {
     this.element = document.getElementById('productSubmitButton');
-    if (this.hasSearchString) {    
+    if (this.hasSearchString) {
       this.element.removeAttribute('disabled');
     }else {
-      this.element.setAttribute('disabled',"true");
+      this.element.setAttribute('disabled', "true");
     }
   }
 
@@ -88,7 +90,9 @@ export class ProductAddComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.router.navigateByUrl(`/`);
+       this.router.navigate(['/admin-product-roster']).then(() => {
+        window.location.reload();
+      });
     });
   }
 }

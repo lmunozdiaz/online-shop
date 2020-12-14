@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Category} from "../model/category";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +50,31 @@ export class CategoryService {
 
   }
 
+  /**
+   * The getOne() retrieves a product by the given
+   * id from the backend endpoint
+   * @param id
+   */
+  getCategory(id: string):Observable<Category> {
+
+    // the modified url for the backend endpoint
+    const searchUrl = `${this.baseUrl}/category/${id}`;
+
+    return this.http.get<Category>(searchUrl);
+
+  }
+   /**
+   * The createCategory() retrieves a category by the given
+   * id from the backend endpoint
+   * @param id
+   */
+  createCategory(category: Category): Observable<Category> {
+        var header = new HttpHeaders({
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        });
+        return this.http.post<Category>(`${this.baseUrl}/add`, JSON.stringify(category), {
+            headers: header
+        });
+    }
 }

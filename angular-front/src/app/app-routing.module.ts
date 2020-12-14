@@ -14,6 +14,7 @@ import {AdminGuard} from "./guards/admin-guard.service";
 import {DashComponent} from "./components/admin-related/admin-dashboard/dash.component";
 import {ProductRosterComponent} from "./components/admin-related/product-roster/product-roster.component";
 import {CategoryRosterComponent} from "./components/admin-related/category-roster/category-roster.component";
+import {CategoryAddComponent} from "./components/admin-related/category-add/category-add.component";
 
 
 const routes: Routes = [
@@ -55,8 +56,18 @@ const routes: Routes = [
     canActivate: [AdminGuard],
   },
   {
+    path:  'category-add',
+    component: CategoryAddComponent,
+    canActivate: [AdminGuard],
+  },
+  {
     path:  'product-update/:id',
     component: ProductAddComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path:  'category-update/:id',
+    component: CategoryAddComponent,
     canActivate: [AdminGuard],
   },
   {path: '', redirectTo: '/products', pathMatch: 'full'},

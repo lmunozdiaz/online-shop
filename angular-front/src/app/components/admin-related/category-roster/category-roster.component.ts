@@ -5,7 +5,10 @@ import {MatSort} from "@angular/material/sort";
 import {CategoryService} from "../../../services/category.service";
 import {Router} from "@angular/router";
 import {DOCUMENT} from "@angular/common";
-import {Product} from "../../../model/product";
+import {Category} from '../../../model/category';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {DialogElementsExampleDialog} from '../../user-related/signup/signup.component';
+
 
 @Component({
   selector: 'app-category-roster',
@@ -20,8 +23,8 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private categoryService: CategoryService, private router: Router,
-              @Inject(DOCUMENT) private _document: Document) { }
+  constructor(private categoryService: CategoryService, private router: Router,public dialog: MatDialog,
+              @Inject(DOCUMENT) private document: Document) { }
 
   ngOnInit(): void {
     this.fetchAllCategories()
@@ -45,25 +48,34 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
 
   }
 
-  onDelete(categoryId: number) {
+  openDialog(msg1:string): void {
+    const dialogRef = this.dialog.open(DialogElementsExampleDialog, {
+     height: '200px',
+     width: '600px',
+     data: {msg: msg1}
+    });
 
-    this.categoryService.deleteCategory(categoryId).subscribe(
+    dialogRef.afterClosed().subscribe(result => {
+      this.refreshPage();
+    });
+  }
 
-      data => {
-
-        console.log(data);
-
-      }
-
-    );
-
-    this.refreshPage();
-
+  onDelete(category: Category) {
+    if (confirm('Are you sure to delete this category ' + category.name)) {
+      this.categoryService.deleteCategory(category.id).subscribe(
+        data => {
+          console.log(data);
+          this.openDialog('Category Deleted Successfully');
+        }, error => {
+         this.openDialog(error.error.text);
+        }
+      );
+    }
   }
 
   refreshPage() {
     this.router.navigateByUrl('/admin-category-roster', {skipLocationChange: false}).then(() =>
-      this._document.defaultView.location.reload());
+      this.document.defaultView.location.reload());
   }
 
 }
