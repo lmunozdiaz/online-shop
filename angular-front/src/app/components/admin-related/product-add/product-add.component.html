@@ -67,9 +67,10 @@
 					<span [ngClass]="{'invalidLabel': (description.invalid && (description.touched || description.dirty)) }"
 						*ngIf="description.invalid && (description.touched || description.dirty)">(Product Description cannot be
 						blank)</span>
-					<input maxlength="30" [ngClass]="{'invalidTB': (description.invalid && (description.touched || description.dirty))}"
-						required type="text" class="form-control" id="description" [(ngModel)]="product.description" name="description"
-						#description="ngModel">
+						
+					<textarea maxlength="3000" [ngClass]="{'invalidTB': (description.invalid && (description.touched || description.dirty))}"
+						required class="form-control" id="description" [(ngModel)]="product.description" name="description"
+						#description="ngModel"></textarea>
 				</div>
 				<div class="form-group">
 					<label> Product Image</label>
@@ -89,7 +90,7 @@
 					</select>
 				</div>
 				 -->
-				<button class="btn btn-success" id="productSubmitButton" [disabled]="productform.form.invalid" type="submit">Submit</button> |
+				<button class="btn btn-success" id="productSubmitButton" [disabled]="!productform.form.valid" type="submit">Submit</button> |
 				<button class="btn btn-primary" type="reset">Start over?</button>
 
 			</form>

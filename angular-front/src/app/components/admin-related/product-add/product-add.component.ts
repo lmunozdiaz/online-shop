@@ -51,7 +51,8 @@ export class ProductAddComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    if (this.hasSearchString) {
+    this.element = document.getElementById('productSubmitButton');
+    if (this.hasSearchString) {    
       this.element.removeAttribute('disabled');
     }else {
       this.element.setAttribute('disabled',"true");
