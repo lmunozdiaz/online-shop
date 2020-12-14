@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Product} from "../../../model/product";
 import {CartService} from "../../../services/cart.service";
 import {CartItem} from "../../../model/cart-item";
+import {User} from "../../../model/user";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-card',
@@ -20,14 +22,28 @@ export class CardComponent implements OnInit {
   // to hold the product that will be
   // sent to the cart, if requested
   @Input() product: Product;
+  user: User;
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService,
+              private userService: UserService) { }
 
   ngOnInit(): void {
   }
 
-  // @TODO: add to server side cart
   addToCart(product: Product) {
+    // get the active session user
+    this.userService.getActiveUser().subscribe(
+      data => {
+        this.user = data;
 
+        // build the cart item
+        let cartItem: CartItem = new CartItem(product, this.user);
+
+        // save to backend
+        this.cartService.addItem(cartItem).subscribe(
+          data => { console.log(data) }
+        );
+      }
+    );
   }
 }

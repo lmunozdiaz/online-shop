@@ -44,7 +44,7 @@ export class ProductService {
    * id from the backend endpoint
    * @param id
    */
-  getOne(id: string):Observable<Product> {
+  getProduct(id: string):Observable<Product> {
 
     // the modified url for the backend endpoint
     const searchUrl = `${this.baseUrl}/product/${id}`;

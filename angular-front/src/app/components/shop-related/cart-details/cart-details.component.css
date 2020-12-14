@@ -1,32 +1,14 @@
-.header-container{
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-
-.table-container{
-  padding: 30px;
-}
-
-.mat-row {
-  height: auto;
-}
-
-.mat-cell {
-  padding: 8px 8px 8px 0;
-}
-
 table {
+  border-collapse: collapse;
   width: 100%;
 }
 
-tr.mat-footer-row {
-  font-weight: bold;
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
 
-.card-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
