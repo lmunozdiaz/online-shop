@@ -29,6 +29,8 @@ export class CardComponent implements OnInit {
               private userService: UserService,private productService:ProductService) { }
 
   ngOnInit(): void {
+    this.user = new User();
+    this.user.role ='ROLE_CUSTOMER';
     this.fetchActiveUser();
   }
 
