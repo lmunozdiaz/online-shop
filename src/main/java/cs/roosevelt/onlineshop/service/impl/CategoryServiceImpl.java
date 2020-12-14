@@ -3,6 +3,7 @@ package cs.roosevelt.onlineshop.service.impl;
 import cs.roosevelt.onlineshop.model.Category;
 import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.repository.CategoryRepository;
+import cs.roosevelt.onlineshop.repository.ProductRepository;
 import cs.roosevelt.onlineshop.repository.UserRepository;
 import cs.roosevelt.onlineshop.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
     /**
      * The getAll() retrieves all the categories from the db.
      * @return All the categories.
@@ -279,6 +284,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
+    @Transactional
     public ResponseEntity<String> delete(Long categoryId, HttpSession session) {
 
         // is there an active session?
@@ -289,6 +295,7 @@ public class CategoryServiceImpl implements CategoryService {
 
             // is the session user valid?
             if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+                Category cat = categoryRepository.findById(categoryId).orElse(new Category());
 
                 // yes, the user is valid
 
@@ -300,8 +307,10 @@ public class CategoryServiceImpl implements CategoryService {
                     // does the category exist?
                     if (categoryRepository.existsById(categoryId)) {
 
-                        // yes, it does exist; delete it
+                        // yes, it does exist; delete it and all products too
                         categoryRepository.deleteById(categoryId);
+                        System.out.println("Total Products Deleted:"+productRepository.deleteByCategoryType(cat.getCategoryType()));
+                        
 
                         // respond with confirmation
                         return new ResponseEntity<>("Category deleted", HttpStatus.OK);

@@ -40,13 +40,17 @@
 						class="form-control" id="name" [(ngModel)]="product.name" name="name" #name="ngModel">
 					<p>
 					</p>
-				</div>
+				</div>				
 				<div class="form-group">
 					<label> Category Type</label>
 					<span [ngClass]="{'invalidLabel': (categoryType.invalid && (categoryType.touched || categoryType.dirty)) }"
-						*ngIf="categoryType.invalid && (categoryType.touched || categoryType.dirty)">(Category Type cannot be blank)</span>
-					<input [ngClass]="{'invalidTB': (categoryType.invalid && (categoryType.touched || categoryType.dirty))}" min="0" required
-						type="number" class="form-control" id="categoryType" [(ngModel)]="product.categoryType" name="categoryType" #categoryType="ngModel">
+						*ngIf="categoryType.invalid && (categoryType.touched || categoryType.dirty)">(Category Type cannot be
+						blank)</span>
+					<select required #categoryType="ngModel" [(ngModel)]="product.categoryType" name="categoryType" class="form-control">
+						<option *ngFor="let cat of categories" value="{{cat.categoryType}}">
+							{{cat.name}}
+						</option>
+					</select>
 				</div>
 				<div class="form-group">
 					<label> Product Price</label>

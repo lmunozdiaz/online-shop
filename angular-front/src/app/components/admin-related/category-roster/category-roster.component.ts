@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {CategoryService} from "../../../services/category.service";
-import {Router} from "@angular/router";
-import {DOCUMENT} from "@angular/common";
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {CategoryService} from '../../../services/category.service';
+import {Router} from '@angular/router';
+import {DOCUMENT} from '@angular/common';
 import {Category} from '../../../model/category';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {DialogElementsExampleDialog} from '../../user-related/signup/signup.component';
@@ -36,7 +36,6 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
   }
 
   fetchAllCategories() {
-
     this.categoryService.getAll().subscribe(
 
       data => {
@@ -45,7 +44,6 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
         console.log(error);
       }
     );
-
   }
 
   openDialog(msg1:string): void {
@@ -61,7 +59,7 @@ export class CategoryRosterComponent implements OnInit, AfterViewInit {
   }
 
   onDelete(category: Category) {
-    if (confirm('Are you sure to delete this category ' + category.name)) {
+    if (confirm('Are you sure to delete this category ' + category.name+'?. All associated products will be deleted!')) {
       this.categoryService.deleteCategory(category.id).subscribe(
         data => {
           console.log(data);

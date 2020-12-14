@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Product} from "../model/product";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import {Category} from '../model/category';
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -50,6 +50,17 @@ export class ProductService {
     const searchUrl = `${this.baseUrl}/product/${id}`;
 
     return this.http.get<Product>(searchUrl);
+
+  }
+
+  /**
+  * The getAllCategories() retrieves a product by the given
+  * id from the backend endpoint
+  * @param id
+  */
+  getAllCategories(): Observable<Category[]> {
+
+    return this.http.get<Category[]>('http://localhost:8080/api/categories/');
 
   }
    /**

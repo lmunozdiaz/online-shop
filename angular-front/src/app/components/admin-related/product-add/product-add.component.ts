@@ -5,6 +5,7 @@ import { MatSelectCountryModule } from '@angular-material-extensions/select-coun
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Category } from 'src/app/model/category';
 
 export interface DialogData {
   msg: string;
@@ -21,6 +22,7 @@ export class ProductAddComponent implements OnInit {
   productId:string;
   element: HTMLElement;
   pageTitle:string;
+  categories:Category[];
   constructor(private productService: ProductService, public dialog: MatDialog, private router: Router,private route: ActivatedRoute) {
     this.errors = [];
   }
@@ -31,7 +33,7 @@ export class ProductAddComponent implements OnInit {
 
   ngOnInit(): void {
     this.hasSearchString = this.route.snapshot.paramMap.has('id');
-     this.pageTitle = 'Product Add';
+    this.pageTitle = 'Product Add';
     if (this.hasSearchString) {
       // yes, there is
       this.pageTitle = "Product Update";
@@ -40,10 +42,18 @@ export class ProductAddComponent implements OnInit {
         data => {
           this.product = data;
         }, error => {
-            alert(error.error);
+          alert(error.error);
         }
       );
     }
+    this.productService.getAllCategories().subscribe(
+      data => {
+        this.categories = data;
+      }, error => {
+        alert(error.error);
+      }
+    );
+
   }
 
   onSubmit(form: NgForm) {
