@@ -15,6 +15,7 @@ import {DashComponent} from "./components/admin-related/admin-dashboard/dash.com
 import {ProductRosterComponent} from "./components/admin-related/product-roster/product-roster.component";
 import {CategoryRosterComponent} from "./components/admin-related/category-roster/category-roster.component";
 import {CategoryAddComponent} from "./components/admin-related/category-add/category-add.component";
+import { UserProfileComponent } from './components/user-related/user-profile/user-profile.component';
 
 
 const routes: Routes = [
@@ -43,6 +44,11 @@ const routes: Routes = [
     component: CartDetailsComponent,
     canActivate: [LoggedInGuard]
   },
+  {
+    path: 'user-profile',
+    component: UserProfileComponent,
+    canActivate: [LoggedInGuard]
+  },  
   {path: 'products/:id', component: ProductDetailsComponent},
   {path: 'search/:searchStr', component: ProductListComponent},
   {path: 'category/:categoryType', component: ProductListComponent},

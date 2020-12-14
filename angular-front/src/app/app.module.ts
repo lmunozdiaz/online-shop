@@ -38,6 +38,7 @@ import { UserStatusComponent } from './components/user-related/user-status/user-
 import { ProductRosterComponent } from './components/admin-related/product-roster/product-roster.component';
 import { CategoryRosterComponent } from './components/admin-related/category-roster/category-roster.component';
 import { ProductUpdateComponent } from './components/admin-related/product-update/product-update.component';
+import { UserProfileComponent } from './components/user-related/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { ProductUpdateComponent } from './components/admin-related/product-updat
     ProductRosterComponent,
     CategoryRosterComponent,
     ProductUpdateComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

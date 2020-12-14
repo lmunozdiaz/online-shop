@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   user: User = new User();
   errors: string[];
 
-  constructor(@Inject(DOCUMENT) private _document: Document, private userService: UserService, private router: Router) { 
+  constructor(@Inject(DOCUMENT) private document: Document, private userService: UserService, private router: Router) { 
      this.errors = [];
   }
 
@@ -56,6 +56,6 @@ export class LoginComponent implements OnInit {
 
   refreshPage() {
     this.router.navigateByUrl('/', { skipLocationChange: false }).then(() =>
-      this._document.defaultView.location.reload());
+      this.document.defaultView.location.reload());
   }
 }
