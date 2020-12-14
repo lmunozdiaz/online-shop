@@ -1,10 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CartItem} from "../../../model/cart-item";
 import {CartService} from "../../../services/cart.service";
-import {merge, Observable, Subject} from "rxjs";
-import {Product} from "../../../model/product";
-import {ProductService} from "../../../services/product.service";
-import {mergeMap, switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-cart-details',
@@ -13,9 +9,14 @@ import {mergeMap, switchMap} from "rxjs/operators";
 })
 export class CartDetailsComponent implements OnInit {
 
+  // to hold the cart item list
   cartItems: CartItem[];
 
-  constructor(private cartService: CartService) { }
+  // the columns to display
+  displayedColumns: string[] = ["imageUrl", "name", "price", "subtotal", "action"];
+
+  constructor(private cartService: CartService) {
+  }
 
   ngOnInit(): void {
     this.fetchCartItems();
@@ -24,6 +25,7 @@ export class CartDetailsComponent implements OnInit {
   fetchCartItems() {
     this.cartService.getCartItemsList().subscribe(
       cartItems => {
+        // store the cart item list response
         this.cartItems = cartItems
       }
     );

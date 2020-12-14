@@ -1,16 +1,65 @@
-<table>
-  <tr>
-    <th>Name</th>
-    <th>ID</th>
-    <th>Price</th>
-    <th>Quantity</th>
-    <th>Subtotal</th>
-  </tr>
-  <tr *ngFor="let cartItem of cartItems">
-    <td>{{cartItem.product.name}}</td>
-    <td>{{cartItem.product.id}}</td>
-    <td>{{cartItem.product.price | currency: 'USD'}}</td>
-    <td>{{cartItem.quantity}}</td>
-    <td>{{cartItem.product.price * cartItem.quantity | currency: 'USD'}}</td>
-  </tr>
-</table>
+<div class="header-container">
+  <h1>Shopping Cart</h1>
+</div>
+
+<!-- show the shopping cart if it's not empty, else display the else block -->
+<div *ngIf="cartItems.length > 0; else emptyCart" class="table-container">
+  <table mat-table [dataSource]="cartItems" class="mat-elevation-z8">
+
+    <!-- Image Column -->
+    <ng-container matColumnDef="imageUrl">
+      <th mat-header-cell *matHeaderCellDef> Product </th>
+      <td mat-cell *matCellDef="let cartItem">
+        <img src="{{cartItem.product.imageUrl}}" height="75">
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let cartItem"> {{cartItem.product.name}} </td>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let cartItem"> {{cartItem.product.price | currency: 'USD'}} </td>
+    </ng-container>
+
+    <!-- Subtotals Column -->
+    <ng-container matColumnDef="subtotal">
+      <th mat-header-cell *matHeaderCellDef> Subtotal </th>
+      <td mat-cell *matCellDef="let cartItem">
+        <span>Quantity: {{cartItem.quantity}}</span>
+        <br>
+        <span>Subtotal: {{cartItem.product.price * cartItem.quantity | currency: 'USD'}}</span>
+      </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let cartItem">
+        <button mat-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<!-- if the cart is empty, then show a message -->
+<ng-template #emptyCart class="card-container">
+  <mat-card class="mat-elevation-z3">
+    <span>Your shopping cart is empty.</span>
+  </mat-card>
+</ng-template>
