@@ -14,4 +14,6 @@ public interface ShoppingCartService {
 
     ResponseEntity<Boolean> removeItem(String productId, HttpSession session);
 
+    ResponseEntity<Integer> getTotalQuantity(HttpSession session);
+
 }

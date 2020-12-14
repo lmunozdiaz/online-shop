@@ -35,4 +35,10 @@ export class CartService {
     return this.http.delete(deleteUrl);
   }
 
+  getTotalQuantity(): Observable<any> {
+    // get-quantity endpoint url
+    const quantityUrl: string = `${this.baseUrl}/totalQuantity`
+
+    return this.http.get(quantityUrl);
+  }
 }

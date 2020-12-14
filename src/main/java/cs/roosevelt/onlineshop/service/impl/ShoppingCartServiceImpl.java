@@ -213,4 +213,64 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
     }
 
+    @Override
+    public ResponseEntity<Integer> getTotalQuantity(HttpSession session) {
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                System.out.println("The session user is: " + sessionUser.toString());
+
+                // yes, they're valid
+
+                // is the session user registered or a manager?
+                if (sessionUser.getRole().equals("ROLE_CUSTOMER") || sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, they are
+
+                    // get all of the user's cart items
+                    List<CartItem> existingCartItems = cartItemRepository.findByUser(sessionUser);
+
+                    // to hold the total quantity
+                    int totalQuantity = 0;
+                    // is there any items?
+                    if (existingCartItems != null) {
+                        // yes, there are items; sum the total quantity
+                        for (CartItem tempCartItem: existingCartItems) {
+                            totalQuantity += tempCartItem.getQuantity();
+                        }
+                        // return the total quantity and OK status
+                        return new ResponseEntity<>(totalQuantity, HttpStatus.OK);
+                    } else {
+                        // there were no items; return 0 quantity and Not Found status
+                        return new ResponseEntity<>(totalQuantity, HttpStatus.NOT_FOUND);
+                    }
+
+                } else {
+
+                    // no, they're neither registered nor a manager; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+    }
+
 }

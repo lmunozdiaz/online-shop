@@ -3,10 +3,14 @@
     <th>Name</th>
     <th>ID</th>
     <th>Price</th>
+    <th>Quantity</th>
+    <th>Subtotal</th>
   </tr>
-  <tr *ngFor="let product of products">
-    <td>{{product.name}}</td>
-    <td>{{product.id}}</td>
-    <td>{{product.price | currency: 'USD'}}</td>
+  <tr *ngFor="let cartItem of cartItems">
+    <td>{{cartItem.product.name}}</td>
+    <td>{{cartItem.product.id}}</td>
+    <td>{{cartItem.product.price | currency: 'USD'}}</td>
+    <td>{{cartItem.quantity}}</td>
+    <td>{{cartItem.product.price * cartItem.quantity | currency: 'USD'}}</td>
   </tr>
 </table>

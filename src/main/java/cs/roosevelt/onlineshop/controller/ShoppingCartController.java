@@ -32,4 +32,9 @@ public class ShoppingCartController {
         return shoppingCartService.removeItem(productId, session);
     }
 
+    @GetMapping(value = {"/totalQuantity", "/totalQuantity/"})
+    public ResponseEntity<Integer> fetchTotalQuantity(HttpSession session) {
+        return shoppingCartService.getTotalQuantity(session);
+    }
+
 }
