@@ -415,7 +415,7 @@ public class PopulateDB_ecommerce  {
           
             insert = "Insert into users (id, active, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
                     + "values "
-                    + "(2147483641, true, 'admin@rooseveltshoping.com', 'Roosevelt', 'Admin', '430 S Michigan Ave', '01', 'Chicago', 'Illinois', '60605','US','3123413500','ROLE_MANAGER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.')";                   
+                    + "(2147483641, true, 'admin@rooseveltshopping.com', 'Roosevelt', 'Admin', '430 S Michigan Ave', '01', 'Chicago', 'Illinois', '60605','US','3123413500','ROLE_MANAGER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.')";                   
           try {
 
                 conn.createStatement().execute(insert);
