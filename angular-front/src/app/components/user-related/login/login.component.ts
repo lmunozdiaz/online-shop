@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { LoginForm } from "../../../model/login-form";
-import { UserService } from "../../../services/user.service";
-import { User } from "../../../model/user";
-import { Router } from "@angular/router";
-import { DOCUMENT } from "@angular/common";
+import { LoginForm } from '../../../model/login-form';
+import { UserService } from '../../../services/user.service';
+import { User } from '../../../model/user';
+import { Router } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -30,9 +30,9 @@ export class LoginComponent implements OnInit {
 
         this.user = data;
 
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("email", this.user.email);
-        localStorage.setItem("role", this.user.role);
+        localStorage.setItem('loggedIn', 'true');
+        localStorage.setItem('email', this.user.email);
+        localStorage.setItem('role', this.user.role);
 
         console.log(data);
 
@@ -40,9 +40,16 @@ export class LoginComponent implements OnInit {
 
       }, error => {
         console.log(error)
-        this.credentials.email = "";
-        this.credentials.password = "";
-        this.errors.push("Invalid Email or Password");
+        if (error.status === 409) {
+          this.credentials.email = '';
+          this.credentials.password = '';
+          this.errors.push('User Not Active.Please check activation email');
+        } else {
+          this.credentials.email = '';
+          this.credentials.password = '';
+          this.errors.push('Invalid Email or Password');
+        }
+
       }
     );
   }

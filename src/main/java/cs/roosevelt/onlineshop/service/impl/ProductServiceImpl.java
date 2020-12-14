@@ -201,31 +201,42 @@ public class ProductServiceImpl implements ProductService {
                     // yes, the user's an admin
 
                     // does the product exist already?
-                    if (productRepository.findByName(productToSave.getName().trim()) == null) {
+                	if(productToSave.getId() == null) {
+                		 if (productRepository.findByName(productToSave.getName().trim()) == null) {
 
-                        // no, it doesn't exist; construct and save the new product
+                             // no, it doesn't exist; construct and save the new product
 
-                        // make a product ID
-                        Random rnd = new Random();
-                        long n = 10000000 + rnd.nextInt(90000000);
+                             // make a product ID
+                             Random rnd = new Random();
+                             long n = 10000000 + rnd.nextInt(90000000);
 
-                        // set the new product's lower level details
-                        productToSave.setId(String.valueOf(n));
-                        productToSave.setCreateTime(new Date());
-                        productToSave.setUpdateTime(new Date());
-                        productToSave.setStatus(0);
+                             // set the new product's lower level details
+                             productToSave.setId(String.valueOf(n));
+                             productToSave.setCreateTime(new Date());
+                             productToSave.setUpdateTime(new Date());
+                             productToSave.setStatus(0);
 
-                        // save and return an OK status
-                        productRepository.save(productToSave);
+                             // save and return an OK status
+                             productRepository.save(productToSave);
 
-                        return new ResponseEntity<>("Product added", HttpStatus.OK);
+                             return new ResponseEntity<>("Product added Successfully", HttpStatus.OK);
 
-                    } else {
-
-                        // yes, the product exists; return found status
-                        return new ResponseEntity<>("Product Already Exists", HttpStatus.FOUND);
-
-                    }
+                         } else {
+                             // yes, the product exists; return found status
+                             return new ResponseEntity<>("Product Already Exists", HttpStatus.FOUND);
+                         }
+                    }else {
+                		List<Product> products = productRepository.findAllByNameAndIdNot(productToSave.getName().trim(),productToSave.getId());
+                		if(products !=null && products.size() >0) {
+                			 return new ResponseEntity<>("Another Product Exisits with Same name", HttpStatus.FOUND);
+                		}else {
+                			  // save and return an OK status
+                            productRepository.save(productToSave);
+                            return new ResponseEntity<>("Product Updated Successfully", HttpStatus.OK);
+                		}
+                			
+                	}
+                   
 
                 } else {
 

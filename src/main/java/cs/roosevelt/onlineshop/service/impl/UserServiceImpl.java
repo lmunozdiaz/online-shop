@@ -414,24 +414,28 @@ public class UserServiceImpl implements UserService {
 		// was the user found?
 		if (existingUser != null) {
 
-			// yes, the user was found; is the password valid?]
+			if(existingUser.isUserActive()) {
+				// yes, the user was found; is the password valid?]
+				if (passwordEncoder.matches(credentials.getPassword(), existingUser.getPassword())) {
 
-			if (passwordEncoder.matches(credentials.getPassword(), existingUser.getPassword())) {
+					// yes, the password is valid; set the session's user
+					session.setAttribute("user", existingUser);
 
-				// yes, the password is valid; set the session's user
-				session.setAttribute("user", existingUser);
+					return new ResponseEntity<>(existingUser, HttpStatus.OK);
 
-				return new ResponseEntity<>(existingUser, HttpStatus.OK);
+				} else {
 
-			} else {
+					// no, the password is not valid
 
-				// no, the password is not valid
+					// create a return-user to display the invalid credentials
+					User invalidUser = new User(credentials.getEmail(), credentials.getPassword() + ": not valid");
 
-				// create a return-user to display the invalid credentials
+					return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
+				}
+			}else {
 				User invalidUser = new User(credentials.getEmail(), credentials.getPassword() + ": not valid");
 
-				return new ResponseEntity<>(invalidUser, HttpStatus.NOT_FOUND);
-
+				return new ResponseEntity<>(invalidUser, HttpStatus.CONFLICT);
 			}
 		} else {
 

@@ -54,6 +54,11 @@ const routes: Routes = [
     component: ProductAddComponent,
     canActivate: [AdminGuard],
   },
+  {
+    path:  'product-update/:id',
+    component: ProductAddComponent,
+    canActivate: [AdminGuard],
+  },
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];

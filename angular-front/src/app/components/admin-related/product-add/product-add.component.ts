@@ -4,7 +4,7 @@ import { Product } from '../../../model/product';
 import { MatSelectCountryModule } from '@angular-material-extensions/select-country';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface DialogData {
   msg: string;
@@ -17,8 +17,10 @@ export interface DialogData {
   styleUrls: ['./product-add.component.css']
 })
 export class ProductAddComponent implements OnInit {
-
-  constructor(private productService: ProductService, public dialog: MatDialog, private router: Router) {
+  hasSearchString: boolean;
+  productId:string;
+  element: HTMLElement;
+  constructor(private productService: ProductService, public dialog: MatDialog, private router: Router,private route: ActivatedRoute) {
     this.errors = [];
   }
   productAlreadyExists = false;
@@ -27,12 +29,33 @@ export class ProductAddComponent implements OnInit {
 
   product: Product = new Product();
   ngOnInit(): void {
+    this.hasSearchString = this.route.snapshot.paramMap.has('id');
+    if (this.hasSearchString) {
+      // yes, there is
+      this.productId = this.route.snapshot.paramMap.get('id')
+      this.productService.getProduct(this.productId).subscribe(
+        data => {
+          this.product = data;
+          
+        }, error => {
+            alert(error.error);
+        }
+      );
+    }
   }
 
   onSubmit(form: NgForm) {
     this.errors = [];
     this.msg = [];
     this.saveProduct(form);
+  }
+
+  ngAfterViewInit() {
+    if (this.hasSearchString) {
+      this.element.removeAttribute('disabled');
+    }else {
+      this.element.setAttribute('disabled',"true");
+    }
   }
 
   saveProduct(form: NgForm) {

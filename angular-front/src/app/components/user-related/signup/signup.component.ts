@@ -45,13 +45,14 @@ export class SignupComponent implements OnInit {
 
   saveUser(form: NgForm) {
     this.userService.createUser(this.user).subscribe(data => {
-
+     this.openDialog('User Registered Successfully, Activation Email has been sent');
+     form.resetForm();
     },
       error => {
-        if (error.status == '409') {
+        if (error.status === 409) {
           this.emailAlreadyExists = true;
-         // this.errors.push(error.error);
-        }else if (error.status == '200') {
+          this.errors.push(error.error);
+        }else if (error.status === 200) {
           this.msg.push(error.text);
           form.resetForm();
           this.openDialog(error.error.text);
