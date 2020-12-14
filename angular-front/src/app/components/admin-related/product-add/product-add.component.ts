@@ -42,11 +42,11 @@ export class ProductAddComponent implements OnInit {
       this.openDialog('Product Added Successfully');
     },
       error => {
-        if (error.status === '409') {
+        if (error.status === 409) {
           this.productAlreadyExists = false;
           this.errors.push(error.error);
-        } else if (error.status === '200') {
-          this.msg.push(error.text);
+        } else if (error.status === 200) {
+          this.msg.push(error.error.text);
           form.resetForm();
           this.openDialog(error.error.text);
         }

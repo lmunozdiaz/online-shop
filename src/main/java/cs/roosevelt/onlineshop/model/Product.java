@@ -20,7 +20,12 @@ import java.util.Date;
 @Data
 public class Product implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @Column(name = "PRODUCT_ID")
     private String id;
 

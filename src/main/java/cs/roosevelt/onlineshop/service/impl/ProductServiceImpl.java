@@ -201,7 +201,7 @@ public class ProductServiceImpl implements ProductService {
                     // yes, the user's an admin
 
                     // does the product exist already?
-                    if (productRepository.findByName(productToSave.getName().trim()) != null) {
+                    if (productRepository.findByName(productToSave.getName().trim()) == null) {
 
                         // no, it doesn't exist; construct and save the new product
 

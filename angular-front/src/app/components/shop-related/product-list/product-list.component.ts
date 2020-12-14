@@ -97,8 +97,13 @@ export class ProductListComponent implements OnInit {
     // retrieve the products containing the search string
     this.productService.getAllContainingSearchString(searchStr).subscribe(
       data => {
-        this.products = data;
-      }
+        this.products = data
+        // log the data for debugging
+        console.log(data);
+      },
+      error => {
+        this.products = error.error;
+      } 
     );
 
   }
