@@ -14,7 +14,7 @@ export class UserProfileComponent implements OnInit {
   ngOnInit(): void {
     this.fetchActiveUser();
   }
-    /**
+  /**
    * The fetchActiveUser() retrieves the active user
    * from the session.
    */
@@ -33,6 +33,5 @@ export class UserProfileComponent implements OnInit {
 
         }
       );
-
   }
 }

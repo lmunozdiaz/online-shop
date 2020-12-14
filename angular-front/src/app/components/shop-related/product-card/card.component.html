@@ -24,7 +24,9 @@
     <!-- on click, send 'product' as a parameter to this component's addToCart(); 'product' is assigned
      in similar fashion as imageUrl -->
     <mat-card-actions align="end">
-      <button (click)="addToCart(product)" color="accent" mat-flat-button>Add To Cart</button>
+       <button  *ngIf="user.role == 'ROLE_CUSTOMER'" (click)="addToCart(product)" color="accent" mat-flat-button>Add To Cart</button>    
+       <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'" routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
+       <button  *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)" mat-flat-button>Delete</button>
     </mat-card-actions>
 
   </mat-card>

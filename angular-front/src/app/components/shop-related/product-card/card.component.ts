@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Product} from "../../../model/product";
-import {CartService} from "../../../services/cart.service";
-import {CartItem} from "../../../model/cart-item";
-import {User} from "../../../model/user";
-import {UserService} from "../../../services/user.service";
+import {Product} from '../../../model/product';
+import {CartService} from '../../../services/cart.service';
+import {CartItem} from '../../../model/cart-item';
+import {User} from '../../../model/user';
+import {UserService} from '../../../services/user.service';
+import {ProductService} from '../../../services/product.service';
 
 @Component({
   selector: 'app-card',
@@ -25,9 +26,40 @@ export class CardComponent implements OnInit {
   user: User;
 
   constructor(private cartService: CartService,
-              private userService: UserService) { }
+              private userService: UserService,private productService:ProductService) { }
 
   ngOnInit(): void {
+    this.fetchActiveUser();
+  }
+
+   /**
+   * The fetchActiveUser() retrieves the active user
+   * from the session.
+   */
+  fetchActiveUser() {
+      this.userService.getActiveUser().subscribe(
+        data => {
+          // store the active user
+          this.user = data;
+        }, error => {
+          console.log(error);
+        }
+      );
+  }
+
+  onDelete(product: Product) {   
+   if (confirm('Are you sure to delete this product ' + product.name)) {
+      this.productService.deleteProduct(product.id).subscribe(
+        data => {
+          console.log(data);
+          alert('Product Deleted Successfully');
+          window.location.reload();
+        }, error => {
+         alert(error.error.text);
+          window.location.reload();
+        }
+      );
+    }
   }
 
   addToCart(product: Product) {
