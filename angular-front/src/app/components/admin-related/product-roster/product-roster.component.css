@@ -1,4 +1,4 @@
-.header-container{
+.header-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -14,4 +14,11 @@ table {
 
 .mat-cell {
   padding: 8px 8px 8px 0;
+}
+
+.mat-row:nth-child(even) {
+}
+
+.mat-row:nth-child(odd) {
+  background-color: rgba(0,0,0,.05);
 }
