@@ -41,7 +41,7 @@ import { ProductUpdateComponent } from './components/admin-related/product-updat
 import { UserProfileComponent } from './components/user-related/user-profile/user-profile.component';
 import { OrderListComponent } from './components/order-related/order-list/order-list.component';
 import { OrderDetailsComponent } from './components/order-related/order-details/order-details.component';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -82,7 +82,8 @@ import { OrderDetailsComponent } from './components/order-related/order-details/
     MatCardModule,
     MatMenuModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBarModule
   ],
   providers: [ProductService, UserService, [{ provide: HTTP_INTERCEPTORS, useClass: AddCredentialsInterceptor, multi: true }]],
   bootstrap: [AppComponent],

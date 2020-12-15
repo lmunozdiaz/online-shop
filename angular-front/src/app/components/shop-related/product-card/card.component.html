@@ -5,7 +5,7 @@
     <a routerLink="/products/{{id}}">
       <!-- [src] must evaluate the imageUrl variable. imageUrl data is assigned via interpolation when
       using this component's selector -->
-      <img [src]="imageUrl" class="image"  mat-card-image>
+      <img [src]="imageUrl" class="image" mat-card-image>
     </a>
 
     <a routerLink="/products/{{id}}">
@@ -24,10 +24,13 @@
     <!-- on click, send 'product' as a parameter to this component's addToCart(); 'product' is assigned
      in similar fashion as imageUrl -->
     <mat-card-actions align="end">
-       <button  *ngIf="user.role == 'ROLE_CUSTOMER'" disabled="{{user.firstName == 'dummy'}}" (click)="addToCart(product)" color="accent" mat-flat-button>Add To Cart</button>    
-       <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'" routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
-       <button  *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)" mat-flat-button>Delete</button>
+      <button *ngIf="user.role == 'ROLE_CUSTOMER'" disabled="{{user.firstName == 'dummy'}}" (click)="addToCart(product)"
+        color="accent" mat-flat-button>Add To Cart</button>
+      <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'"
+        routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
+      <button *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)"
+        mat-flat-button>Delete</button>
     </mat-card-actions>
-
+  
   </mat-card>
 </div>

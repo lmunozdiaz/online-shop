@@ -27,3 +27,10 @@ interface Country {
   max-height: calc(100vh - 155px);
   overflow: auto;
 }
+
+a:hover {
+ cursor:pointer !important;
+}
+button:hover {
+   cursor:pointer !important;
+}

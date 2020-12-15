@@ -6,7 +6,10 @@ import {CartService} from '../../../services/cart.service';
 import {CartItem} from '../../../model/cart-item';
 import {User} from '../../../model/user';
 import {UserService} from '../../../services/user.service';
-import {MatBadge} from '@angular/material/badge'
+import {MatBadge} from '@angular/material/badge';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
@@ -29,7 +32,9 @@ export class ProductDetailsComponent implements OnInit {
   element: HTMLElement;
   constructor(private productService: ProductService,
               private route: ActivatedRoute,private cartService: CartService,
-              private userService: UserService) { }
+              private userService: UserService,
+              private _snackBar: MatSnackBar,
+              private router:Router) { }
 
   ngOnInit(): void {
     this.user = new User();
@@ -58,7 +63,7 @@ export class ProductDetailsComponent implements OnInit {
       );
   }
 
-   onDelete(product: Product) {   
+   onDelete(product: Product) {
    if (confirm('Are you sure to delete this product ' + product.name)) {
       this.productService.deleteProduct(product.id).subscribe(
         data => {
@@ -99,14 +104,21 @@ export class ProductDetailsComponent implements OnInit {
         // save to backend
         this.cartService.addItem(cartItem).subscribe(
           data => {
-            this.element = document.getElementById('cartCount') as HTMLElement;
-            let count = 0;
-            for (let i = 0; i < data.length; i++) {
-              count += data[i].quantity;
-            }
-            if(this.element !=null) {
-                this.element.children[0].innerHTML = count + '';
-            }
+            this.cartService.getTotalQuantity().subscribe(
+              count => {
+                let element = document.getElementById('cartCount') as HTMLElement;
+                if (element != null) {
+                   element.children[0].innerHTML = count + '';
+                }
+                const snack = this._snackBar.open(cartItem.product.name+' added to Cart', 'Go to Cart', {
+                  duration: 3000,
+                  verticalPosition: 'top'
+                });
+                snack.onAction().subscribe(() => {
+                  this.router.navigateByUrl('/cart-details');
+                });
+
+              });
           }, error => {
             console.log(error);
           }

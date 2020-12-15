@@ -5,6 +5,8 @@ import { CartItem } from '../../../model/cart-item';
 import { User } from '../../../model/user';
 import { UserService } from '../../../services/user.service';
 import { ProductService } from '../../../services/product.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-card',
@@ -26,7 +28,7 @@ export class CardComponent implements OnInit {
   user: User;
 
   constructor(private cartService: CartService,
-    private userService: UserService, private productService: ProductService) { }
+    private userService: UserService, private productService: ProductService,private _snackBar: MatSnackBar,private router:Router) { }
 
   ngOnInit(): void {
     this.user = new User();
@@ -77,13 +79,20 @@ export class CardComponent implements OnInit {
         this.cartService.addItem(cartItem).subscribe(
           data => {
             this.element = document.getElementById('cartCount') as HTMLElement;
-            let count = 0;
-            for (let i = 0; i < data.length; i++) {
-              count += data[i].quantity;
-            }
-            if(this.element !=null) {
-                this.element.children[0].innerHTML = count + '';
-            }
+            this.cartService.getTotalQuantity().subscribe(
+              count => {
+                if (this.element != null) {
+                  this.element.children[0].innerHTML = count + '';
+                }
+                const snack = this._snackBar.open(cartItem.product.name+' added to Cart', 'Go to Cart', {
+                  duration: 5000,
+                  verticalPosition: 'top'
+                });
+                snack.onAction().subscribe(() => {
+                  this.router.navigateByUrl('/cart-details');
+                });
+
+              });
           }, error => {
             console.log(error);
           }
