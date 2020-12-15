@@ -431,6 +431,21 @@ public class PopulateDB_ecommerce  {
                 sqle.printStackTrace();
 
             }
+          
+          insert = "INSERT INTO ORDER_DETAILS "
+                  + "( PRODUCT_ID, ORDER_ID, USER_ID, QUANTITY)"
+                  + "VALUES"
+                  + "( '3237189120', 8147483129, 2147483642, 3)";
+          try {
+
+                conn.createStatement().execute(insert);
+                System.out.println("ORDER_DETAILS POPULATED");
+                succeeds = true;
+
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+
+            }
 
     }
 
