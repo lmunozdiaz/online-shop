@@ -35,8 +35,8 @@ public class OrderController {
     public ResponseEntity<List<Order>> fetchAllOrders(HttpSession session) {
         return orderService.getAll(session);
     }
-	@GetMapping("/orderDetails/{id}")
-    public ResponseEntity<Optional<OrderDetail>> fetchProduct(@PathVariable("id") String orderId) {
+	@GetMapping("/orderDetail/{id}")
+	public ResponseEntity<List<OrderDetail>> fetchProduct(@PathVariable("id") String orderId) {
         return orderService.getOrderDetails(orderId);
     }
 }

@@ -88,9 +88,9 @@ public class OrderServiceImpl implements OrderService {
 
 
 	@Override
-	public ResponseEntity<Optional<OrderDetail>> getOrderDetails(String orderId) {
+	public ResponseEntity<List<OrderDetail>> getOrderDetails(String orderId) {
 		Order order = new Order();
 		order.setId(orderId);		
-		return orderDetailRepository.findAllByOrder(order);
+		return new ResponseEntity<>(orderDetailRepository.findAllByOrder(order), HttpStatus.OK);
 	}
 }

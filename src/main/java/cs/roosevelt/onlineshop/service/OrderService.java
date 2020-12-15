@@ -21,6 +21,6 @@ public interface OrderService {
     ResponseEntity<List<Order>> getAll(HttpSession session);
   
 
-	ResponseEntity<Optional<OrderDetail>> getOrderDetails(String orderId);
+	ResponseEntity<List<OrderDetail>> getOrderDetails(String orderId);
 
 }
