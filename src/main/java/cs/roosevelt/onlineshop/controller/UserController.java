@@ -143,13 +143,13 @@ public class UserController {
         }
     	
     }
- // 2.1 Add an User
+ // Add an User
  	@PostMapping(value = "/createUser", consumes = MediaType.APPLICATION_JSON_VALUE)
  	public ResponseEntity<String> createUser(@RequestBody @Valid final User s, HttpServletRequest request) {
  		try {
  			String msg = userService.createUser(s,request);
  			if(msg.contains("Success")) {
- 				return new ResponseEntity("An email has been sent with activation Link Please check", HttpStatus.OK);
+ 				return new ResponseEntity("An email has been sent with activation link, please check", HttpStatus.OK);
  			}
  			else
  				return new ResponseEntity(msg, HttpStatus.CONFLICT);

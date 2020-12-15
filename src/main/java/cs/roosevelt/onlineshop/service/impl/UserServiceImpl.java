@@ -555,7 +555,7 @@ public class UserServiceImpl implements UserService {
 		} else if (user1.isUserActive())
 			return "User with Email:" + user.getEmail() + " Already  Exists";
 		else
-			return "User is already Registered but not active.Please check activation Email";
+			return "User is already registered but not active. Please check activation Email";
 
 	}
 
@@ -572,7 +572,7 @@ public class UserServiceImpl implements UserService {
 				 }else{
 					 user.setUserActive(true);
 					 userRepository.save(user);
-					 String str = "<html>\n" + "<header><title>Welcome</title></header>\n <body>\n" + "User Registration Successfully Completed,<a href='http://localhost:4200/products'>Click Here</a> to Start Shopping\n" + "</body>\n" + "</html>";
+					 String str = "<html>\n" + "<header><title>Welcome</title></header>\n <body>\n" + "User Registration Successfully Completed,<a href='http://localhost:4200/products'> Click Here</a> to Start Shopping\n" + "</body>\n" + "</html>";
 					 return str; 
 				 } 
 			 }else {
