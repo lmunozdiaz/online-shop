@@ -417,21 +417,21 @@ public class PopulateDB_ecommerce  {
 
             }
           
-//          insert = "INSERT INTO ORDERS "
-//                  + "(ORDER_ID, ORDER_ADDRESS1,ORDER_ADDRESS2,ORDER_CITY,ORDER_STATE,ORDER_ZIP,ORDER_COUNTRY,ORDER_EMAIL,ORDER_NAME,ORDER_PHONE,CREATE_TIME,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME)"
-//                  + "VALUES"
-//                  + "(3147483643, '555 Hello Ave', '123','Los Angeles','California','98990','US','louis@email.com', 'Louis Diaz', '23434562223', CURRENT_TIMESTAMP, 100.00, 0, CURRENT_TIMESTAMP)";
-//          try {
-//
-//                conn.createStatement().execute(insert);
-//                System.out.println("ORDERS POPULATED");
-//                succeeds = true;
-//
-//            } catch (SQLException sqle) {
-//                sqle.printStackTrace();
-//
-//            }
-//
+          insert = "INSERT INTO ORDERS "
+                  + "(ORDER_ID,CREATE_TIME,USER_ID,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME,NUM_OF_ITEMS)"
+                  + "VALUES"
+                  + "(8147483129, CURRENT_TIMESTAMP, 2147483642, 500, 1, CURRENT_TIMESTAMP, 3)";
+          try {
+
+                conn.createStatement().execute(insert);
+                System.out.println("ORDERS POPULATED");
+                succeeds = true;
+
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+
+            }
+
     }
 
     
