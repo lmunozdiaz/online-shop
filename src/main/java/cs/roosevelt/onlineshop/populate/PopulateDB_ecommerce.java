@@ -420,7 +420,7 @@ public class PopulateDB_ecommerce  {
           insert = "INSERT INTO ORDERS "
                   + "(ORDER_ID,CREATE_TIME,USER_ID,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME,NUM_OF_ITEMS)"
                   + "VALUES"
-                  + "(8147483129, CURRENT_TIMESTAMP, 2147483642, 500, 1, CURRENT_TIMESTAMP, 3)";
+                  + "(8147483129, CURRENT_TIMESTAMP, 2147483642, 194.97, 1, CURRENT_TIMESTAMP, 3)";
           try {
 
                 conn.createStatement().execute(insert);
