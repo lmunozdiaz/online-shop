@@ -251,3 +251,4 @@ buildNumber.properties
 /angular-front/onlineshop/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,maven,vscode,eclipse,angular,java,linux
+/angular-front/

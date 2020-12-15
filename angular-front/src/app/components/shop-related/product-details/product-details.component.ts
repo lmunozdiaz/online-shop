@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit,ViewChild} from '@angular/core';
 import {Product} from '../../../model/product';
 import {ProductService} from '../../../services/product.service';
 import {ActivatedRoute} from '@angular/router';
@@ -6,7 +6,7 @@ import {CartService} from '../../../services/cart.service';
 import {CartItem} from '../../../model/cart-item';
 import {User} from '../../../model/user';
 import {UserService} from '../../../services/user.service';
-
+import {MatBadge} from '@angular/material/badge'
 @Component({
   selector: 'app-product-details',
   templateUrl: './product-details.component.html',
@@ -26,7 +26,7 @@ export class ProductDetailsComponent implements OnInit {
   // to hold the product that will be
   // sent to the cart, if requested
   user: User;
-
+  element: HTMLElement;
   constructor(private productService: ProductService,
               private route: ActivatedRoute,private cartService: CartService,
               private userService: UserService) { }
@@ -36,6 +36,7 @@ export class ProductDetailsComponent implements OnInit {
     this.user.role ='ROLE_CUSTOMER';
     this.user.firstName ='dummy';
     this.fetchActiveUser();
+   // badge = document.getElementById();
     this.route.paramMap.subscribe(
       () => {
         this.handleProductDetails();
@@ -98,7 +99,14 @@ export class ProductDetailsComponent implements OnInit {
         // save to backend
         this.cartService.addItem(cartItem).subscribe(
           data => {
-            console.log(data)
+            this.element = document.getElementById('cartCount') as HTMLElement;
+            let count = 0;
+            for (let i = 0; i < data.length; i++) {
+              count += data[i].quantity;
+            }
+            if(this.element !=null) {
+                this.element.children[0].innerHTML = count + '';
+            }
           }, error => {
             console.log(error);
           }

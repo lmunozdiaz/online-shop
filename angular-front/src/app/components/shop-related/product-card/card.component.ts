@@ -1,10 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Product} from '../../../model/product';
-import {CartService} from '../../../services/cart.service';
-import {CartItem} from '../../../model/cart-item';
-import {User} from '../../../model/user';
-import {UserService} from '../../../services/user.service';
-import {ProductService} from '../../../services/product.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { Product } from '../../../model/product';
+import { CartService } from '../../../services/cart.service';
+import { CartItem } from '../../../model/cart-item';
+import { User } from '../../../model/user';
+import { UserService } from '../../../services/user.service';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-card',
@@ -19,46 +19,46 @@ export class CardComponent implements OnInit {
   @Input() id: string;
   @Input() imageUrl: string;
   @Input() name: string;
-
+  element: HTMLElement;
   // to hold the product that will be
   // sent to the cart, if requested
   @Input() product: Product;
   user: User;
 
   constructor(private cartService: CartService,
-              private userService: UserService,private productService:ProductService) { }
+    private userService: UserService, private productService: ProductService) { }
 
   ngOnInit(): void {
     this.user = new User();
-    this.user.role ='ROLE_CUSTOMER';
-    this.user.firstName ='dummy';
+    this.user.role = 'ROLE_CUSTOMER';
+    this.user.firstName = 'dummy';
     this.fetchActiveUser();
   }
 
-   /**
-   * The fetchActiveUser() retrieves the active user
-   * from the session.
-   */
+  /**
+  * The fetchActiveUser() retrieves the active user
+  * from the session.
+  */
   fetchActiveUser() {
-      this.userService.getActiveUser().subscribe(
-        data => {
-          // store the active user
-          this.user = data;
-        }, error => {
-          console.log(error);
-        }
-      );
+    this.userService.getActiveUser().subscribe(
+      data => {
+        // store the active user
+        this.user = data;
+      }, error => {
+        console.log(error);
+      }
+    );
   }
 
-  onDelete(product: Product) {   
-   if (confirm('Are you sure to delete this product ' + product.name)) {
+  onDelete(product: Product) {
+    if (confirm('Are you sure to delete this product ' + product.name)) {
       this.productService.deleteProduct(product.id).subscribe(
         data => {
           console.log(data);
           alert('Product Deleted Successfully');
           window.location.reload();
         }, error => {
-         alert(error.error.text);
+          alert(error.error.text);
           window.location.reload();
         }
       );
@@ -73,11 +73,17 @@ export class CardComponent implements OnInit {
 
         // build the cart item
         let cartItem: CartItem = new CartItem(product, this.user);
-
         // save to backend
         this.cartService.addItem(cartItem).subscribe(
           data => {
-            console.log(data)
+            this.element = document.getElementById('cartCount') as HTMLElement;
+            let count = 0;
+            for (let i = 0; i < data.length; i++) {
+              count += data[i].quantity;
+            }
+            if(this.element !=null) {
+                this.element.children[0].innerHTML = count + '';
+            }
           }, error => {
             console.log(error);
           }

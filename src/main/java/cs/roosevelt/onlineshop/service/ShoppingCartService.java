@@ -10,7 +10,7 @@ public interface ShoppingCartService {
 
     ResponseEntity<List<CartItem>> getCart(HttpSession session);
 
-    ResponseEntity<CartItem> saveItem(CartItem cartItemToSave, HttpSession session);
+    ResponseEntity<List<CartItem>> saveItem(CartItem cartItemToSave, HttpSession session);
 
     ResponseEntity<Boolean> removeItem(String productId, HttpSession session);
 

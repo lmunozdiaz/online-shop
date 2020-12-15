@@ -81,7 +81,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ResponseEntity<CartItem> saveItem(CartItem cartItemToSave, HttpSession session) {
+    public ResponseEntity<List<CartItem>> saveItem(CartItem cartItemToSave, HttpSession session) {
 
         // is there an active session?
         if (session != null && session.getAttribute("user") != null) {
@@ -113,18 +113,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             // yes the item exists; only adjust the quantity
                             existingCartItem = cartItemRepository
                                     .findByProductAndUser(cartItemToSave.getProduct(), sessionUser);
+                            List<CartItem> cartItems = cartItemRepository.findByUser(sessionUser);
 
                             // set the new quantity
                             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemToSave.getQuantity());
-
                             // return the modified cart item and OK status
-                            return new ResponseEntity<>(existingCartItem, HttpStatus.OK);
+                            return new ResponseEntity<>(cartItems, HttpStatus.OK);
                         } else {
+
                             // no it doesn't exist; add the new cart item
                             CartItem newCartItem = cartItemRepository.save(cartItemToSave);
+                            List<CartItem> cartItems = cartItemRepository.findByUser(sessionUser);
 
                             // return the saved item and OK status
-                            return new ResponseEntity<>(newCartItem, HttpStatus.OK);
+                            return new ResponseEntity<>(cartItems, HttpStatus.OK);
                         }
                     } else {
 

@@ -23,7 +23,7 @@ public class ShoppingCartController {
     }
 
     @PostMapping(value = {"/add-to-cart", "/add-to-cart/"})
-    public ResponseEntity<CartItem> addCartItem(@RequestBody CartItem cartItemToSave, HttpSession session) {
+    public ResponseEntity<List<CartItem>> addCartItem(@RequestBody CartItem cartItemToSave, HttpSession session) {
         return shoppingCartService.saveItem(cartItemToSave, session);
     }
 

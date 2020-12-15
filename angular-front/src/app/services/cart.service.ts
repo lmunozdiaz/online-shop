@@ -3,6 +3,7 @@ import {CartItem} from "../model/cart-item";
 import {Observable, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Product} from "../model/product";
+import {HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +21,18 @@ export class CartService {
 
     return this.http.get(cartUrl);
   }
-
-  addItem(cartItem: CartItem): Observable<any> {
-    // add item endpoint url
+ 
+  addItem(cartItem: CartItem): Observable<CartItem[]> {
+    var header = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    });
+    // the modified url for the backend endpoint
     const addUrl: string = `${this.baseUrl}/add-to-cart`
+    return this.http.post<CartItem[]>(addUrl, JSON.stringify(cartItem), {
+      headers: header
+    });
 
-    return this.http.post(addUrl, cartItem);
   }
 
   removeItem(id: number): Observable<any> {
