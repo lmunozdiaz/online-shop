@@ -43,43 +43,54 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public ResponseEntity<List<Order>> getAll(HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
+		  // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, the user is valid
+
+                // is the valid user an admin?
+                if (sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, the user's an admin; get all users
+                    return new ResponseEntity<>(orderRepository.findAll(), HttpStatus.OK);
+
+                } else if (sessionUser.getRole().equals("ROLE_CUSTOMER")) {
+
+                    // no, the user is not an admin; deny the request
+                	
+                    return new ResponseEntity<>(orderRepository.findAllByUser(sessionUser), HttpStatus.OK);
+
+                }else {
+                	return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+
 	}
 
-	@Override
-	public ResponseEntity<Optional<Order>> getOne(String orderId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public ResponseEntity<List<Order>> getAllByCategory(Integer categoryType) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<List<Order>> getAllContainingSearchString(String searchStr) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<String> save(Order orderToSave, HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<String> update(Order orderToUpdate, HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<String> delete(String orderId, HttpSession session) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<Optional<OrderDetail>> getOrderDetails(String orderId) {
+		Order order = new Order();
+		order.setId(orderId);		
+		return orderDetailRepository.findAllByOrder(order);
 	}
 }

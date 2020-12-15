@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import cs.roosevelt.onlineshop.model.Order;
+import cs.roosevelt.onlineshop.model.OrderDetail;
+import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.service.OrderService;
 
 import javax.servlet.http.HttpSession;
@@ -29,8 +31,12 @@ public class OrderController {
      * @param session The http session.
      * @return A list of all the orders.
      */
-    @GetMapping(value = {"/admin/allOrders", "/admin/allOrders/"})
+	@GetMapping(value = {"", "/"})
     public ResponseEntity<List<Order>> fetchAllOrders(HttpSession session) {
         return orderService.getAll(session);
+    }
+	@GetMapping("/orderDetails/{id}")
+    public ResponseEntity<Optional<OrderDetail>> fetchProduct(@PathVariable("id") String orderId) {
+        return orderService.getOrderDetails(orderId);
     }
 }

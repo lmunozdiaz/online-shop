@@ -35,5 +35,4 @@ public class OrderDetail implements Serializable {
 
     @Column(name = "QUANTITY")
     private int quantity;
-
 }
