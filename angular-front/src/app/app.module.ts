@@ -39,6 +39,8 @@ import { ProductRosterComponent } from './components/admin-related/product-roste
 import { CategoryRosterComponent } from './components/admin-related/category-roster/category-roster.component';
 import { ProductUpdateComponent } from './components/admin-related/product-update/product-update.component';
 import { UserProfileComponent } from './components/user-related/user-profile/user-profile.component';
+import { OrderListComponent } from './components/order-related/order-list/order-list.component';
+import { OrderDetailsComponent } from './components/order-related/order-details/order-details.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +64,8 @@ import { UserProfileComponent } from './components/user-related/user-profile/use
     CategoryRosterComponent,
     ProductUpdateComponent,
     UserProfileComponent,
+    OrderListComponent,
+    OrderDetailsComponent,
   ],
   imports: [
     BrowserModule,

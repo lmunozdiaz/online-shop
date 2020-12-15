@@ -16,6 +16,8 @@ import {ProductRosterComponent} from "./components/admin-related/product-roster/
 import {CategoryRosterComponent} from "./components/admin-related/category-roster/category-roster.component";
 import {CategoryAddComponent} from "./components/admin-related/category-add/category-add.component";
 import { UserProfileComponent } from './components/user-related/user-profile/user-profile.component';
+import { OrderListComponent } from './components/order-related/order-list/order-list.component';
+import { OrderDetailsComponent } from './components/order-related/order-details/order-details.component';
 
 
 const routes: Routes = [
@@ -44,11 +46,21 @@ const routes: Routes = [
     component: CartDetailsComponent,
     canActivate: [LoggedInGuard]
   },
+   {
+    path:  'orders',
+    component: OrderListComponent,
+    canActivate: [LoggedInGuard],
+  },
+  {
+    path:  'orders/orderDetails/:id',
+    component: OrderDetailsComponent,
+    canActivate: [LoggedInGuard],
+  },
   {
     path: 'user-profile',
     component: UserProfileComponent,
     canActivate: [LoggedInGuard]
-  },  
+  },
   {path: 'products/:id', component: ProductDetailsComponent},
   {path: 'search/:searchStr', component: ProductListComponent},
   {path: 'category/:categoryType', component: ProductListComponent},
@@ -60,7 +72,7 @@ const routes: Routes = [
     path:  'product-add',
     component: ProductAddComponent,
     canActivate: [AdminGuard],
-  },
+  }, 
   {
     path:  'category-add',
     component: CategoryAddComponent,

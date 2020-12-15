@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 
 import cs.roosevelt.onlineshop.model.Order;
+import cs.roosevelt.onlineshop.model.OrderDetail;
 
 /**
  * The methods that must be implemented. Typically,
@@ -18,17 +19,8 @@ import cs.roosevelt.onlineshop.model.Order;
 public interface OrderService {
 
     ResponseEntity<List<Order>> getAll(HttpSession session);
+  
 
-    ResponseEntity<Optional<Order>> getOne(String orderId);
-
-    ResponseEntity<List<Order>> getAllByCategory(Integer categoryType);
-
-    ResponseEntity<List<Order>> getAllContainingSearchString(String searchStr);
-
-    public ResponseEntity<String>  save(Order orderToSave, HttpSession session);
-
-    ResponseEntity<String> update(Order orderToUpdate, HttpSession session);
-
-    ResponseEntity<String> delete(String orderId, HttpSession session);
+	ResponseEntity<Optional<OrderDetail>> getOrderDetails(String orderId);
 
 }

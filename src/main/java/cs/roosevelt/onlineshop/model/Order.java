@@ -1,15 +1,22 @@
 package cs.roosevelt.onlineshop.model;
 
-import com.sun.istack.NotNull;
-import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.sun.istack.NotNull;
+
+import lombok.Data;
 
 /**
  * This Product class is used to represent a Product entity from the database
@@ -45,4 +52,9 @@ public class Order implements Serializable {
 	@UpdateTimestamp
 	private Date updateTime;
 
+	@Column(name = "ORDER_STATUS")
+	private int orderStatus;
+	
+	@Column(name = "NUM_OF_ITEMS")
+	private int totalItems;
 }
