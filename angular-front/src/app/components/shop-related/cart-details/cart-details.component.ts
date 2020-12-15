@@ -10,7 +10,7 @@ import {CartService} from "../../../services/cart.service";
 export class CartDetailsComponent implements OnInit {
 
   // to hold the cart item list
-  cartItems: CartItem[];
+  cartItems: CartItem[] = [];
 
   // the columns to display
   displayedColumns: string[] = ["imageUrl", "name", "price", "subtotal", "action"];
