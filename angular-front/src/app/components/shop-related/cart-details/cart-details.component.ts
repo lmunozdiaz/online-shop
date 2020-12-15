@@ -13,6 +13,7 @@ export class CartDetailsComponent implements OnInit {
 
   // to hold the cart item list
   cartItems: CartItem[] = [];
+  // to hold the placed order
   order:Order;
   // the columns to display
   displayedColumns: string[] = ["imageUrl", "name", "price", "subtotal", "action"];
@@ -23,6 +24,7 @@ export class CartDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.fetchCartItems();
   }
+
   placeOrder() {
     this.cartService.placeOrder().subscribe(
       order => {
@@ -39,6 +41,7 @@ export class CartDetailsComponent implements OnInit {
       }
     );
   }
+
   fetchCartItems() {
     this.cartService.getCartItemsList().subscribe(
       cartItems => {
@@ -47,11 +50,10 @@ export class CartDetailsComponent implements OnInit {
       }
     );
   }
+
   removeCartItem(cartItemToRemove: CartItem) {
     this.cartService.removeItem(cartItemToRemove.product.id).subscribe(
       data => {
-        console.log('The remove button returned: ');
-        console.log(data);
         const snack = this._snackBar.open(cartItemToRemove.product.name+' Removed from Cart', '', {
                   duration: 5000,
                   verticalPosition: 'top'
@@ -61,5 +63,30 @@ export class CartDetailsComponent implements OnInit {
         window.location.reload();
       }
     );
+  }
+
+  increment(cartItem: CartItem) {
+    // increment the cart item's quantity
+    cartItem.quantity = cartItem.quantity + 1;
+
+    console.log(cartItem.quantity);
+
+    // update the cart item
+    this.cartService.addItem(cartItem).subscribe(data => console.log(data));
+  }
+
+  decrement(cartItem: CartItem) {
+    // decrement the cart item's quantity
+    cartItem.quantity = cartItem.quantity - 1;
+
+    console.log(cartItem.quantity);
+
+    if (cartItem.quantity <= 0) {
+      // remove the cart item
+      this.removeCartItem(cartItem);
+    } else {
+      // update the cart item
+      this.cartService.addItem(cartItem).subscribe(data => console.log(data));
+    }
   }
 }

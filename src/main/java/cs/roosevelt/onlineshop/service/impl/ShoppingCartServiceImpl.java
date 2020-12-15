@@ -134,6 +134,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         // is the item already in the cart?
                         if (cartItemRepository.existsByProductAndUser(cartItemToSave.getProduct(), sessionUser)) {
                             // yes the item exists
+
+                            // get the cart item
                             existingCartItem = cartItemRepository
                                     .findByProductAndUser(cartItemToSave.getProduct(), sessionUser);
 
@@ -162,10 +164,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                                 existingProduct.get().setStock(productStock);
                             }
 
-                            // set the new quantity
-                            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemToSave.getQuantity());
+                            // set the new cart item quantity
+                            existingCartItem.setQuantity(cartItemToSave.getQuantity());
 
-                            // update the existing cart item's quantity
+                            // update the existing cart item
                             cartItemRepository.save(existingCartItem);
 
                             // update the existing product's stock quantity
