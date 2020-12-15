@@ -18,7 +18,7 @@ public class PopulateDB_ecommerce  {
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ecommerce", "ecommerce", "ecommerce");
 
         boolean succeeds = false;
-        String[] tbname = {"CART_ITEMS", "USERS", "PRODUCTS", "CATEGORY", "USER_SIGNUP_OTP"};
+        String[] tbname = {"CART_ITEMS","ORDER_DETAILS", "USERS", "PRODUCTS", "CATEGORY", "USER_SIGNUP_OTP","ORDERS"};
         
         for(String i: tbname) {
             try{
@@ -29,7 +29,7 @@ public class PopulateDB_ecommerce  {
                     continue;                
             }
             catch(SQLException sqle) {
-                System.out.println(sqle.toString());
+            	sqle.printStackTrace();
                 continue;
                 
             }
@@ -146,42 +146,61 @@ public class PopulateDB_ecommerce  {
             }
         }
         
-//        succeeds = false;
-//
-//        while (!succeeds) {
-//            String sql = "CREATE TABLE ORDERS("
-//                    + "ORDER_ID BIGINT PRIMARY KEY,"
-//                    + "ORDER_ADDRESS1 VARCHAR(100),"
-//                    + "ORDER_ADDRESS2 VARCHAR(100),"
-//                    + "ORDER_CITY VARCHAR(100),"
-//                    + "ORDER_STATE VARCHAR(100),"
-//                    + "ORDER_ZIP VARCHAR(100),"
-//                    + "ORDER_COUNTRY VARCHAR(100),"
-//                    + "ORDER_EMAIL VARCHAR(100),"
-//                    + "ORDER_NAME VARCHAR(100),"
-//                    + "ORDER_PHONE VARCHAR(100),"
-//                    + "CREATE_TIME TIMESTAMP,"
-//                    + "ORDER_AMOUNT DOUBLE,"
-//                    + "ORDER_STATUS INT,"
-//                    + "UPDATE_TIME TIMESTAMP)";
-//
-//            try {
-//
-//                conn.createStatement().execute(sql);
-//                System.out.println("Created ORDERS");
-//                succeeds = true;
-//
-//            } catch (SQLException sqle) {
-//                sqle.printStackTrace();
-//  //              conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
-//  //              conn.createStatement().execute("DROP TABLE CART");
-//                conn.createStatement().execute("DROP TABLE ORDERS");
-//
-//            }
-//        }
-        
         succeeds = false;
 
+        while (!succeeds) {
+            String sql = "CREATE TABLE ORDERS("
+                    + "ORDER_ID BIGINT PRIMARY KEY,"
+                    + "CREATE_TIME TIMESTAMP,"
+                    + "USER_ID BIGINT,"
+                    + "ORDER_AMOUNT DOUBLE,"
+                    + "ORDER_STATUS INT,"
+                    + "UPDATE_TIME TIMESTAMP,"
+                    + "CONSTRAINT FK_ORDER_USER FOREIGN KEY (USER_ID) REFERENCES USERS(ID))";
+
+            try {
+
+                conn.createStatement().execute(sql);
+                System.out.println("Created ORDERS");
+                succeeds = true;
+
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+                conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
+                conn.createStatement().execute("DROP TABLE CART");
+                conn.createStatement().execute("DROP TABLE ORDERS");
+
+            }
+        }
+        
+        succeeds = false;
+        
+        
+
+        while (!succeeds) {
+            String sql = "CREATE TABLE ORDER_DETAILS("
+            		 + "ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+                     + "PRODUCT_ID VARCHAR(100),"
+                     + "ORDER_ID BIGINT,"
+                     + "USER_ID BIGINT,"
+                     + "QUANTITY INT,"
+                     + "CONSTRAINT ORDER_DETAILS_ID PRIMARY KEY(ID),"
+                     + "CONSTRAINT FK_ORDER_DETAILS_ORDER FOREIGN KEY (ORDER_ID) REFERENCES ORDERS(ORDER_ID),"
+                     + "CONSTRAINT FK_ORDER_DETAILS_USER FOREIGN KEY (USER_ID) REFERENCES USERS(ID))";
+
+            try {
+
+                conn.createStatement().execute(sql);
+                System.out.println("Created ORDER_DETAILS");
+                succeeds = true;
+
+            } catch (SQLException sqle) {
+                sqle.printStackTrace();
+                conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
+
+            }
+        }
+        succeeds = false;
         while (!succeeds) {
             String sql = "CREATE TABLE CART_ITEMS ("
                     + "ID BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
@@ -200,42 +219,12 @@ public class PopulateDB_ecommerce  {
                 succeeds = true;
 
             } catch (SQLException sqle) {
-
-      //          conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
+            	sqle.printStackTrace();
+            	//conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
                 conn.createStatement().execute("DROP TABLE CART_ITEMS");
 
             }
         }
-        
-//        succeeds = false;
-//
-//        while (!succeeds) {
-//            String sql = "CREATE TABLE ORDER_DETAILS("
-//                    + "ID BIGINT PRIMARY KEY,"
-//                    + "CATEGORY_TYPE INT,"
-//                    + "COUNT INT,"
-//                    + "PRODUCT_DESCRIPTION VARCHAR(1000),"
-//                    + "PRODUCT_ICON VARCHAR(1000),"
-//                    + "PRODUCT_ID VARCHAR(100),"
-//                    + "PRODUCT_NAME VARCHAR(255),"
-//                    + "PRODUCT_PRICE DOUBLE,"
-//                    + "PRODUCT_STOCK INT,"
-//                    + "CART_USER_ID BIGINT REFERENCES CART(USER_ID),"
-//                    + "ORDER_ID BIGINT,"
-//                    + "FOREIGN KEY(ORDER_ID) REFERENCES ORDERS(ORDER_ID))";
-//
-//            try {
-//
-//                conn.createStatement().execute(sql);
-//                System.out.println("Created ORDER_DETAILS");
-//                succeeds = true;
-//
-//            } catch (SQLException sqle) {
-//                sqle.printStackTrace();
-//                conn.createStatement().execute("DROP TABLE ORDER_DETAILS");
-//
-//            }
-//        }
         
         String insert = "INSERT INTO products "
                 + "(PRODUCT_ID,CATEGORY_TYPE,CREATE_TIME,PRODUCT_DESCRIPTION,PRODUCT_ICON,"

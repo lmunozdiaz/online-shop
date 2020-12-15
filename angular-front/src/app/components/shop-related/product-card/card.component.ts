@@ -31,6 +31,7 @@ export class CardComponent implements OnInit {
   ngOnInit(): void {
     this.user = new User();
     this.user.role ='ROLE_CUSTOMER';
+    this.user.firstName ='dummy';
     this.fetchActiveUser();
   }
 
@@ -75,8 +76,14 @@ export class CardComponent implements OnInit {
 
         // save to backend
         this.cartService.addItem(cartItem).subscribe(
-          data => { console.log(data) }
+          data => {
+            console.log(data)
+          }, error => {
+            console.log(error);
+          }
         );
+      }, error => {
+        console.log(error);
       }
     );
   }
