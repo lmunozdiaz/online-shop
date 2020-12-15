@@ -13,10 +13,12 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     CartItem findByProductAndUser(Product product, User user);
 
+    CartItem findByProductIdAndUser(String productId, User user);
+
     Boolean existsByProductAndUser(Product product, User user);
 
     Boolean existsByProductIdAndUser(String productId, User user);
 
-    Boolean deleteByProductIdAndUser(String productId, User user);
+    Long deleteByProductIdAndUser(String productId, User user);
 
 }

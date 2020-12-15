@@ -46,7 +46,7 @@
         <button mat-button>
           <mat-icon>remove</mat-icon>
         </button>
-        <button mat-button>
+        <button (click)="removeCartItem(cartItem)" mat-button>
           <mat-icon>delete</mat-icon>
         </button>
       </td>
@@ -58,18 +58,18 @@
 
   <mat-toolbar>
     <mat-toolbar-row style="padding: 0px !important;">
-   
+
       <span fxFlex="97" style="float: right;">
         <button  style="float: right;" (click)="placeOrder()" mat-raised-button color="accent">
           <mat-button-toggle value="bold">Place Order</mat-button-toggle>
         </button>
       </span>
       <span fxFlex="2">
-  
+
       </span>
     </mat-toolbar-row>
   </mat-toolbar>
-   
+
   </div>
 
 <!-- if the cart is empty, then show a message -->

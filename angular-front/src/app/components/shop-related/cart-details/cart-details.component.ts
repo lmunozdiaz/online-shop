@@ -43,4 +43,13 @@ export class CartDetailsComponent implements OnInit {
       }
     );
   }
+
+  removeCartItem(cartItemToRemove: CartItem) {
+    this.cartService.removeItem(cartItemToRemove.product.id).subscribe(
+      data => {
+        console.log("The remove button returned: ");
+        console.log(data);
+      }
+    );
+  }
 }

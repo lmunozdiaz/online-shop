@@ -21,7 +21,7 @@ export class CartService {
 
     return this.http.get(cartUrl);
   }
- 
+
   addItem(cartItem: CartItem): Observable<CartItem[]> {
     var header = new HttpHeaders({
       "Content-Type": "application/json",
@@ -43,9 +43,9 @@ export class CartService {
 
   }
 
-  removeItem(id: number): Observable<any> {
+  removeItem(id: string): Observable<any> {
     // delete endpoint url
-    const deleteUrl: string = `${this.baseUrl}/remove-from-cart${id}`
+    const deleteUrl: string = `${this.baseUrl}/remove-from-cart/${id}`
 
     return this.http.delete(deleteUrl);
   }

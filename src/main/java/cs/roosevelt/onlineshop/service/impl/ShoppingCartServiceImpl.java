@@ -248,7 +248,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Boolean> removeItem(String productId, HttpSession session) {
+        System.out.println("In the removeItem backend method...");
         // is there an active session?
         if (session != null && session.getAttribute("user") != null) {
 
@@ -265,13 +267,42 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                     // yes, they are; remove the cart item and return OK status
 
-                    // does the user's product exist?
-                    if (cartItemRepository.existsByProductIdAndUser(productId, sessionUser)) {
-                        // yes it exists; delete it
-                        boolean isRemoved = cartItemRepository.deleteByProductIdAndUser(productId, sessionUser);
+                    // get the user's cart item
+                    CartItem existingCartItem = cartItemRepository.findByProductIdAndUser(productId, sessionUser);
 
-                        if (isRemoved) {
+                    // does the user's product exist?
+                    if (existingCartItem != null) {
+                        // yes it exists; delete the product
+                        System.out.println("The user's cart item: " + existingCartItem.toString());
+                        Long recordsDelete = cartItemRepository.deleteByProductIdAndUser(productId, sessionUser);
+                        System.out.println("The number of records deleted was: " + recordsDelete);
+
+                        if (recordsDelete != 0) {
                             // item was deleted
+
+                            // replenish the product stock
+
+                            // get the product
+                            Optional<Product> existingProduct = productRepository.findById(productId);
+
+                            // does the product exist?
+                            if (existingProduct.isPresent()) {
+                                // set the new stock value
+                                existingProduct.get().setStock(existingProduct.get().getStock()
+                                        + existingCartItem.getQuantity());
+
+                                System.out.println("The new stock quantity is: " + existingProduct.get().getStock());
+
+                                // is there stock?
+                                if (existingProduct.get().getStock() > 0) {
+                                    // set it's status to 0 (in stock)
+                                    existingProduct.get().setStatus(0);
+                                }
+
+                                // update the product in the db
+                                productRepository.save(existingProduct.get());
+                            }
+
                             return new ResponseEntity<>(true, HttpStatus.OK);
                         } else {
                             // item was not deleted
@@ -279,6 +310,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                         }
                     } else {
                         // it doesn't exist; return not found status
+                        System.out.println("The user's cart item did not exist.");
                         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
                     }
 
