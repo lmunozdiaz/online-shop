@@ -55,7 +55,22 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-</div>
+
+  <mat-toolbar>
+    <mat-toolbar-row style="padding: 0px !important;">
+   
+      <span fxFlex="97" style="float: right;">
+        <button  style="float: right;" (click)="placeOrder()" mat-raised-button color="accent">
+          <mat-button-toggle value="bold">Place Order</mat-button-toggle>
+        </button>
+      </span>
+      <span fxFlex="2">
+  
+      </span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+   
+  </div>
 
 <!-- if the cart is empty, then show a message -->
 <ng-template #emptyCart class="card-container">

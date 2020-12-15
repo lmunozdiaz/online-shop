@@ -1,6 +1,8 @@
 package cs.roosevelt.onlineshop.service;
 
 import cs.roosevelt.onlineshop.model.CartItem;
+import cs.roosevelt.onlineshop.model.Order;
+
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpSession;
@@ -15,5 +17,7 @@ public interface ShoppingCartService {
     ResponseEntity<Boolean> removeItem(String productId, HttpSession session);
 
     ResponseEntity<Integer> getTotalQuantity(HttpSession session);
+
+	ResponseEntity<Order> placeOrder(HttpSession session);
 
 }

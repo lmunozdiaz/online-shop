@@ -141,7 +141,9 @@
 						#phone="ngModel">
 				</div>
 
-				<button class="btn btn-success" [disabled]="registrationform.form.invalid" type="submit">Submit</button>
+				<button id="signupbutton" class="btn btn-success" [disabled]="registrationform.form.invalid" type="submit">
+							<mat-button-toggle value="bold">Submit</mat-button-toggle>
+				</button>
 				|
 				<button class="btn btn-primary" type="reset">Start over?</button>
 

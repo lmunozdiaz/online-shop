@@ -4,7 +4,7 @@ import {Observable, Subject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Product} from "../model/product";
 import {HttpHeaders} from '@angular/common/http';
-
+import {Order} from '../model/order';
 @Injectable({
   providedIn: 'root'
 })
@@ -32,6 +32,14 @@ export class CartService {
     return this.http.post<CartItem[]>(addUrl, JSON.stringify(cartItem), {
       headers: header
     });
+
+  }
+
+  placeOrder(): Observable<Order> {
+    // get-quantity endpoint url
+    const orderUrl: string = `${this.baseUrl}/placeorder`
+
+    return this.http.get<Order>(orderUrl);
 
   }
 

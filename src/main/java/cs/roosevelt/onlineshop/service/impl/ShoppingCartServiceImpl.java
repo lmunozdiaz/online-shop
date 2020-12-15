@@ -1,21 +1,31 @@
 package cs.roosevelt.onlineshop.service.impl;
 
-import cs.roosevelt.onlineshop.model.CartItem;
-import cs.roosevelt.onlineshop.model.Product;
-import cs.roosevelt.onlineshop.model.User;
-import cs.roosevelt.onlineshop.repository.CartItemRepository;
-import cs.roosevelt.onlineshop.repository.ProductRepository;
-import cs.roosevelt.onlineshop.repository.UserRepository;
-import cs.roosevelt.onlineshop.service.ProductService;
-import cs.roosevelt.onlineshop.service.ShoppingCartService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
+import cs.roosevelt.onlineshop.model.CartItem;
+import cs.roosevelt.onlineshop.model.Order;
+import cs.roosevelt.onlineshop.model.OrderDetail;
+import cs.roosevelt.onlineshop.model.Product;
+import cs.roosevelt.onlineshop.model.User;
+import cs.roosevelt.onlineshop.repository.CartItemRepository;
+import cs.roosevelt.onlineshop.repository.OrderDetailsRepository;
+import cs.roosevelt.onlineshop.repository.OrderRepository;
+import cs.roosevelt.onlineshop.repository.ProductRepository;
+import cs.roosevelt.onlineshop.repository.UserRepository;
+import cs.roosevelt.onlineshop.service.ShoppingCartService;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -28,6 +38,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
+    private OrderDetailsRepository orderDetailRepository;
 
     @Override
     public ResponseEntity<List<CartItem>> getCart(HttpSession session) {
@@ -347,5 +363,88 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         }
     }
+
+	
+    @Override
+    @Transactional
+	public ResponseEntity<Order> placeOrder(HttpSession session) {
+		
+    	 if (session != null && session.getAttribute("user") != null) {
+
+             // get the user from the session
+             User sessionUser = (User) session.getAttribute("user");
+
+             // is the session user valid?
+             if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                 System.out.println("The session user is: " + sessionUser.toString());
+
+                 // yes, they're valid
+
+                 // is the session user registered or a manager?
+                 if (sessionUser.getRole().equals("ROLE_CUSTOMER")) {
+
+                     // yes, they are
+
+                     // get all of the user's cart items
+                     List<CartItem> existingCartItems = cartItemRepository.findByUser(sessionUser);
+                     Order order = new Order();
+                     Random rnd = new Random();
+                     long n = 10000000 + rnd.nextInt(90000000);
+                     order.setId(String.valueOf(n));
+                     
+                     BigDecimal totalPrice = new BigDecimal(0);
+                     long totalItmes=0;
+                     List<OrderDetail> detail = new ArrayList<OrderDetail>();
+                     OrderDetail lineItem;
+                     for(CartItem item:existingCartItems) {
+                    	 
+                    	 lineItem = new OrderDetail();
+                    	 lineItem.setId(((long)10000000 + rnd.nextInt(90000000)));
+                    	 lineItem.setProduct(item.getProduct());
+                    	 lineItem.setQuantity(item.getQuantity());
+                    	 lineItem.setUser(sessionUser);
+                    	 lineItem.setOrder(order);
+                    	 totalItmes+=item.getQuantity();
+                    	 totalPrice= totalPrice.add(item.getProduct().getPrice());
+                    	 detail.add(lineItem);
+                     }
+                     order.setAmount(totalPrice);
+                     order.setTotalItems((int)totalItmes);
+                     order.setUser(sessionUser);
+                     order.setOrderStatus(0);
+                     order.setCreateTime(new Date());
+                     order.setUpdateTime(new Date());
+                     orderRepository.save(order);
+                     orderDetailRepository.saveAll(detail);
+                     cartItemRepository.deleteAll(existingCartItems);
+                     
+                     return new ResponseEntity<>(order, HttpStatus.OK);
+                     
+
+                 } else {
+
+                     // no, they're neither registered nor a manager; deny the request
+                     return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                 }
+
+             } else {
+
+                 // no valid user found
+                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+             }
+
+         } else {
+
+             // no, there's no active session; return denial response
+             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+         }
+	}
+    
+    
+    
 
 }
