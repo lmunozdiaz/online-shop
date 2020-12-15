@@ -406,7 +406,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                     	 lineItem.setUser(sessionUser);
                     	 lineItem.setOrder(order);
                     	 totalItmes+=item.getQuantity();
-                    	 totalPrice= totalPrice.add(item.getProduct().getPrice());
+                    	 totalPrice= totalPrice.add(item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())));
                     	 detail.add(lineItem);
                      }
                      order.setAmount(totalPrice);
