@@ -18,7 +18,7 @@ public class PopulateDB_ecommerce  {
         Connection conn = DriverManager.getConnection("jdbc:derby://localhost:1527/ecommerce", "ecommerce", "ecommerce");
 
         boolean succeeds = false;
-        String[] tbname = {"CART_ITEMS","ORDER_DETAILS", "USERS", "PRODUCTS", "CATEGORY", "USER_SIGNUP_OTP","ORDERS"};
+        String[] tbname = {"CART_ITEMS","ORDER_DETAILS", "ORDERS","USERS", "PRODUCTS", "CATEGORY", "USER_SIGNUP_OTP"};
         
         for(String i: tbname) {
             try{
@@ -174,8 +174,7 @@ public class PopulateDB_ecommerce  {
         }
         
         succeeds = false;
-        
-        
+               
 
         while (!succeeds) {
             String sql = "CREATE TABLE ORDER_DETAILS("
@@ -404,7 +403,8 @@ public class PopulateDB_ecommerce  {
           
             insert = "Insert into users (id, active, email, first_name, last_name, address1, address2, city, state, zip, country, phone, role,password) "
                     + "values "
-                    + "(2147483641, true, 'admin@rooseveltshopping.com', 'Roosevelt', 'Admin', '430 S Michigan Ave', '01', 'Chicago', 'Illinois', '60605','US','3123413500','ROLE_MANAGER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.')";                   
+                    + "(2147483641, true, 'admin@rooseveltshopping.com', 'Roosevelt', 'Admin', '430 S Michigan Ave', '01', 'Chicago', 'Illinois', '60605','US','3123413500','ROLE_MANAGER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.'),"
+                    + "(2147483642, true, 'andy@gmail.com', 'Andy', 'Brown', '111 S Michigan Ave', '425', 'Chicago', 'Illinois', '60601','US','123456890','ROLE_CUSTOMER', '$2a$10$sIsYzTgwro/mmDONrl/x3eb6rtauA0sp/8FTy74G4mxWjnk2RI89.')";  
           try {
 
                 conn.createStatement().execute(insert);
