@@ -1,9 +1,12 @@
 package cs.roosevelt.onlineshop.service.impl;
 
 import cs.roosevelt.onlineshop.model.CartItem;
+import cs.roosevelt.onlineshop.model.Product;
 import cs.roosevelt.onlineshop.model.User;
 import cs.roosevelt.onlineshop.repository.CartItemRepository;
+import cs.roosevelt.onlineshop.repository.ProductRepository;
 import cs.roosevelt.onlineshop.repository.UserRepository;
+import cs.roosevelt.onlineshop.service.ProductService;
 import cs.roosevelt.onlineshop.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Autowired
     private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -110,19 +117,85 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
                         // is the item already in the cart?
                         if (cartItemRepository.existsByProductAndUser(cartItemToSave.getProduct(), sessionUser)) {
-                            // yes the item exists; only adjust the quantity
+                            // yes the item exists
                             existingCartItem = cartItemRepository
                                     .findByProductAndUser(cartItemToSave.getProduct(), sessionUser);
-                            List<CartItem> cartItems = cartItemRepository.findByUser(sessionUser);
+
+                            // decrease the product's stock quantity first, since the cart item is a promise
+
+                            // get the product
+                            Optional<Product> existingProduct = productRepository.findById(cartItemToSave
+                                    .getProduct()
+                                    .getId());
+
+                            // does the product exist?
+                            if (existingProduct.isPresent()) {
+                                // save the product's new stock value based on the cart item's demands
+                                int productStock = existingProduct.get().getStock() - cartItemToSave.getQuantity();
+
+                                // is the product stock 0?
+                                if (productStock == 0) {
+                                    // set the product status to 1 (out of stock)
+                                    existingProduct.get().setStatus(1);
+                                } else if (productStock < 0) {
+                                    // there's not enough in stock for the cartItem's demands
+                                    return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+                                }
+
+                                // set the product's new stock quantity
+                                existingProduct.get().setStock(productStock);
+                            }
 
                             // set the new quantity
                             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemToSave.getQuantity());
+
+                            // update the existing cart item's quantity
+                            cartItemRepository.save(existingCartItem);
+
+                            // update the existing product's stock quantity
+                            productRepository.save(existingProduct.get());
+
+                            // get a return list of the updated cart items
+                            List<CartItem> cartItems = cartItemRepository.findByUser(sessionUser);
+
                             // return the modified cart item and OK status
                             return new ResponseEntity<>(cartItems, HttpStatus.OK);
                         } else {
 
-                            // no it doesn't exist; add the new cart item
-                            CartItem newCartItem = cartItemRepository.save(cartItemToSave);
+                            // no it doesn't exist
+
+                            // decrease the product's stock quantity first, since the cart item is a promise
+
+                            // get the product
+                            Optional<Product> existingProduct = productRepository.findById(cartItemToSave
+                                    .getProduct()
+                                    .getId());
+
+                            // does the product exist?
+                            if (existingProduct.isPresent()) {
+                                // save the product's new stock value based on the cart item's demands
+                                int productStock = existingProduct.get().getStock() - cartItemToSave.getQuantity();
+
+                                // is the product stock 0?
+                                if (productStock == 0) {
+                                    // set the product status to 1 (out of stock)
+                                    existingProduct.get().setStatus(1);
+                                } else if (productStock < 0) {
+                                    // there's not enough in stock for the cartItem's demands
+                                    return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+                                }
+
+                                // set the product's new stock quantity
+                                existingProduct.get().setStock(productStock);
+                            }
+
+                            // save the new cart item
+                            cartItemRepository.save(cartItemToSave);
+
+                            // update the existing product's stock quantity
+                            productRepository.save(existingProduct.get());
+
+                            // get a return list of the updated cart items
                             List<CartItem> cartItems = cartItemRepository.findByUser(sessionUser);
 
                             // return the saved item and OK status
