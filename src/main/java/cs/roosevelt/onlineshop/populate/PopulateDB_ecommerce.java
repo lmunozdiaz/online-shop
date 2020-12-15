@@ -156,6 +156,7 @@ public class PopulateDB_ecommerce  {
                     + "ORDER_AMOUNT DOUBLE,"
                     + "ORDER_STATUS INT,"
                     + "UPDATE_TIME TIMESTAMP,"
+                    + "NUM_OF_ITEMS INT,"
                     + "CONSTRAINT FK_ORDER_USER FOREIGN KEY (USER_ID) REFERENCES USERS(ID))";
 
             try {
