@@ -165,7 +165,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             }
 
                             // set the new cart item quantity
-                            existingCartItem.setQuantity(cartItemToSave.getQuantity());
+                            existingCartItem.setQuantity(cartItemToSave.getQuantity() +existingCartItem.getQuantity());
 
                             // update the existing cart item
                             cartItemRepository.save(existingCartItem);
