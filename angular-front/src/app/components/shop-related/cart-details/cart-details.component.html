@@ -9,8 +9,10 @@
     <!-- Image Column -->
     <ng-container matColumnDef="imageUrl">
       <th *matHeaderCellDef mat-header-cell> Product</th>
-      <td *matCellDef="let cartItem" mat-cell>
-        <img height="75" src="{{cartItem.product.imageUrl}}">
+      <td *matCellDef="let cartItem" mat-cell>       
+         <a routerLink="/products/{{cartItem.product.id}}">
+          <img src="{{cartItem.product.imageUrl}}" height="75">
+        </a>
       </td>
       <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>

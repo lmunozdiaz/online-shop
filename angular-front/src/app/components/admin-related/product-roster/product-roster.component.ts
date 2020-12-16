@@ -24,7 +24,7 @@ export class ProductRosterComponent implements OnInit, AfterViewInit {
   msg: string[];
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['image', 'name', 'price', 'categoryType',
-    'status', 'stock', 'action'];
+     'stock', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
