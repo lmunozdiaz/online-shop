@@ -38,7 +38,7 @@
         <span>Subtotal: {{cartItem.product.price * cartItem.quantity | currency: 'USD'}}</span>
       </td>
       <td *matFooterCellDef mat-footer-cell>
-        <span><b>Total: $0.00</b></span>
+        <span><b>Total: {{cartTotalPrice | currency: 'USD'}}</b></span>
       </td>
     </ng-container>
 

@@ -398,7 +398,68 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         }
     }
 
-	
+    @Override
+    public ResponseEntity<BigDecimal> getTotalPrice(HttpSession session) {
+        // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                System.out.println("The session user is: " + sessionUser.toString());
+
+                // yes, they're valid
+
+                // is the session user registered or a manager?
+                if (sessionUser.getRole().equals("ROLE_CUSTOMER") || sessionUser.getRole().equals("ROLE_MANAGER")) {
+
+                    // yes, they are
+
+                    // get all of the user's cart items
+                    List<CartItem> existingCartItems = cartItemRepository.findByUser(sessionUser);
+
+                    // to hold the total price
+                    BigDecimal totalPrice = new BigDecimal(0);
+
+                    // is there any items?
+                    if (existingCartItems != null) {
+                        // yes, there are items; calculate the total price
+                        for (CartItem tempCartItem: existingCartItems) {
+                            totalPrice= totalPrice.add(tempCartItem.getProduct().getPrice().multiply(new BigDecimal(tempCartItem.getQuantity())));
+                        }
+                        // return the total price and OK status
+                        return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+                    } else {
+                        // there were no items; return Not Found status
+                        return new ResponseEntity<>(totalPrice, HttpStatus.NOT_FOUND);
+                    }
+
+                } else {
+
+                    // no, they're neither registered nor a manager; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+            }
+
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        }
+    }
+
+
     @Override
     @Transactional
 	public ResponseEntity<Order> placeOrder(HttpSession session) {

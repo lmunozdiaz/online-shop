@@ -1,5 +1,6 @@
 package cs.roosevelt.onlineshop.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -49,6 +50,11 @@ public class ShoppingCartController {
     @GetMapping(value = {"/placeorder", "/placeorder/"})
     public ResponseEntity<Order> placeOrder(HttpSession session) {
         return shoppingCartService.placeOrder(session);
+    }
+
+    @GetMapping(value = {"/totalPrice", "/totalPrice/"})
+    public ResponseEntity<BigDecimal> fetchTotalPrice(HttpSession session) {
+        return shoppingCartService.getTotalPrice(session);
     }
     
 }

@@ -6,6 +6,7 @@ import cs.roosevelt.onlineshop.model.Order;
 import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ShoppingCartService {
@@ -17,6 +18,8 @@ public interface ShoppingCartService {
     ResponseEntity<Boolean> removeItem(String productId, HttpSession session);
 
     ResponseEntity<Integer> getTotalQuantity(HttpSession session);
+
+    ResponseEntity<BigDecimal> getTotalPrice(HttpSession session);
 
 	ResponseEntity<Order> placeOrder(HttpSession session);
 

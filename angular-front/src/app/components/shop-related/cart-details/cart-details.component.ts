@@ -17,6 +17,7 @@ export class CartDetailsComponent implements OnInit {
   order:Order;
   // the columns to display
   displayedColumns: string[] = ["imageUrl", "name", "price", "subtotal", "action"];
+  cartTotalPrice: number;
 
   constructor(private cartService: CartService,private router: Router,private _snackBar: MatSnackBar) {
   }
@@ -73,6 +74,10 @@ export class CartDetailsComponent implements OnInit {
 
     // update the cart item
     this.cartService.addItem(cartItem).subscribe(data => console.log(data));
+
+
+    // calculate total price
+    this.getCartTotalPrice();
   }
 
   decrement(cartItem: CartItem) {
@@ -88,5 +93,16 @@ export class CartDetailsComponent implements OnInit {
       // update the cart item
       this.cartService.addItem(cartItem).subscribe(data => console.log(data));
     }
+  }
+
+  getCartTotalPrice() {
+    this.cartService.getTotalPrice().subscribe(
+      totalPrice => {
+        this.cartTotalPrice = totalPrice;
+        console.log(totalPrice);
+      }, error => {
+        console.log(error);
+      }
+    );
   }
 }

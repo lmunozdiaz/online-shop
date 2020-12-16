@@ -56,4 +56,11 @@ export class CartService {
 
     return this.http.get<number>(quantityUrl);
   }
+
+  getTotalPrice(): Observable<any> {
+    // get-total-value endpoint url
+    const totalValueUrl: string = `${this.baseUrl}/totalPrice`
+
+    return this.http.get(totalValueUrl);
+  }
 }
