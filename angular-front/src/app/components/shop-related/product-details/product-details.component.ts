@@ -110,6 +110,7 @@ export class ProductDetailsComponent implements OnInit {
                 if (element != null) {
                    element.children[0].innerHTML = count + '';
                 }
+                product.stock = product.stock - 1;
                 const snack = this._snackBar.open(cartItem.product.name+' added to Cart', 'Go to Cart', {
                   duration: 3000,
                   verticalPosition: 'top'
