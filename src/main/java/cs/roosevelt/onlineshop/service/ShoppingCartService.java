@@ -23,4 +23,6 @@ public interface ShoppingCartService {
 
 	ResponseEntity<Order> placeOrder(HttpSession session);
 
+	ResponseEntity<CartItem> updateCartItem(CartItem cartItemToSave, String action, HttpSession session);
+
 }

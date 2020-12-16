@@ -10,10 +10,20 @@
         </p>
       </mat-card-content>
       <mat-card-actions align="end">
-         <button  *ngIf="user.role == 'ROLE_CUSTOMER'" disabled="{{user.firstName == 'dummy'}}" (click)="addToCart(product)" color="accent" mat-flat-button>Add To Cart</button>    
-          <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'" routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
-          <button  *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)" mat-flat-button>Delete</button>
+
+        <button (click)="addToCart(product)" *ngIf="user.role == 'ROLE_CUSTOMER'" color="accent"
+          disabled="{{user.firstName == 'dummy' || product.stock == 0}}" mat-flat-button>
+
+          <span *ngIf="product.stock == 0">Out of Stock</span>
+          <span *ngIf="product.stock > 0">Add To Cart</span>
+        </button>
+        <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'"
+          routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
+        <button *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)"
+          mat-flat-button>Delete</button>
       </mat-card-actions>
+
+
     </mat-card>
   </div>
 </div>

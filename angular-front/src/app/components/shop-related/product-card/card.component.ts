@@ -21,7 +21,6 @@ export class CardComponent implements OnInit {
   @Input() id: string;
   @Input() imageUrl: string;
   @Input() name: string;
-  element: HTMLElement;
   // to hold the product that will be
   // sent to the cart, if requested
   @Input() product: Product;
@@ -78,20 +77,19 @@ export class CardComponent implements OnInit {
         // save to backend
         this.cartService.addItem(cartItem).subscribe(
           data => {
-            this.element = document.getElementById('cartCount') as HTMLElement;
+            let element = document.getElementById('cartCount') as HTMLElement;
             this.cartService.getTotalQuantity().subscribe(
               count => {
-                if (this.element != null) {
-                  this.element.children[0].innerHTML = count + '';
+                if (element != null) {
+                 element.children[0].innerHTML = count + '';
                 }
-                const snack = this._snackBar.open(cartItem.product.name+' added to Cart', 'Go to Cart', {
+                const snack = this._snackBar.open(cartItem.product.name +' added to Cart', 'Go to Cart', {
                   duration: 5000,
                   verticalPosition: 'top'
                 });
                 snack.onAction().subscribe(() => {
                   this.router.navigateByUrl('/cart-details');
                 });
-
               });
           }, error => {
             console.log(error);

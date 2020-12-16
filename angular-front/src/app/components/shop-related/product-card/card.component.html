@@ -26,7 +26,10 @@
      in similar fashion as imageUrl -->
     <mat-card-actions align="end">
       <button (click)="addToCart(product)" *ngIf="user.role == 'ROLE_CUSTOMER'" color="accent"
-              disabled="{{user.firstName == 'dummy'}}" mat-flat-button>Add To Cart
+              disabled="{{user.firstName == 'dummy' || product.stock == 0}}" mat-flat-button>
+              
+              <span *ngIf="product.stock == 0">Out of Stock</span>
+               <span *ngIf="product.stock > 0">Add To Cart</span>
       </button>
       <button *ngIf="user.role == 'ROLE_MANAGER'" color="dark" mat-stroked-button
               routerLink="/product-update/{{product.id}}" style="margin-right: 5px !important;">Edit

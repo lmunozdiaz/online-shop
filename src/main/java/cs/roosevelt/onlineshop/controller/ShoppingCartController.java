@@ -37,6 +37,11 @@ public class ShoppingCartController {
     public ResponseEntity<List<CartItem>> addCartItem(@RequestBody CartItem cartItemToSave, HttpSession session) {
         return shoppingCartService.saveItem(cartItemToSave, session);
     }
+    
+    @PostMapping(value = {"/update-cart-item/{action}/", "/update-cart-item/{action}"})
+    public ResponseEntity<CartItem> updateCartItem(@RequestBody CartItem cartItemToSave, HttpSession session,@PathVariable("action") String action) {
+        return shoppingCartService.updateCartItem(cartItemToSave,action,session);
+    }
 
     @DeleteMapping(value = {"/remove-from-cart/{id}", "/remove-from-cart/{id}"})
     public ResponseEntity<Boolean> removeCartItem(@PathVariable("id") String productId, HttpSession session) {

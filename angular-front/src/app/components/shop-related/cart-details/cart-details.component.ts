@@ -24,6 +24,7 @@ export class CartDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchCartItems();
+    this.getCartTotalPrice();
   }
 
   placeOrder() {
@@ -68,16 +69,28 @@ export class CartDetailsComponent implements OnInit {
 
   increment(cartItem: CartItem) {
     // increment the cart item's quantity
-    cartItem.quantity = cartItem.quantity + 1;
 
     console.log(cartItem.quantity);
+    if (cartItem.product.stock == 0) {
+      const snack = this._snackBar.open('Oops! Maximum stock quantity reached', '', {
+        duration: 5000,
+        verticalPosition: 'top'
+      });
+    } else {
+      cartItem.quantity = cartItem.quantity + 1;
+      // update the cart item
+      this.cartService.updateCartItem(cartItem, 'increment').subscribe(
+        data => {
 
-    // update the cart item
-    this.cartService.addItem(cartItem).subscribe(data => console.log(data));
+          window.location.reload();
+          console.log(data)
+        });
 
+    }
+   
 
     // calculate total price
-    this.getCartTotalPrice();
+   // this.getCartTotalPrice();
   }
 
   decrement(cartItem: CartItem) {
@@ -91,7 +104,10 @@ export class CartDetailsComponent implements OnInit {
       this.removeCartItem(cartItem);
     } else {
       // update the cart item
-      this.cartService.addItem(cartItem).subscribe(data => console.log(data));
+      this.cartService.updateCartItem(cartItem,'decrement').subscribe(data => {
+        window.location.reload();
+        console.log(data)
+      });
     }
   }
 

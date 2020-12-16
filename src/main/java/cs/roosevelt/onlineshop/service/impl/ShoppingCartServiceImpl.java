@@ -538,8 +538,79 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
          }
 	}
-    
-    
-    
 
-}
+	@Override
+	public ResponseEntity<CartItem> updateCartItem(CartItem cartItemToSave, String action, HttpSession session) {
+		  // is there an active session?
+        if (session != null && session.getAttribute("user") != null) {
+
+            // get the user from the session
+            User sessionUser = (User) session.getAttribute("user");
+
+            // is the session user valid?
+            if (sessionUser != null && userRepository.existsById(sessionUser.getId())) {
+
+                // yes, they're valid
+
+                // is the session user registered or a manager?
+                if (sessionUser.getRole().equals("ROLE_CUSTOMER")) {
+                	cartItemToSave = cartItemRepository.findById(cartItemToSave.getId()).get();
+                    // yes, they are; proceed with request
+                	
+                	if("increment".equalsIgnoreCase(action)) {
+                		if(cartItemToSave.getProduct().getStock()>0) {
+                			cartItemToSave.setQuantity(cartItemToSave.getQuantity()+1); 
+                    		cartItemToSave.getProduct().setStock(cartItemToSave.getProduct().getStock()-1);
+                    		cartItemRepository.save(cartItemToSave);                			
+                		}                			
+                		
+                	}else {
+                		if(cartItemToSave.getQuantity() == 1) {
+                			Product p = cartItemToSave.getProduct();
+                			p.setStock(p.getStock()+1);
+                			cartItemRepository.delete(cartItemToSave);
+                			productRepository.save(p);
+                			return new ResponseEntity<>(null, HttpStatus.OK);
+                		}else {
+                			cartItemToSave.setQuantity(cartItemToSave.getQuantity()-1); 
+                    		cartItemToSave.getProduct().setStock(cartItemToSave.getProduct().getStock()+1);
+                    		cartItemRepository.save(cartItemToSave);
+                		}
+                		
+                	}
+                    // find the cart items
+
+                    // did we find any cart items for the user?
+                    if (cartItemToSave != null) {
+
+                        // yes we did
+                        return new ResponseEntity<>(cartItemToSave, HttpStatus.OK);
+
+                    } else {
+
+                        //no we didn't find any
+                        return new ResponseEntity<>(cartItemToSave, HttpStatus.NOT_FOUND);
+
+                    }
+                    
+                    
+
+                } else {
+
+                    // no, they're neither registered nor an employee; deny the request
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+                }
+
+            } else {
+
+                // no valid user found
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
+        } else {
+
+            // no, there's no active session; return denial response
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+	}      
+ }

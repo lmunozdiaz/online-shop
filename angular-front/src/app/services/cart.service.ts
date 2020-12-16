@@ -35,6 +35,20 @@ export class CartService {
 
   }
 
+  updateCartItem(cartItem: CartItem,st:String): Observable<CartItem[]> {
+    var header = new HttpHeaders({
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    });
+    // the modified url for the backend endpoint
+    const addUrl: string = `${this.baseUrl}/update-cart-item`
+    return this.http.post<CartItem[]>(addUrl+ '/'+ st, JSON.stringify(cartItem), {
+      headers: header
+    });
+
+  }
+
+
   placeOrder(): Observable<Order> {
     // get-quantity endpoint url
     const orderUrl: string = `${this.baseUrl}/placeorder`

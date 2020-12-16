@@ -106,7 +106,7 @@ export class ProductDetailsComponent implements OnInit {
           data => {
             this.cartService.getTotalQuantity().subscribe(
               count => {
-                let element = document.getElementById('cartCount') as HTMLElement;
+                const element = document.getElementById('cartCount') as HTMLElement;
                 if (element != null) {
                    element.children[0].innerHTML = count + '';
                 }
