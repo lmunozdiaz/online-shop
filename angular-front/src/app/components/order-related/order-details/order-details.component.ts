@@ -21,7 +21,7 @@ export class OrderDetailsComponent implements OnInit {
   hasSearchString: boolean;
   orderId: string;
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['image', 'name','description' ,'quantity', 'price'];
+  displayedColumns: string[] = ['image', 'name','description','itemprice' ,'quantity', 'price'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
