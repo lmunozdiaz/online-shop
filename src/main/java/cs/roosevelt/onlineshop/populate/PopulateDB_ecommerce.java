@@ -417,35 +417,6 @@ public class PopulateDB_ecommerce  {
 
             }
           
-          insert = "INSERT INTO ORDERS "
-                  + "(ORDER_ID,CREATE_TIME,USER_ID,ORDER_AMOUNT,ORDER_STATUS,UPDATE_TIME,NUM_OF_ITEMS)"
-                  + "VALUES"
-                  + "(8147483129, CURRENT_TIMESTAMP, 2147483642, 194.97, 1, CURRENT_TIMESTAMP, 3)";
-          try {
-
-                conn.createStatement().execute(insert);
-                System.out.println("ORDERS POPULATED");
-                succeeds = true;
-
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-
-            }
-          
-          insert = "INSERT INTO ORDER_DETAILS "
-                  + "( PRODUCT_ID, ORDER_ID, USER_ID, QUANTITY)"
-                  + "VALUES"
-                  + "( '3237189120', 8147483129, 2147483642, 3)";
-          try {
-
-                conn.createStatement().execute(insert);
-                System.out.println("ORDER_DETAILS POPULATED");
-                succeeds = true;
-
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-
-            }
 
     }
 
