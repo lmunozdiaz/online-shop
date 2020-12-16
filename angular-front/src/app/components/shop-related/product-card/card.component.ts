@@ -81,12 +81,14 @@ export class CardComponent implements OnInit {
             this.cartService.getTotalQuantity().subscribe(
               count => {
                 if (element != null) {
-                 element.children[0].innerHTML = count + '';
+                  element.children[0].innerHTML = count + '';
                 }
-                const snack = this._snackBar.open(cartItem.product.name +' added to Cart', 'Go to Cart', {
+                product.stock = product.stock - 1;
+
+                const snack = this._snackBar.open(cartItem.product.name + ' added to cart', 'Go to Cart', {
                   duration: 5000,
                   verticalPosition: 'top'
-                });
+                });               
                 snack.onAction().subscribe(() => {
                   this.router.navigateByUrl('/cart-details');
                 });
