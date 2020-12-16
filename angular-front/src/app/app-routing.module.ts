@@ -11,7 +11,6 @@ import {LoggedInGuard} from "./guards/logged-in.guard";
 import { ProductAddComponent } from './components/admin-related/product-add/product-add.component';
 import {AdminMenuComponent} from "./components/admin-related/admin-menu/admin-menu.component";
 import {AdminGuard} from "./guards/admin-guard.service";
-import {DashComponent} from "./components/admin-related/admin-dashboard/dash.component";
 import {ProductRosterComponent} from "./components/admin-related/product-roster/product-roster.component";
 import {CategoryRosterComponent} from "./components/admin-related/category-roster/category-roster.component";
 import {CategoryAddComponent} from "./components/admin-related/category-add/category-add.component";
@@ -29,11 +28,6 @@ const routes: Routes = [
   {
     path: 'admin-product-roster',
     component: ProductRosterComponent,
-    canActivate: [AdminGuard],
-  },
-  {
-    path: 'admin-dashboard',
-    component: DashComponent,
     canActivate: [AdminGuard],
   },
   {
@@ -72,7 +66,7 @@ const routes: Routes = [
     path:  'product-add',
     component: ProductAddComponent,
     canActivate: [AdminGuard],
-  }, 
+  },
   {
     path:  'category-add',
     component: CategoryAddComponent,

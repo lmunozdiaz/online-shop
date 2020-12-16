@@ -15,8 +15,9 @@ export class LoginComponent implements OnInit {
   credentials: LoginForm = new LoginForm();
   user: User = new User();
   errors: string[];
+  hide: boolean = true;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private userService: UserService, private router: Router) { 
+  constructor(@Inject(DOCUMENT) private document: Document, private userService: UserService, private router: Router) {
      this.errors = [];
   }
 

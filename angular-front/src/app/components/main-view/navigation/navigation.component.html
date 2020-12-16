@@ -14,14 +14,20 @@
       </div>
     </ng-template>
 
-    <mat-divider></mat-divider>
+    <mat-divider *ngIf="activeUser.role == 'ROLE_MANAGER'"></mat-divider>
 
     <!-- this component selector is used to display the admin tools -->
     <app-admin-menu *ngIf="activeUser.role == 'ROLE_MANAGER'" class="admin-menu"></app-admin-menu>
-    <mat-divider></mat-divider>
-    <mat-selection-list [multiple]="false">            
-      <mat-list-option routerLink="/orders" routerLinkActive="active">Orders</mat-list-option>          
-    </mat-selection-list>
+
+    <mat-divider *ngIf="activeUser.role == 'ROLE_MANAGER'"></mat-divider>
+
+    <div *ngIf="activeUser.role == 'ROLE_MANAGER' || activeUser.role == 'ROLE_CUSTOMER'" class="orders-container">
+      <div mat-subheader>Your Account</div>
+      <mat-nav-list>
+        <mat-list-item routerLink="/orders" routerLinkActive="active">Orders</mat-list-item>
+      </mat-nav-list>
+    </div>
+
     <mat-divider></mat-divider>
 
     <!-- this component selector is used to display the category menu -->

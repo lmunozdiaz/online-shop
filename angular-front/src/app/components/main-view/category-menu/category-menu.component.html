@@ -1,16 +1,8 @@
 <!-- category-menu component -->
-<mat-selection-list [multiple]="false">
-
-  <div mat-subheader>Categories</div>
-
-  <!-- use an ngFor loop to iterate through this component's 'categories' array and create a routerLink for each one.
-  The routerLink points to a special instance of the product-list component, which (in this case) displays products
-  based on category -->
-
-
-  <mat-selection-list #selectedCat (selectionChange)="onChange($event, selectedCat.selectedOptions.selected)"  [multiple]="false">
-    <mat-list-option  *ngFor="let category of categories"  [value]="category.categoryType">
-      {{category.name}}
-    </mat-list-option>
-  </mat-selection-list>
+<div mat-subheader>Categories</div>
+<mat-selection-list #selectedCat (selectionChange)="onChange($event, selectedCat.selectedOptions.selected)"
+                    [multiple]="false">
+  <mat-list-option *ngFor="let category of categories" [value]="category.categoryType">
+    {{category.name}}
+  </mat-list-option>
 </mat-selection-list>

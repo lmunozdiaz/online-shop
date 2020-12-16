@@ -1,3 +1,9 @@
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .my-form{
   min-width: 150px;
   max-width: 500px;
@@ -16,10 +22,10 @@
 .invalidTB {
   background-color: lightpink;
   border: 2px solid red;
-  border-radius: 4px;    
+  border-radius: 4px;
 }
 .invalidLabel {
   color: red;
   font-weight: bold;
-  font-variant: small-caps;  
+  font-variant: small-caps;
 }

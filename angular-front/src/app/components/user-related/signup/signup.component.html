@@ -1,17 +1,9 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<mat-toolbar>
-	<div fxLayout="row">
-		<img md-card-image src="" fxFlex="25">
-		<span fxFlex="10"></span>
-		<md-card-content fxFlex="65">
-
-			Registration
-
-		</md-card-content>
-	</div>
-</mat-toolbar>
+<div class="header-container">
+  <h1>Sign up</h1>
+</div>
 
 <md-card>
 
@@ -111,7 +103,7 @@
 					<select required #state="ngModel" [(ngModel)]="user.state" name="state" class="form-control">
 						<option value="IL">IL</option>
 					</select>
-				</div>				
+				</div>
 
 				<div class="form-group">
 					<label> Zip</label>
@@ -120,7 +112,7 @@
 					<input [ngClass]="{'invalidTB': (zip.invalid && (zip.touched || zip.dirty))}" min="0" required
 						type="number" class="form-control" id="zip" [(ngModel)]="user.zip" name="zip" #zip="ngModel">
 				</div>
-		
+
 
 				<div class="form-group">
 					<label> Country</label>

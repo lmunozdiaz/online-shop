@@ -1,36 +1,39 @@
 <!-- card component -->
 <div class="card-container">
   <mat-card class="mat-elevation-z4">
+    <div class="card-content-container">
 
-    <a routerLink="/products/{{id}}">
-      <!-- [src] must evaluate the imageUrl variable. imageUrl data is assigned via interpolation when
-      using this component's selector -->
-      <img [src]="imageUrl" class="image" mat-card-image>
-    </a>
+      <div fxLayout="column" fxLayoutAlign="center center">
+        <a routerLink="/products/{{id}}">
+          <!-- [src] must evaluate the imageUrl variable. imageUrl data is assigned via interpolation when
+          using this component's selector -->
+          <img [src]="imageUrl" class="image" mat-card-image>
+        </a>
+      </div>
 
-    <a routerLink="/products/{{id}}">
       <mat-card-title>
         <!-- similar case as imageUrl -->
         {{name}}
       </mat-card-title>
-    </a>
 
-    <!-- ng-content is replaced with whatever content lies between a set of this component's
-    selector tags -->
-    <mat-card-content>
-      <ng-content></ng-content>
-    </mat-card-content>
-
+      <!-- ng-content is replaced with whatever content lies between a set of this component's
+      selector tags -->
+      <mat-card-content>
+        <ng-content></ng-content>
+      </mat-card-content>
+    </div>
     <!-- on click, send 'product' as a parameter to this component's addToCart(); 'product' is assigned
      in similar fashion as imageUrl -->
     <mat-card-actions align="end">
-      <button *ngIf="user.role == 'ROLE_CUSTOMER'" disabled="{{user.firstName == 'dummy'}}" (click)="addToCart(product)"
-        color="accent" mat-flat-button>Add To Cart</button>
-      <button style="margin-right: 5px !important;" color="dark" *ngIf="user.role == 'ROLE_MANAGER'"
-        routerLink="/product-update/{{product.id}}" mat-stroked-button>Edit</button>
-      <button *ngIf="user.role == 'ROLE_MANAGER'" color="warn" (click)="onDelete(product)"
-        mat-flat-button>Delete</button>
+      <button (click)="addToCart(product)" *ngIf="user.role == 'ROLE_CUSTOMER'" color="accent"
+              disabled="{{user.firstName == 'dummy'}}" mat-flat-button>Add To Cart
+      </button>
+      <button *ngIf="user.role == 'ROLE_MANAGER'" color="dark" mat-stroked-button
+              routerLink="/product-update/{{product.id}}" style="margin-right: 5px !important;">Edit
+      </button>
+      <button (click)="onDelete(product)" *ngIf="user.role == 'ROLE_MANAGER'" color="warn"
+              mat-flat-button>Delete
+      </button>
     </mat-card-actions>
-  
   </mat-card>
 </div>

@@ -4,42 +4,48 @@
 
 <!-- show the shopping cart if it's not empty, else display the else block -->
 <div *ngIf="cartItems.length > 0; else emptyCart" class="table-container">
-  <table mat-table [dataSource]="cartItems" class="mat-elevation-z8">
+  <table [dataSource]="cartItems" class="mat-elevation-z8" mat-table>
 
     <!-- Image Column -->
     <ng-container matColumnDef="imageUrl">
-      <th mat-header-cell *matHeaderCellDef> Product </th>
-      <td mat-cell *matCellDef="let cartItem">
-        <img src="{{cartItem.product.imageUrl}}" height="75">
+      <th *matHeaderCellDef mat-header-cell> Product</th>
+      <td *matCellDef="let cartItem" mat-cell>
+        <img height="75" src="{{cartItem.product.imageUrl}}">
       </td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let cartItem"> {{cartItem.product.name}} </td>
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let cartItem" mat-cell> {{cartItem.product.name}} </td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Price Column -->
     <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef> Price </th>
-      <td mat-cell *matCellDef="let cartItem"> {{cartItem.product.price | currency: 'USD'}} </td>
+      <th *matHeaderCellDef mat-header-cell> Price</th>
+      <td *matCellDef="let cartItem" mat-cell> {{cartItem.product.price | currency: 'USD'}} </td>
+      <td *matFooterCellDef mat-footer-cell></td>
     </ng-container>
 
     <!-- Subtotals Column -->
     <ng-container matColumnDef="subtotal">
-      <th mat-header-cell *matHeaderCellDef> Subtotal </th>
-      <td mat-cell *matCellDef="let cartItem">
+      <th *matHeaderCellDef mat-header-cell> Subtotal</th>
+      <td *matCellDef="let cartItem" mat-cell>
         <span>Quantity: {{cartItem.quantity}}</span>
         <br>
         <span>Subtotal: {{cartItem.product.price * cartItem.quantity | currency: 'USD'}}</span>
+      </td>
+      <td *matFooterCellDef mat-footer-cell>
+        <span><b>Total: $0.00</b></span>
       </td>
     </ng-container>
 
     <!-- Action Column -->
     <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let cartItem">
+      <th *matHeaderCellDef mat-header-cell></th>
+      <td *matCellDef="let cartItem" mat-cell>
         <button (click)="decrement(cartItem)" mat-button>
           <mat-icon>remove</mat-icon>
         </button>
@@ -50,27 +56,18 @@
           <mat-icon>delete</mat-icon>
         </button>
       </td>
+      <td *matFooterCellDef mat-footer-cell>
+        <button (click)="placeOrder()" color="accent" mat-raised-button size="small">
+          <mat-button value="bold">Place Order</mat-button>
+        </button>
+      </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    <tr *matFooterRowDef="displayedColumns; sticky: true" mat-footer-row></tr>
   </table>
-
-  <mat-toolbar>
-    <mat-toolbar-row style="padding: 0px !important;">
-
-      <span fxFlex="97" style="float: right;">
-        <button  style="float: right;" (click)="placeOrder()" mat-raised-button color="accent">
-          <mat-button-toggle value="bold">Place Order</mat-button-toggle>
-        </button>
-      </span>
-      <span fxFlex="2">
-
-      </span>
-    </mat-toolbar-row>
-  </mat-toolbar>
-
-  </div>
+</div>
 
 <!-- if the cart is empty, then show a message -->
 <ng-template #emptyCart class="card-container">
